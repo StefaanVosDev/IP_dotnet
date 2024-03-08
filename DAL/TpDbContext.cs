@@ -4,12 +4,6 @@ using Microsoft.EntityFrameworkCore;
 namespace DAL;
 
 //TODO: Change the name of the DBContext for the project
-/// <summary>
-/// The TpDbContext class that inherits from the DbContext class.
-/// This class is responsible for acting as a bridge between the domain or entity classes and the database.
-/// </summary>
-/// <author>TCS</author>
-/// <version>1.0.0</version>
 public class TpDbContext : DbContext
 {
     #region Constructors

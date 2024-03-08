@@ -7,8 +7,6 @@ namespace BL;
 /// The Manager class that implements the IManager interface.
 /// </summary>
 /// <typeparam name="TEntity">The type of the entity to be managed. This must be a class.</typeparam>
-/// <author>TCS</author>
-/// <version>1.0.0</version>
 public class Manager<TEntity> : IManager<TEntity> where TEntity : class
 {
     private readonly IRepository _repo;

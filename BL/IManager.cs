@@ -5,8 +5,6 @@
 /// Defines a generic interface to communicate with the DB repository
 /// </summary>
 /// <typeparam name="TEntity">The type of the entity to be managed. This must be a class</typeparam>
-/// <author> TCS</author>
-/// <version>1.0.0</version>
 public interface IManager<TEntity> where TEntity : class
 {
     Task<IEnumerable<TEntity>> GetAllAsync();
