@@ -4,8 +4,6 @@
 /// <summary>
 /// Defines a generic interface for repository operations.
 /// </summary>
-/// <author>TCS</author>
-/// <version>1.0.0</version>
 public interface IRepository
 {
     Task<IEnumerable<TEntity>> GetAllAsync<TEntity>() where TEntity : class;

@@ -6,8 +6,6 @@ namespace DAL;
 /// <summary>
 /// The Repository class that implements the IRepository interface.
 /// </summary>
-/// <author>TCS</author>
-/// <version>1.0.0</version>
 public class Repository : IRepository
 {
     private readonly TpDbContext _dbContext;
