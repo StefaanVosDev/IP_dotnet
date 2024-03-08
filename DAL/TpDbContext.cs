@@ -23,7 +23,7 @@ public class TpDbContext : DbContext
     #region vars
 
     //TODO: Change the Generic to a class being used 
-    public DbSet<Template> Templates { get; set; }
+    //public DbSet<Template> Templates { get; set; }
 
     #endregion
 
@@ -37,7 +37,7 @@ public class TpDbContext : DbContext
             //TODO: Change the connection string to the correct string for the DB
             //Template: "server={{ip address}};database={{database to modify}};user={{user}};password={{user's password}}"
             var connectionString =
-                "server=;database=;user=;password=;";
+                "jdbc:postgresql://35.240.22.60/postgres?password=<Dsvok:]C.\\hO0I";
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
     }
@@ -46,20 +46,6 @@ public class TpDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.Entity<Template>().HasData(
-            new Template
-            {
-                Id = 1,
-                Name = "Hawaii",
-                Price = 12.50
-            },
-            new Template
-            {
-                Id = 2,
-                Name = "Margarita",
-                Price = 10
-            });
     }
 
     #endregion

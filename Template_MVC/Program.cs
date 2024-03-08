@@ -23,7 +23,7 @@ builder.Services.AddDbContext<TpDbContext>(options =>
 //TODO: check if the Repository is still ok.
 builder.Services.AddScoped<IRepository, Repository>();
 //TODO: Change the IManager and Manager generic type to the correct Domain models and add scopes when needed.
-builder.Services.AddScoped<IManager<Template>, Manager<Template>>();
+//builder.Services.AddScoped<IManager<Template>, Manager<Template>>();
 
 #endregion
 
