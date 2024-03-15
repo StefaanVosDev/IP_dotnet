@@ -46,13 +46,40 @@ namespace BL.Domain
         public IEnumerable<Content> Contents { get; set; }
 
         /// <summary>
+        /// Gets or sets the session associated with the flow.
+        /// </summary>
+        public Session Session { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the session associated with the flow.
+        /// </summary>
+        public int SessionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the installation associated with the flow.
+        /// </summary>
+        public Installation Installation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the installation associated with the flow.
+        /// </summary>
+        public int InstallationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project associated with the flow.
+        /// </summary>
+        public Project Project { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the project associated with the flow.
+        /// </summary>
+        public int ProjectId { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Flow"/> class.
         /// </summary>
-        public Flow(IEnumerable<Flow> subFlows, IEnumerable<Question> questions, IEnumerable<Content> contents)
+        public Flow()
         {
-            SubFlows = subFlows;
-            Questions = questions;
-            Contents = contents;
         }
 
         /// <summary>
@@ -62,10 +89,12 @@ namespace BL.Domain
         /// <param name="theme">The theme of the flow.</param>
         /// <param name="description">The description of the flow.</param>
         /// <param name="type">The type of the flow.</param>
-        /// <param name="subFlows"></param>
-        /// <param name="questions"></param>
-        /// <param name="contents"></param>
-        public Flow(string name, string theme, string description, FlowType type, IEnumerable<Flow> subFlows, IEnumerable<Question> questions, IEnumerable<Content> contents)
+        /// <param name="subFlows">The subflows of the flow.</param>
+        /// <param name="questions">The questions of the flow.</param>
+        /// <param name="contents">The contents of the flow.</param>
+        /// <param name="installation">The installation associated with the flow.</param>
+        /// <param name="project">The project associated with the flow.</param>
+        public Flow(string name, string theme, string description, FlowType type, IEnumerable<Flow> subFlows, IEnumerable<Question> questions, IEnumerable<Content> contents, Installation installation, Project project)
         {
             Name = name;
             Theme = theme;
@@ -74,6 +103,8 @@ namespace BL.Domain
             SubFlows = subFlows;
             Questions = questions;
             Contents = contents;
+            Installation = installation;
+            Project = project;
         }
     }
 }

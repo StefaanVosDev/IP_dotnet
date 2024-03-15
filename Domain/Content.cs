@@ -6,6 +6,8 @@ public class Content
     
     public int ContentId { get; set; }
     public ContentType Type { get; set; }
+    public Flow Flow { get; set; }
+    public int FlowId { get; set; }
 
     public Content()
     {
