@@ -1,6 +1,4 @@
-﻿using BL;
-using BL.Domain;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 //TODO: if the namespace is not being changed when renaming the solution, you can make a new one
 namespace WebApplication1.Controllers.api;
@@ -17,6 +15,7 @@ namespace WebApplication1.Controllers.api;
 //TODO: Change the Controller name to the correct name.
 public class TemplatesController : ControllerBase
 {
+    /*
     #region Vars
 
     //TODO: Change the Generic Template to the correct Domain class
@@ -104,4 +103,5 @@ public class TemplatesController : ControllerBase
     }
 
     #endregion
+    */
 }
