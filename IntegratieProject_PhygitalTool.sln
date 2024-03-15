@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BL", "BL\BL.csproj", "{9619
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{E03EF2D7-E929-4140-9C81-4EA1FFF5C830}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template_MVC", "Template_MVC\Template_MVC.csproj", "{0D3DEBF9-0E9E-44A0-B268-C5E467884CB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IP_MVC", "IP_MVC\IP_MVC.csproj", "{0D3DEBF9-0E9E-44A0-B268-C5E467884CB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

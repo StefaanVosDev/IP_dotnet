@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using net6npmwebpack.Models;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
@@ -27,5 +28,25 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [HttpGet]
+    public IActionResult Contact()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Contact(ContactViewModel contactVM)
+    {
+        if (ModelState.IsValid)
+        {
+            // Send an email or save the message in a table...
+            // Redirect to a page that says "Thanks for contacting us!"...
+
+            return RedirectToAction("Index");
+        }
+
+        return View();
     }
 }
