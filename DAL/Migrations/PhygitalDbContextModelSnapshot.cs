@@ -22,6 +22,32 @@ namespace DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("BL.Domain.Answer", b =>
+                {
+                    b.Property<int>("AnswerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AnswerId"));
+
+                    b.Property<string>("AnswerText")
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RespondentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("RespondentId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("BL.Domain.Content", b =>
                 {
                     b.Property<int>("ContentId")
@@ -325,6 +351,9 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("QuestionId"));
 
+                    b.Property<int>("AnswerId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("FlowId")
                         .HasColumnType("integer");
 
@@ -415,6 +444,25 @@ namespace DAL.Migrations
                     b.HasIndex("ProjectsProjectId");
 
                     b.ToTable("PlatformProject");
+                });
+
+            modelBuilder.Entity("BL.Domain.Answer", b =>
+                {
+                    b.HasOne("BL.Domain.Question", "Question")
+                        .WithMany("Answer")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BL.Domain.Respondent", "Respondent")
+                        .WithMany("Answers")
+                        .HasForeignKey("RespondentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Respondent");
                 });
 
             modelBuilder.Entity("BL.Domain.Content", b =>
@@ -674,6 +722,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BL.Domain.Question", b =>
                 {
+                    b.Navigation("Answer");
+
                     b.Navigation("Notes");
 
                     b.Navigation("SubQuestions");
@@ -681,6 +731,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BL.Domain.Respondent", b =>
                 {
+                    b.Navigation("Answers");
+
                     b.Navigation("Feedback");
 
                     b.Navigation("Installations");
