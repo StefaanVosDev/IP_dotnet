@@ -1,4 +1,6 @@
-﻿namespace BL;
+﻿using System.Linq.Expressions;
+
+namespace BL;
 
 //TODO: Be sure that the IManager is set up correctly for the project.
 /// <summary>
@@ -12,4 +14,5 @@ public interface IManager<TEntity> where TEntity : class
     Task AddAsync(TEntity entity);
     Task UpdateAsync(TEntity entityToUpdate, TEntity entity);
     Task DeleteAsync(TEntity entity);
+    Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 }
