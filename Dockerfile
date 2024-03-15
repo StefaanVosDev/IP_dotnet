@@ -2,11 +2,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /app
 
-ADD Template_MVC ./Template_MVC
+ADD IP_MVC ./IP_MVC
 ADD BL ./BL 
 ADD DAL ./DAL
 ADD Domain ./Domain
-RUN dotnet restore Template_MVC/Template_MVC.csproj
+RUN dotnet restore IP_MVC/IP_MVC.csproj
 
 COPY . .
 RUN dotnet publish -c Release -o out
@@ -20,4 +20,4 @@ EXPOSE 8080
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 
-ENTRYPOINT ["dotnet", "Template_MVC.dll"]
+ENTRYPOINT ["dotnet", "IP_MVC.dll"]
