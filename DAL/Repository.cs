@@ -8,9 +8,9 @@ namespace DAL;
 /// </summary>
 public class Repository : IRepository
 {
-    private readonly TpDbContext _dbContext;
+    private readonly PhygitalDbContext _dbContext;
     
-    public Repository(TpDbContext context)
+    public Repository(PhygitalDbContext context)
     {
         _dbContext = context;
     }

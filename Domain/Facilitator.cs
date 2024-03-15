@@ -36,14 +36,20 @@ namespace BL.Domain
         public IEnumerable<Session> Sessions { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Facilitator"/> class with the specified notes and sessions.
+        /// Gets or sets the installations associated with the facilitator.
         /// </summary>
-        /// <param name="notes">The notes associated with the facilitator.</param>
-        /// <param name="sessions">The sessions associated with the facilitator.</param>
-        public Facilitator(IEnumerable<Notes> notes, IEnumerable<Session> sessions)
+        public IEnumerable<Installation> Installations { get; set; }
+
+        /// <summary>
+        /// Gets or sets the respondents associated with the facilitator.
+        /// </summary>
+        public IEnumerable<Respondent> Respondents { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Facilitator"/> class.
+        /// </summary>
+        public Facilitator()
         {
-            Notes = notes;
-            Sessions = sessions;
         }
 
         /// <summary>
@@ -54,13 +60,17 @@ namespace BL.Domain
         /// <param name="phoneNumber">The phone number of the facilitator.</param>
         /// <param name="notes">The notes associated with the facilitator.</param>
         /// <param name="sessions">The sessions associated with the facilitator.</param>
-        public Facilitator(string name, string email, string phoneNumber, IEnumerable<Notes> notes, IEnumerable<Session> sessions)
+        /// <param name="installations">The installations associated with the facilitator.</param>
+        /// <param name="respondents">The respondents associated with the facilitator.</param>
+        public Facilitator(string name, string email, string phoneNumber, IEnumerable<Notes> notes, IEnumerable<Session> sessions, IEnumerable<Installation> installations, IEnumerable<Respondent> respondents)
         {
             Name = name;
             Email = email;
             PhoneNumber = phoneNumber;
             Notes = notes;
             Sessions = sessions;
+            Installations = installations;
+            Respondents = respondents;
         }
     }
 }

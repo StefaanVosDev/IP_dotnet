@@ -27,8 +27,12 @@ namespace BL.Domain
         public Respondent Respondent { get; set; }
 
         /// <summary>
+        /// Gets or sets the unique identifier for the respondent associated with the feedback.
+        /// </summary>
+        public int RespondentId { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Feedback"/> class.
-        /// Protected constructor as this is an abstract class.
         /// </summary>
         public Feedback()
         {
@@ -36,7 +40,6 @@ namespace BL.Domain
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Feedback"/> class with the specified timestamp, message, and respondent.
-        /// Protected constructor as this is an abstract class.
         /// </summary>
         /// <param name="timestamp">The timestamp of the feedback.</param>
         /// <param name="message">The message of the feedback.</param>

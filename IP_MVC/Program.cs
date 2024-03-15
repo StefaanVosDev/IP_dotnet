@@ -1,7 +1,18 @@
+using DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<PhygitalDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("Connection");
+    options.UseNpgsql(connectionString);
+});
+
+
 
 var app = builder.Build();
 
