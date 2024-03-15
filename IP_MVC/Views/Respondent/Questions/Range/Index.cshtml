@@ -4,5 +4,63 @@
     ViewBag.Title = "Range";
     Layout = "_Layout";
 }
-
-<h2>Range</h2>
+<div class="container text-center">
+    <div class="row py-2 justify-content-end">
+        <div class="col col-md-4">
+            <select class="form-select">
+                <option value="option1">Vraag 1</option>
+                <option value="option2">Vraag 2</option>
+                <option value="option3">Vraag 3</option>
+                <option value="option4">Vraag 4</option>
+                <option value="option5">Vraag 5</option>
+            </select>
+        </div>
+    </div>
+    <div class="row py-2">
+        <img src="https://via.placeholder.com/200x100" alt="Afbeeldingsplaatsaanduiding">
+    </div>
+    <div class="row py-2">
+        <p class="text-start fw-bold">VRAAG X</p>
+    </div>
+    <div class="row py-2 slider-container">
+        <div class="slider-values">
+            <span>0</span>
+            <span>10</span>
+            <span>20</span>
+            <span>30</span>
+            <span>40</span>
+            <span>50</span>
+            <span>60</span>
+            <span>70</span>
+            <span>80</span>
+            <span>90</span>
+            <span>100</span>
+        </div>
+        <input type="range">
+    </div>
+    <div class="row py-2">
+        <div class="col-auto me-auto">
+            <a href="" class="btn btn-secondary">Vorige</a>
+        </div>
+        <div class="col-auto">
+            <a href="" class="btn btn-secondary">Volgende</a>
+        </div>
+    </div>
+</div>
+<style>
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .slider-values {
+            display: flex;
+            width: 100%;
+        }
+        
+        .slider-values span {
+            flex: 1;
+            text-align: center;
+        }
+    </style>
