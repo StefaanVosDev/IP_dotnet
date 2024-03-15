@@ -21,6 +21,10 @@
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Views\Respondent\Questions\" />
+    </ItemGroup>
+
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->
         <Exec Command="node --version" ContinueOnError="true">
