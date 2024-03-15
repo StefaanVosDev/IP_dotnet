@@ -1,110 +1,30 @@
-namespace BL.Domain
+using BL.Domain;
+using BL.Domain.Questions;
+
+namespace BL.Domain;
+
+public class Flow
 {
-    /// <summary>
-    /// Represents a Flow entity with a unique ID, name, theme, description, type, subflows, questions, and contents.
-    /// </summary>
-    public class Flow
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public FlowType Type { get; set; }
+    public List<Question> Questions { get; set; }
+    public int? ParentFlowId { get; set; }
+    public Flow ParentFlow { get; set; }
+    public List<Flow> SubFlows { get; set; }
+    public int ProjectId { get; set; }
+    public Project Project { get; set; }
+    
+    public Flow(FlowType type)
     {
-        /// <summary>
-        /// Gets or sets the unique identifier for the flow.
-        /// </summary>
-        public int FlowId { get; set; }
+        Type = type;
+    }
 
-        /// <summary>
-        /// Gets or sets the name of the flow.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the theme of the flow.
-        /// </summary>
-        public string Theme { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description of the flow.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type of the flow.
-        /// </summary>
-        public FlowType Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets the subflows of the flow.
-        /// </summary>
-        public IEnumerable<Flow> SubFlows { get; set; }
-
-        /// <summary>
-        /// Gets or sets the questions of the flow.
-        /// </summary>
-        public IEnumerable<Question> Questions { get; set; }
-
-        /// <summary>
-        /// Gets or sets the contents of the flow.
-        /// </summary>
-        public IEnumerable<Content> Contents { get; set; }
-
-        /// <summary>
-        /// Gets or sets the session associated with the flow.
-        /// </summary>
-        public Session Session { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier for the session associated with the flow.
-        /// </summary>
-        public int SessionId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the installation associated with the flow.
-        /// </summary>
-        public Installation Installation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier for the installation associated with the flow.
-        /// </summary>
-        public int InstallationId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the project associated with the flow.
-        /// </summary>
-        public Project Project { get; set; }
-
-        /// <summary>
-        /// Gets or sets the unique identifier for the project associated with the flow.
-        /// </summary>
-        public int ProjectId { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Flow"/> class.
-        /// </summary>
-        public Flow()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Flow"/> class with the specified name, theme, description, and type.
-        /// </summary>
-        /// <param name="name">The name of the flow.</param>
-        /// <param name="theme">The theme of the flow.</param>
-        /// <param name="description">The description of the flow.</param>
-        /// <param name="type">The type of the flow.</param>
-        /// <param name="subFlows">The subflows of the flow.</param>
-        /// <param name="questions">The questions of the flow.</param>
-        /// <param name="contents">The contents of the flow.</param>
-        /// <param name="installation">The installation associated with the flow.</param>
-        /// <param name="project">The project associated with the flow.</param>
-        public Flow(string name, string theme, string description, FlowType type, IEnumerable<Flow> subFlows, IEnumerable<Question> questions, IEnumerable<Content> contents, Installation installation, Project project)
-        {
-            Name = name;
-            Theme = theme;
-            Description = description;
-            Type = type;
-            SubFlows = subFlows;
-            Questions = questions;
-            Contents = contents;
-            Installation = installation;
-            Project = project;
-        }
+    public Flow(string name, FlowType type, List<Question> questions, List<Flow> subFlows)
+    {
+        Questions = questions;
+        SubFlows = subFlows;
+        Type = type;
+        Name = name;
     }
 }
