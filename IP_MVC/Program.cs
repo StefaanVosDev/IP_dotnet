@@ -1,4 +1,8 @@
+using BL;
+using BL.Domain;
+using BL.Domain.Questions;
 using DAL;
+using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,13 +10,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<PhygitalDbContext>(options =>
+//TODO remove this when deploying to production
+try
 {
-    var connectionString = builder.Configuration.GetConnectionString("Connection");
-    options.UseNpgsql(connectionString);
-});
+    builder.Services.AddDbContext<PhygitalDbContext>(options =>
+    {
+        var connectionString = builder.Configuration.GetConnectionString("Connection");
+        options.UseNpgsql(connectionString);
+    });
+}
+catch
+{
+    // If connection to the database fails, use InMemoryRepository
+    builder.Services.AddSingleton<IRepository, InMemoryRepository>();
+}
 
-
+// Add Managers as a transient service
+builder.Services.AddTransient<Manager<Project>>();
+builder.Services.AddTransient<Manager<Question>>();
+builder.Services.AddTransient<Manager<Flow>>();
 
 var app = builder.Build();
 
@@ -34,5 +50,12 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// Seed data into the InMemoryRepository if it was used
+if (app.Services.GetService<IRepository>() is InMemoryRepository)
+{
+    var dbContext = app.Services.GetService<PhygitalDbContext>();
+    InMemoryRepository.Seed(dbContext);
+}
 
 app.Run();
