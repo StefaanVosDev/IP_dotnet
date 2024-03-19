@@ -1,0 +1,59 @@
+@model dynamic
+
+@{
+    ViewBag.Title = "Multiple Choice";
+    Layout = "_Layout";
+}
+<div class="row py-2 justify-content-end">
+    <div class="col col-md-4">
+        <select class="form-select">
+            <option value="vraag1">Vraag 1</option>
+            <option value="vraag2">Vraag 2</option>
+            <option value="vraag3">Vraag 3</option>
+            <option value="vraag4">Vraag 4</option>
+        </select>
+    </div>
+</div>
+<div class="row py-2">
+    <img src="https://via.placeholder.com/200x100" alt="Afbeeldingsplaatsaanduiding">
+</div>
+<div class="row py-2">
+    <p class="text-start fw-bold">VRAAG X</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium consequuntur culpa dolor dolores, impedit nesciunt officia porro possimus quibusdam quidem recusandae sequi tempora totam vel vero. Asperiores fugiat incidunt tempore.</p>
+</div>
+<div class="row bg-secondary-subtle border border-black my-2">
+    <form>
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" id="checkOne">
+            <label class="form-check-label" for="checkOne">
+                Multiple choice answer 1
+            </label>
+        </div>
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" id="checkTwo">
+            <label class="form-check-label" for="checkTwo">
+                Multiple choice answer 2
+            </label>
+        </div>
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" id="checkThree">
+            <label class="form-check-label" for="checkThree">
+                Multiple choice answer 3
+            </label>
+        </div>
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" id="checkFour">
+            <label class="form-check-label" for="checkFour">
+                Multiple choice answer 4
+            </label>
+        </div>
+    </form>
+</div>
+<div class="row py-2">
+    <div class="col-auto me-auto">
+        <a href="" class="btn btn-secondary">Vorige</a>
+    </div>
+    <div class="col-auto">
+        <a href="" class="btn btn-secondary">Volgende</a>
+    </div>
+</div>
