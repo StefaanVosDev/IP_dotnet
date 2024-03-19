@@ -6,7 +6,11 @@ ADD IP_MVC ./IP_MVC
 ADD BL ./BL 
 ADD DAL ./DAL
 ADD Domain ./Domain
+RUN apt-get update
+RUN apt-get install npm nodejs -y
 RUN dotnet restore IP_MVC/IP_MVC.csproj
+
+RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive
 
 COPY . .
 RUN dotnet publish -c Release -o out
