@@ -1,22 +1,27 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["WebApplication1/WebApplication1.csproj", "WebApplication1/"]
-RUN dotnet restore "WebApplication1/WebApplication1.csproj"
+WORKDIR /app
+
+ADD IP_MVC ./IP_MVC
+ADD BL ./BL 
+ADD DAL ./DAL
+ADD Domain ./Domain
+RUN apt-get update
+RUN apt-get install npm nodejs -y
+RUN dotnet restore IP_MVC/IP_MVC.csproj
+
+RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive
+
 COPY . .
-WORKDIR "/src/WebApplication1"
-RUN dotnet build "WebApplication1.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet publish -c Release -o out
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "WebApplication1.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
-FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebApplication1.dll"]
+COPY --from=build /app/out .
+
+EXPOSE 8080
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+ENTRYPOINT ["dotnet", "IP_MVC.dll"]
