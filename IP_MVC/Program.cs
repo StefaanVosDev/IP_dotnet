@@ -1,36 +1,51 @@
 using BL;
 using BL.Domain;
 using BL.Domain.Questions;
+using BL.Implementations;
+using BL.Interfaces;
 using DAL;
+using DAL.EF;
+using DAL.Implementations;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//TODO remove this when deploying to production
-try
+builder.Services.AddDbContext<PhygitalDbContext>(options =>
 {
-    builder.Services.AddDbContext<PhygitalDbContext>(options =>
-    {
-        var connectionString = builder.Configuration.GetConnectionString("Connection");
-        options.UseNpgsql(connectionString);
-    });
-}
-catch
-{
-    // If connection to the database fails, use InMemoryRepository
-    builder.Services.AddSingleton<IRepository, InMemoryRepository>();
-}
+    var connectionString = builder.Configuration.GetConnectionString("Connection");
+    options.UseNpgsql(connectionString);
+});
 
-// Add Managers as a transient service
-builder.Services.AddTransient<Manager<Project>>();
-builder.Services.AddTransient<Manager<Question>>();
-builder.Services.AddTransient<Manager<Flow>>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Add scoped
+builder.Services.AddScoped<IRepository,Repository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IFlowRepository, FlowRepository>();
+builder.Services.AddScoped<IProjectManager, ProjectManager>();
+builder.Services.AddScoped<IFlowManager, FlowManager>();
+builder.Services.AddScoped<Manager<Question>>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<PhygitalDbContext>();
+    if (context.CreateDatabase(false))
+    {
+        DataSeeder.Seed(context);
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -44,18 +59,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Seed data into the InMemoryRepository if it was used
-if (app.Services.GetService<IRepository>() is InMemoryRepository)
-{
-    var dbContext = app.Services.GetService<PhygitalDbContext>();
-    InMemoryRepository.Seed(dbContext);
-}
 
 app.Run();

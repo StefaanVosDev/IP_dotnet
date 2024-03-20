@@ -1,16 +1,15 @@
 namespace BL.Domain.Questions;
 
-public class ScaleQuestion : Question
+public class RangeQuestion : Question
 {
-    //TODO change name to range
     public int Min { get; set; }
     public int Max { get; set; }
     
-    public ScaleQuestion()
+    public RangeQuestion()
     {
     }
     
-    public ScaleQuestion(string text, int min, int max) : base(text)
+    public RangeQuestion(string text, int min, int max) : base(text, QuestionType.Range)
     {
         Min = min;
         Max = max;

@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Domain.Questions;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,8 +9,24 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
 {
     private readonly DbContext _context = context;
 
-    public Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
+    public IEnumerable<Flow> GetFlowsByProjectIdAsync(int projectId)
     {
-        return Task.FromResult(_context.Set<Flow>().Where(f => f.ProjectId == projectId).AsEnumerable());
+        return _context.Set<Flow>().Where(f => f.ProjectId == projectId);
+    }
+    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
+    {
+        return _context.Set<Flow>().Where(f => f.ProjectId == projectId && f.ParentFlowId == null);
+    }
+    public IEnumerable<Flow> GetFlowsByParentId(int flowId)
+    {
+        return _context.Set<Flow>().Where(f => f.ParentFlowId == flowId);
+    }
+    public Flow getFlowById(int id)
+    {
+        return _context.Set<Flow>().Find(id);
+    }
+    public IEnumerable<Question> GetQuestionsByFlowId(int id)
+    {
+        return _context.Set<Question>().Where(q => q.FlowId == id);
     }
 } 

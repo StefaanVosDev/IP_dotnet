@@ -2,15 +2,15 @@ using BL.Domain.Questions;
 
 namespace BL.Domain.Answers;
 
-public class ScaleAnswer : Answer
+public class RangeAnswer : Answer
 {
     public int SelectedValue { get; set; }
     
-    public ScaleAnswer()
+    public RangeAnswer()
     {
     }
     
-    public ScaleAnswer(Question question, int selectedValue) : base(question)
+    public RangeAnswer(Question question, int selectedValue) : base(question)
     {
         SelectedValue = selectedValue;
     }

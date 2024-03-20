@@ -164,11 +164,14 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("FlowId")
+                    b.Property<int>("FlowId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -292,7 +295,9 @@ namespace DAL.Migrations
                 {
                     b.HasOne("BL.Domain.Flow", null)
                         .WithMany("Questions")
-                        .HasForeignKey("FlowId");
+                        .HasForeignKey("FlowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BL.Domain.Flow", b =>

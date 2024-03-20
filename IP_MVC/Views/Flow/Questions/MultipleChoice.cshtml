@@ -1,0 +1,35 @@
+@model BL.Domain.Questions.MultipleChoiceQuestion
+
+@{
+    ViewBag.Title = "Multiple Choice";
+    Layout = "_Layout";
+}
+
+<div class="row py-2">
+    <img src="https://via.placeholder.com/200x100" alt="Afbeeldingsplaatsaanduiding">
+</div>
+<div class="row py-2">
+    <p class="text-start fw-bold">Question @ViewData["QuestionNumber"]</p>
+    <p>@Model.Text</p>
+</div>
+<div class="row bg-secondary-subtle border border-black my-2">
+    <form>
+        @foreach (var t in Model.Options)
+        {
+            <div class="form-check m-3">
+                <input class="form-check-input" type="checkbox" id="check@i">
+                <label class="form-check-label" for="check@i">
+                    @t
+                </label>
+            </div>
+        }
+    </form>
+</div>
+<div class="row py-2">
+    <div class="col-auto me-auto">
+        <a href="" class="btn btn-secondary">Previous</a>
+    </div>
+    <div class="col-auto">
+        <a href="" class="btn btn-secondary">Next</a>
+    </div>
+</div>
