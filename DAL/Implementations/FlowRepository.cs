@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Implementations;
 
-public class FlowRepository(DbContext context) : Repository(context), IFlowRepository
+public class FlowRepository(PhygitalDbContext context) : Repository(context), IFlowRepository
 {
     private readonly DbContext _context = context;
 

@@ -1,4 +1,6 @@
 ﻿using BL.Domain;
+using BL.Domain.Answers;
+using BL.Domain.Questions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL;
@@ -19,8 +21,18 @@ public class PhygitalDbContext : DbContext
 
     //TODO: Add the users needed in the DB
     #region vars
+
+    private DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
+    private DbSet<OpenAnswer> OpenAnswers { get; set; }
+    private DbSet<RangeAnswer> RangeAnswers { get; set; }
+    private DbSet<SingleChoiceAnswer> SingleChoiceAnswers { get; set; }
+    private DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
+    private DbSet<OpenQuestion> OpenQuestions { get; set; }
+    private DbSet<RangeQuestion> RangeQuestions { get; set; }
+    private DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
+    private DbSet<Flow> Flows { get; set; }
+    private DbSet<Project> Projects { get; set; }
     
-    //DbSet<>
     
     #endregion
 
@@ -43,9 +55,19 @@ public class PhygitalDbContext : DbContext
             .WithOne(s => s.ParentFlow)
             .HasForeignKey(s => s.ParentFlowId);
     }
+    
+    public bool CreateDatabase(bool wipeDatabase = true)
+    {
+        if (wipeDatabase)
+        {
+            Database.EnsureDeleted();
+        }
 
+        return Database.EnsureCreated();
+    }
     #endregion
      
+    
     //TODO: run database migrations.
     //TODO:ProjectDirectory>cd DAL
     //TODO:ProjectDirectory\DAL>dotnet ef migrations add {{migrationName}}
