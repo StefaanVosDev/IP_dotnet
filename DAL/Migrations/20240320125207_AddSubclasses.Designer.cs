@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using DAL;
+using DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;

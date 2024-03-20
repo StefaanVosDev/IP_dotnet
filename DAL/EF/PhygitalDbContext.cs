@@ -3,7 +3,7 @@ using BL.Domain.Answers;
 using BL.Domain.Questions;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL;
+namespace DAL.EF;
 
 public class PhygitalDbContext : DbContext
 {
@@ -60,10 +60,32 @@ public class PhygitalDbContext : DbContext
     {
         if (wipeDatabase)
         {
-            Database.EnsureDeleted();
+            EmptyDatabase();
         }
 
         return Database.EnsureCreated();
+    }
+    
+    public void EmptyDatabase()
+    {
+        // Get all the DbSets properties
+        var dbSets = GetType().GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+
+        foreach (var dbSet in dbSets)
+        {
+            // Get the generic method for the specific DbSet
+            var method = typeof(PhygitalDbContext).GetMethod("ClearTable").MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
+
+            // Invoke the method
+            method.Invoke(this, new object[] { dbSet.GetValue(this) });
+        }
+
+        SaveChanges();
+    }
+
+    public void ClearTable<T>(DbSet<T> dbSet) where T : class
+    {
+        dbSet.RemoveRange(dbSet);
     }
     #endregion
      

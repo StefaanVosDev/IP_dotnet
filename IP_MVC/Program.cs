@@ -41,7 +41,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<PhygitalDbContext>();
-    if (context.CreateDatabase(false))
+    if (context.CreateDatabase(true))
     {
         DataSeeder.Seed(context);
     }
