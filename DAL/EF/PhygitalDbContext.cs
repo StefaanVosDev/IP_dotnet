@@ -34,6 +34,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     private DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
     private DbSet<Flow> Flows { get; set; }
     private DbSet<Project> Projects { get; set; }
+    private DbSet<Session> Sessions { get; set; }
     
     
     #endregion

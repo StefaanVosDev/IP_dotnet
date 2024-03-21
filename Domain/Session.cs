@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BL.Domain;
 
 public class Session
 {
+    [Key]
     public int FlowId { get; set; }
     public int QuestionId { get; set; }
     public string Answer { get; set; }

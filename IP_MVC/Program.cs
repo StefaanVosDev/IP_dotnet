@@ -7,6 +7,8 @@ using DAL;
 using DAL.EF;
 using DAL.Implementations;
 using DAL.Interfaces;
+using IP_MVC;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -43,6 +45,12 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<PhygitalDbContext>();
     if (context.CreateDatabase(false))
     {
+        var userManager = scope.ServiceProvider
+            .GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = scope.ServiceProvider
+            .GetRequiredService<RoleManager<IdentityRole>>();
+        SeedIdentity(userManager, roleManager);
+        
         DataSeeder.Seed(context);
     }
 }
@@ -68,3 +76,31 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+{
+    var userRole = new IdentityRole
+    {
+        Name = CustomIdentityConstants.UserRole
+    };
+    roleManager.CreateAsync(userRole).Wait();
+    var adminRole = new IdentityRole
+    {
+        Name = CustomIdentityConstants.AdminRole
+    };
+    roleManager.CreateAsync(adminRole).Wait();
+
+    var user = new IdentityUser
+    {
+        Email = "admin@kdg.be",
+        UserName = "admin@kdg.be",
+        EmailConfirmed = true
+    };
+    userManager.CreateAsync(user, "Password1!").Wait();
+
+    userManager.AddToRoleAsync(user, CustomIdentityConstants.AdminRole);
+}
+
+public partial class Program
+{
+}

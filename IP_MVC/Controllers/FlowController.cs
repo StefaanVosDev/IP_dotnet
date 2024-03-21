@@ -5,16 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using System.Linq;
 using BL.Domain.Answers;
+using BL.Implementations;
+using IP_MVC.Models;
 
 namespace IP_MVC.Controllers
 {
     public class FlowController : Controller
     {
         private readonly IFlowManager _flowManager;
+        private readonly SessionManager _sessionManager;
 
-        public FlowController(IFlowManager flowManager)
+        public FlowController(IFlowManager flowManager, SessionManager sessionManager)
         {
             _flowManager = flowManager;
+            _sessionManager = sessionManager;
         }
 
         public IActionResult Flow(int id) => View(_flowManager.GetParentFlowsByProjectId(id));
@@ -89,6 +93,5 @@ namespace IP_MVC.Controllers
             ViewData["Message"] = "Thank you for completing the subflow!";
             return View();
         }
-
     }
 }
