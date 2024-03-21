@@ -66,18 +66,9 @@ public class PhygitalDbContext : DbContext
     
     public bool CreateDatabase(bool wipeDatabase = true)
     {
-        try
-        {
-            if (wipeDatabase)
-            {
-                EmptyDatabase();
-            }
-            return false;
-        }
-        catch
-        {
-            return false;
-        }
+        if (!wipeDatabase) return false;
+        EmptyDatabase();
+        return true;
     }
 
     private void EmptyDatabase()
@@ -87,16 +78,17 @@ public class PhygitalDbContext : DbContext
 
         foreach (var dbSet in dbSets)
         {
-            // Get the generic method for the specific DbSet
-            var method = typeof(PhygitalDbContext).GetMethod("ClearTable")?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
-
-            // Invoke the method
-            if (method != null)
+            // Get the DbSet instance
+            var dbSetInstance = dbSet.GetValue(this);
+            if (dbSetInstance != null)
             {
-                var dbSetInstance = dbSet.GetValue(this);
-                if (dbSetInstance != null)
+                // Get the RemoveRange method
+                var removeRangeMethod = typeof(DbContext).GetMethod(nameof(DbContext.RemoveRange), new Type[] { typeof(IEnumerable<>) })?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
+
+                // Invoke the RemoveRange method with the DbSet instance
+                if (removeRangeMethod != null)
                 {
-                    method.Invoke(this, new object[] { dbSetInstance });
+                    removeRangeMethod.Invoke(this, new object[] { dbSetInstance });
                 }
             }
         }
