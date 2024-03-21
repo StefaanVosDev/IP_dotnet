@@ -16,11 +16,12 @@
     <textarea class="form-control"></textarea>
 </div>
 <div class="row py-2">
-
     <div class="col-auto">
-        <form asp-action="Question" asp-controller="Flow" method="post">
-            <input type="hidden" name="direction" value="next" />
-            <input type="submit" value="Next" class="btn btn-secondary" />
+        <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+            <input type="hidden" name="flowId" value="@Model.FlowId"/>
+            <input type="hidden" name="id" value="@Model.Id"/>
+            <input type="text" name="Answer"/>
+            <input type="submit" value="Next"/>
         </form>
     </div>
 </div>

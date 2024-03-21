@@ -19,18 +19,21 @@
             <span>@i</span>
         }
     </div>
-    <input type="range" min="@Model.Min" max="@Model.Max"/>
+    <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+        <input type="range" min="@Model.Min" max="@Model.Max"/>
+        <input type="hidden" name="flowId" value="@Model.FlowId"/>
+        <input type="hidden" name="id" value="@Model.Id"/>
+        <input type="submit" value="Next"/>
+    </form>
 </div>
 <div class="row py-2">
-    <div class="col-auto">
-        <form asp-action="Question" asp-controller="Flow" method="post">
-            <input type="hidden" name="direction" value="next" />
-            <input type="submit" value="Next" class="btn btn-secondary" />
-        </form>
+    <div class="row py-2">
+        <div class="col-auto">
+            <form asp-action="Question" asp-controller="Flow" method="post">
+                <input type="hidden" name="id" value="@Model.FlowId"/>
+                <input type="text" name="Answer"/>
+                <input type="submit" value="Submit"/>
+            </form>
+        </div>
     </div>
 </div>
-
-
-@*<span class="slider-label">Tevreden</span>
-        <span class="slider-label">Neutraal</span>
-        <span class="slider-label">Heel ontevreden</span>*@

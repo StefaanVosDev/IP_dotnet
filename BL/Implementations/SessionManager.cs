@@ -1,44 +1,40 @@
 using BL.Domain;
+using BL.Interfaces;
+using DAL.Interfaces;
+using BL.Domain.Answers;
+using DAL.EF;
+using Microsoft.EntityFrameworkCore;
 
-namespace BL.Implementations;
-
-public class SessionManager
+namespace BL.Implementations
 {
-    private readonly Dictionary<string, Session> _sessions;
-
-    public SessionManager()
+    public class SessionManager : Manager<Session>, ISessionManager
     {
-        _sessions = new Dictionary<string, Session>();
-    }
+        private readonly PhygitalDbContext _context;
 
-    public void StartSession(string userId, int flowId, int questionId)
-    {
-        var session = new Session
+        public SessionManager(ISessionRepository repository, PhygitalDbContext context) : base(repository)
         {
-            UserId = userId,
-            FlowId = flowId,
-            QuestionId = questionId
-        };
-
-        _sessions[userId] = session;
-    }
-
-    public Session GetSession(string userId)
-    {
-        _sessions.TryGetValue(userId, out var session);
-        return session;
-    }
-
-    public void UpdateSession(string userId, string answer)
-    {
-        if (_sessions.TryGetValue(userId, out var session))
-        {
-            session.Answer = answer;
+            _context = context;
         }
-    }
 
-    public void EndSession(string userId)
-    {
-        _sessions.Remove(userId);
+        public Session GetSession(string userId)
+        {
+            return _context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.UserId == userId);
+        }
+
+        public void AddAnswerToSession(Answer answer, string userId)
+        {
+            var session = GetSession(userId);
+            if (session != null)
+            {
+                session.Answers.Add(answer);
+                _context.SaveChanges();
+            }
+        }
+
+        public void UpdateSession(Session session)
+        {
+            _context.Sessions.Update(session);
+            _context.SaveChanges();
+        }
     }
 }

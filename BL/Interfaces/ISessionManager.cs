@@ -1,14 +1,11 @@
 using BL.Domain;
+using BL.Domain.Answers;
 
 namespace BL.Interfaces;
 
-public interface ISessionManager
+public interface ISessionManager : IManager<Session>
 {
-    public void StartSession(string userId, int flowId, int questionId);
-
-    public Session GetSession(string userId);
-
-    public void UpdateSession(string userId, string answer);
-
-    public void EndSession(string userId);
+    Session GetSession(string userId);
+    void AddAnswerToSession(Answer answer, string userId);
+    void UpdateSession(Session session);
 }

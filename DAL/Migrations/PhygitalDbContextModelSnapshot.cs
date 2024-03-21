@@ -23,7 +23,7 @@ namespace DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BL.Domain.Answers.MultipleChoiceAnswer", b =>
+            modelBuilder.Entity("BL.Domain.Answers.Answer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,80 +31,20 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<List<string>>("SelectedOptions")
-                        .HasColumnType("text[]");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("MultipleChoiceAnswers");
-                });
-
-            modelBuilder.Entity("BL.Domain.Answers.OpenAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Text")
+                    b.Property<string>("AnswerText")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("OpenAnswers");
-                });
-
-            modelBuilder.Entity("BL.Domain.Answers.RangeAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("SelectedValue")
+                    b.Property<int?>("SessionId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("SessionId");
 
-                    b.ToTable("RangeAnswers");
-                });
-
-            modelBuilder.Entity("BL.Domain.Answers.SingleChoiceAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SelectedOption")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("SingleChoiceAnswers");
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("BL.Domain.Flow", b =>
@@ -192,14 +132,17 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BL.Domain.Session", b =>
                 {
-                    b.Property<int>("FlowId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FlowId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Answer")
                         .HasColumnType("text");
+
+                    b.Property<int>("FlowId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
@@ -207,7 +150,7 @@ namespace DAL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.HasKey("FlowId");
+                    b.HasKey("Id");
 
                     b.ToTable("Sessions");
                 });
@@ -454,48 +397,13 @@ namespace DAL.Migrations
                     b.HasDiscriminator().HasValue("SingleChoiceQuestion");
                 });
 
-            modelBuilder.Entity("BL.Domain.Answers.MultipleChoiceAnswer", b =>
+            modelBuilder.Entity("BL.Domain.Answers.Answer", b =>
                 {
-                    b.HasOne("BL.Domain.Questions.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("BL.Domain.Session", "Session")
+                        .WithMany("Answers")
+                        .HasForeignKey("SessionId");
 
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("BL.Domain.Answers.OpenAnswer", b =>
-                {
-                    b.HasOne("BL.Domain.Questions.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("BL.Domain.Answers.RangeAnswer", b =>
-                {
-                    b.HasOne("BL.Domain.Questions.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("BL.Domain.Answers.SingleChoiceAnswer", b =>
-                {
-                    b.HasOne("BL.Domain.Questions.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
+                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("BL.Domain.Flow", b =>
@@ -585,6 +493,11 @@ namespace DAL.Migrations
             modelBuilder.Entity("BL.Domain.Project", b =>
                 {
                     b.Navigation("Flows");
+                });
+
+            modelBuilder.Entity("BL.Domain.Session", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

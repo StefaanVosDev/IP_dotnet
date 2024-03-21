@@ -34,9 +34,13 @@ builder.Services.AddSession(options =>
 builder.Services.AddScoped<IRepository,Repository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IFlowRepository, FlowRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+builder.Services.AddScoped<Manager<Question>>();
 builder.Services.AddScoped<IProjectManager, ProjectManager>();
 builder.Services.AddScoped<IFlowManager, FlowManager>();
-builder.Services.AddScoped<Manager<Question>>();
+builder.Services.AddScoped<IQuestionManager, QuestionManager>();
+builder.Services.AddScoped<ISessionManager, SessionManager>();
 
 var app = builder.Build();
 

@@ -13,15 +13,20 @@ namespace IP_MVC.Controllers
     public class FlowController : Controller
     {
         private readonly IFlowManager _flowManager;
-        private readonly SessionManager _sessionManager;
+        private readonly ISessionManager _sessionManager;
+        private readonly IProjectManager _projectManager;
+        private readonly IQuestionManager _questionManager;
 
-        public FlowController(IFlowManager flowManager, SessionManager sessionManager)
+        public FlowController(IFlowManager flowManager, ISessionManager sessionManager, IProjectManager projectManager,
+            IQuestionManager questionManager)
         {
             _flowManager = flowManager;
             _sessionManager = sessionManager;
+            _projectManager = projectManager;
+            _questionManager = questionManager;
         }
 
-        public IActionResult Flow(int id) => View(_flowManager.GetParentFlowsByProjectId(id));
+        public IActionResult Flow(int id) => View(_projectManager.GetParentFlowsByProjectId(id));
 
         public IActionResult SubFlow(int id) => View(_flowManager.GetFlowsByParentId(id));
 
@@ -31,22 +36,23 @@ namespace IP_MVC.Controllers
             var questionIds = _flowManager.GetQuestionsByFlowId(id).Select(q => q.Id).ToList();
 
             // Retrieve the dictionary of queues from the session.
-            var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ?? new Dictionary<int, Queue<int>>();
+            var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
+                         new Dictionary<int, Queue<int>>();
 
             // Add the new queue to the dictionary.
             queues[id] = new Queue<int>(questionIds);
 
             // Store the dictionary in the session.
             HttpContext.Session.Set("queues", queues);
-            
+
             // Reset the current index.
             HttpContext.Session.SetInt32("currentIndex", 0);
 
             // Redirect to the first question.
             return RedirectToAction("Question", new { id });
         }
-        
-        public IActionResult Question(int id)
+
+        public IActionResult Question(int id, AnswerViewModel model)
         {
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
@@ -68,10 +74,12 @@ namespace IP_MVC.Controllers
             {
                 return RedirectToAction("EndSubFlow");
             }
-
-            // Get the question ID at the current index.
+            
+            // Retrieve the current question ID from the queue.
             var questionId = questionQueue.ElementAt(currentIndex);
-            var question = _flowManager.GetQuestionById(questionId);
+            
+            // Retrieve the question based on the ID.
+            var question = _questionManager.GetQuestionById(questionId);
 
             // Increment the current index and store it in the session.
             currentIndex++;
@@ -87,11 +95,35 @@ namespace IP_MVC.Controllers
                 _ => throw new Exception("Unknown question type")
             };
         }
-        
+
         public IActionResult EndSubFlow()
         {
             ViewData["Message"] = "Thank you for completing the subflow!";
             return View();
+        }
+        
+        [HttpPost]
+        public IActionResult SaveAndNext(int flowId, int id, AnswerViewModel model)
+        {
+            if (!string.IsNullOrEmpty(model.Answer))
+            {
+                SaveAnswer(model, id);
+            }
+
+            return RedirectToAction("Question", new { id = flowId });
+        }
+        
+        private void SaveAnswer(AnswerViewModel model, int questionId)
+        {
+            var answer = new Answer
+            {
+                Id = _sessionManager.GetSession(User.Identity.Name).Id,
+                QuestionId = questionId,
+                AnswerText = model.Answer
+            };
+
+            _sessionManager.GetSession(User.Identity.Name).Answers.Add(answer);
+            _sessionManager.UpdateSession(_sessionManager.GetSession(User.Identity.Name));
         }
     }
 }

@@ -24,17 +24,14 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     //TODO: Add the users needed in the DB
     #region vars
 
-    private DbSet<MultipleChoiceAnswer> MultipleChoiceAnswers { get; set; }
-    private DbSet<OpenAnswer> OpenAnswers { get; set; }
-    private DbSet<RangeAnswer> RangeAnswers { get; set; }
-    private DbSet<SingleChoiceAnswer> SingleChoiceAnswers { get; set; }
-    private DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
-    private DbSet<OpenQuestion> OpenQuestions { get; set; }
-    private DbSet<RangeQuestion> RangeQuestions { get; set; }
-    private DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
-    private DbSet<Flow> Flows { get; set; }
-    private DbSet<Project> Projects { get; set; }
-    private DbSet<Session> Sessions { get; set; }
+    public DbSet<Answer> Answers { get; set; }
+    public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
+    public DbSet<OpenQuestion> OpenQuestions { get; set; }
+    public DbSet<RangeQuestion> RangeQuestions { get; set; }
+    public DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
+    public DbSet<Flow> Flows { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<Session> Sessions { get; set; }
     
     
     #endregion
@@ -57,14 +54,6 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
             .HasMany(s => s.SubFlows)
             .WithOne(s => s.ParentFlow)
             .HasForeignKey(s => s.ParentFlowId);
-        
-        modelBuilder.Entity<RangeQuestion>()
-            .Property(r => r.Min)
-            .IsRequired();
-
-        modelBuilder.Entity<RangeQuestion>()
-            .Property(r => r.Max)
-            .IsRequired();
     }
     
     public bool CreateDatabase(bool wipeDatabase = true)
