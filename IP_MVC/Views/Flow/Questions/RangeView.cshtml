@@ -13,27 +13,27 @@
     <p>@Model.Text</p>
 </div>
 <div class="row py-2 slider-container" style="text-align: center">
-    <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
-        @for (int i = Model.Min; i <= Model.Max; i++)
-        {
-            <span>@i</span>
-        }
-    </div>
+
     <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+        <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
+            @for (int i = Model.Min; i <= Model.Max; i++)
+            {
+                <span>@i</span>
+            }
+        </div>
         <input type="range" min="@Model.Min" max="@Model.Max"/>
+        <input type="hidden" id="selectedValue" name="Answer"/>
         <input type="hidden" name="flowId" value="@Model.FlowId"/>
         <input type="hidden" name="id" value="@Model.Id"/>
+        <input type="hidden" name="QuestionId" value="@Model.Id"/>
+        <br/>
         <input type="submit" value="Next"/>
     </form>
 </div>
-<div class="row py-2">
-    <div class="row py-2">
-        <div class="col-auto">
-            <form asp-action="Question" asp-controller="Flow" method="post">
-                <input type="hidden" name="id" value="@Model.FlowId"/>
-                <input type="text" name="Answer"/>
-                <input type="submit" value="Submit"/>
-            </form>
-        </div>
-    </div>
-</div>
+
+<!-- TODO Move this to different file -->
+<script>
+    document.querySelector('input[type="range"]').addEventListener('input', function(e) {
+        document.getElementById('selectedValue').value = e.target.value;
+    });
+</script>
