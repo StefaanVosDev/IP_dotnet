@@ -9,16 +9,14 @@
     @foreach (var flow in Model)
     {
         <div class="col">
-            <a href="">
-                <div class="card">
-                    <img src="https://via.placeholder.com/10x10" alt="Foto flow">
-                    <div class="card-body">
-                        <h5 class="card-title">@flow.Name</h5>
-                        <p class="card-text">Description TODO</p>
-                        <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id })" class="btn btn-primary">Start Flow</a>
-                    </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/10x10" alt="Foto flow">
+                <div class="card-body">
+                    <h5 class="card-title">@flow.Name</h5>
+                    <p class="card-text">@flow.Description</p>
+                    <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id })" class="btn btn-primary">Start Flow</a>
                 </div>
-            </a>
+            </div>
         </div>
     }
 </div>
