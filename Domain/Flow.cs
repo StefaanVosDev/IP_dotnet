@@ -7,6 +7,7 @@ public class Flow
 {
     public int Id { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
     public FlowType Type { get; set; }
     public List<Question> Questions { get; set; }
     public int? ParentFlowId { get; set; }
@@ -15,16 +16,17 @@ public class Flow
     public int ProjectId { get; set; }
     public Project Project { get; set; }
     
-    public Flow(FlowType type)
+    public Flow()
     {
-        Type = type;
     }
 
-    public Flow(string name, FlowType type, List<Question> questions, List<Flow> subFlows)
+    public Flow(string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows)
     {
         Questions = questions;
         SubFlows = subFlows;
         Type = type;
         Name = name;
+        ProjectId = projectId;
+        Description = description;
     }
 }

@@ -1,6 +1,13 @@
 namespace BL.Domain.Questions;
 
-public class OpenQuestion(string text) : Question(text)
+public class OpenQuestion : Question
 {
+    public OpenQuestion()
+    {
+    }
+
+    public OpenQuestion(string text) : base(text, QuestionType.Open)
+    {
+    }
     
 }

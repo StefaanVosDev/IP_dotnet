@@ -1,0 +1,22 @@
+@model IEnumerable<BL.Domain.Flow>
+
+@{
+    ViewBag.Title = "SubFlows";
+    Layout = "_Layout";
+}
+
+<div class="row row-cols-3">
+    @foreach (var flow in Model)
+    {
+        <div class="col">
+            <div class="card">
+                <img src="https://via.placeholder.com/10x10" alt="Foto flow">
+                <div class="card-body">
+                    <h5 class="card-title">@flow.Name</h5>
+                    <p class="card-text">@flow.Description</p>
+                    <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id })" class="btn btn-primary">Start Flow</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

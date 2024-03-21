@@ -1,15 +1,28 @@
 using BL.Domain;
+using BL.Domain.Answers;
+using BL.Domain.Questions;
+using DAL.EF;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Implementations;
 
-public class FlowRepository(DbContext context) : Repository(context), IFlowRepository
+public class FlowRepository(PhygitalDbContext context) : Repository(context), IFlowRepository
 {
     private readonly DbContext _context = context;
-
-    public Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
+    
+    public IEnumerable<Flow> GetFlowsByParentId(int flowId)
     {
-        return Task.FromResult(_context.Set<Flow>().Where(f => f.ProjectId == projectId).AsEnumerable());
+        return _context.Set<Flow>().Where(f => f.ParentFlowId == flowId);
     }
-}
+    public Flow getFlowById(int id)
+    {
+        return _context.Set<Flow>().Find(id);
+    }
+    public IEnumerable<Question> GetQuestionsByFlowId(int id)
+    {
+        return _context.Set<Question>().Where(q => q.FlowId == id);
+    }
+    
+
+} 

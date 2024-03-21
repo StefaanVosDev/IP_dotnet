@@ -1,6 +1,16 @@
-namespace BL.Domain.Questions;
-
-public class SingleChoiceQuestion(string text, List<string> options) : Question(text)
+namespace BL.Domain.Questions
 {
-    public List<string> Options { get; set; } = options;
+    public class SingleChoiceQuestion : Question
+    {
+        public SingleChoiceQuestion()
+        {
+        }
+
+        public SingleChoiceQuestion(string text, List<string> options) : base(text, QuestionType.SingleChoice)
+        {
+            Options = options;
+        }
+
+        public List<string> Options { get; set; }
+    }
 }

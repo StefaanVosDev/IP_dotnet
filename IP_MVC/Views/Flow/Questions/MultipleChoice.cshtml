@@ -1,0 +1,36 @@
+@model BL.Domain.Questions.MultipleChoiceQuestion
+
+@{
+    ViewBag.Title = "Multiple Choice";
+    Layout = "_Layout";
+}
+
+<div class="row py-2">
+    <img src="https://via.placeholder.com/200x100" alt="Afbeeldingsplaatsaanduiding">
+</div>
+<div class="row py-2">
+    <p class="text-start fw-bold">Question</p>
+    <p>@Model.Text</p>
+</div>
+<div class="row bg-secondary-subtle border border-black my-2">
+    <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+        @if (Model.Options != null)
+        {
+            var i = 0;
+            foreach (var option in Model.Options)
+            {
+                <div class="form-check m-3">
+                    <input class="form-check-input" type="checkbox" id="check@i" name="Answer" value="@option">
+                    <label class="form-check-label" for="check@i">
+                        @option
+                    </label>
+                </div>
+                i++;
+            }
+        }
+        <input type="hidden" name="flowId" value="@Model.FlowId"/>
+        <input type="hidden" name="id" value="@Model.Id"/>
+        <input type="hidden" name="QuestionId" value="@Model.Id"/>
+        <input type="submit" value="Next"/>
+    </form>
+</div>

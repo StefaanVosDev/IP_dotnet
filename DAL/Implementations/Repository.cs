@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using DAL.EF;
 using DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ namespace DAL;
 /// <summary>
 /// The Repository class that implements the IRepository interface.
 /// </summary>
-public class Repository(DbContext context) : IRepository
+public class Repository(PhygitalDbContext context) : IRepository
 {
     public async Task<IEnumerable<TEntity>> GetAllAsync<TEntity>() where TEntity : class => await context.Set<TEntity>().ToListAsync();
 

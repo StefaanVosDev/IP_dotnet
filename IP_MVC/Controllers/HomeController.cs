@@ -1,22 +1,26 @@
 ﻿using System.Diagnostics;
+using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using net6npmwebpack.Models;
 using WebApplication1.Models;
 
-namespace WebApplication1.Controllers;
+namespace IP_MVC.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IProjectManager _projectManager;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IProjectManager projectManager)
     {
         _logger = logger;
+        _projectManager = projectManager;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var projects = await _projectManager.GetAllAsync();
+        return View(projects);
     }
 
     public IActionResult Privacy()
