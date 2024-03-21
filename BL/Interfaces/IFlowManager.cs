@@ -11,4 +11,5 @@ public interface IFlowManager : IManager<Flow>
     public Flow GetFlowById(int id);
     public Flow GetFirstSubFlowByParentId(int id);
     public IEnumerable<Question> GetQuestionsByFlowId(int id);
+    public Question GetQuestionById(int questionId);
 }

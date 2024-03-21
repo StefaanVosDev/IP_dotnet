@@ -28,6 +28,7 @@
       <_ContentIncludedByDefault Remove="Views\Respondent\Questions\MultipleChoice\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Open\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Range\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Respondent\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

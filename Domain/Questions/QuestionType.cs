@@ -3,7 +3,7 @@ namespace BL.Domain.Questions;
 public enum QuestionType
 {
     MultipleChoice,
-    Range,
+    RangeEnum,
     SingleChoice,
     Open
 }

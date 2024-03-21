@@ -10,4 +10,5 @@ public interface IFlowRepository : IRepository
     public IEnumerable<Flow> GetFlowsByParentId(int flowId);
     public Flow getFlowById(int id);
     public IEnumerable<Question> GetQuestionsByFlowId(int id);
+    public Question GetQuestionById(int questionId);
 }

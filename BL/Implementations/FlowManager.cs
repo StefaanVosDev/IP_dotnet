@@ -37,5 +37,10 @@ namespace BL.Implementations
         {
             return repository.GetQuestionsByFlowId(id);
         }
+
+        public Question GetQuestionById(int questionId)
+        {
+            return repository.GetQuestionById(questionId);
+        }
     }
 }

@@ -54,19 +54,33 @@ public class PhygitalDbContext : DbContext
             .HasMany(s => s.SubFlows)
             .WithOne(s => s.ParentFlow)
             .HasForeignKey(s => s.ParentFlowId);
+        
+        modelBuilder.Entity<RangeQuestion>()
+            .Property(r => r.Min)
+            .IsRequired();
+
+        modelBuilder.Entity<RangeQuestion>()
+            .Property(r => r.Max)
+            .IsRequired();
     }
     
     public bool CreateDatabase(bool wipeDatabase = true)
     {
-        if (wipeDatabase)
+        try
         {
-            EmptyDatabase();
+            if (wipeDatabase)
+            {
+                EmptyDatabase();
+            }
+            return false;
         }
-
-        return Database.EnsureCreated();
+        catch
+        {
+            return false;
+        }
     }
-    
-    public void EmptyDatabase()
+
+    private void EmptyDatabase()
     {
         // Get all the DbSets properties
         var dbSets = GetType().GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
@@ -74,18 +88,20 @@ public class PhygitalDbContext : DbContext
         foreach (var dbSet in dbSets)
         {
             // Get the generic method for the specific DbSet
-            var method = typeof(PhygitalDbContext).GetMethod("ClearTable").MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
+            var method = typeof(PhygitalDbContext).GetMethod("ClearTable")?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
 
             // Invoke the method
-            method.Invoke(this, new object[] { dbSet.GetValue(this) });
+            if (method != null)
+            {
+                var dbSetInstance = dbSet.GetValue(this);
+                if (dbSetInstance != null)
+                {
+                    method.Invoke(this, new object[] { dbSetInstance });
+                }
+            }
         }
 
         SaveChanges();
-    }
-
-    public void ClearTable<T>(DbSet<T> dbSet) where T : class
-    {
-        dbSet.RemoveRange(dbSet);
     }
     #endregion
      

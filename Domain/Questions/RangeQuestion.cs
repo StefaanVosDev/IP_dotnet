@@ -9,7 +9,7 @@ public class RangeQuestion : Question
     {
     }
     
-    public RangeQuestion(string text, int min, int max) : base(text, QuestionType.Range)
+    public RangeQuestion(string text, int min, int max) : base(text, QuestionType.RangeEnum)
     {
         Min = min;
         Max = max;

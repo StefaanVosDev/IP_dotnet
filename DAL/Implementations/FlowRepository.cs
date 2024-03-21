@@ -30,4 +30,9 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     {
         return _context.Set<Question>().Where(q => q.FlowId == id);
     }
+
+    public Question GetQuestionById(int questionId)
+    {
+        return _context.Set<Question>().Find(questionId);
+    }
 } 

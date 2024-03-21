@@ -2,79 +2,88 @@ using BL.Domain;
 using BL.Domain.Questions;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using IP_MVC.Helpers;
 using System.Linq;
 
-namespace IP_MVC.Controllers;
-
-public class FlowController : Controller
+namespace IP_MVC.Controllers
 {
-    private readonly IFlowManager _flowManager;
-    
-    public FlowController(IFlowManager flowManager)
+    public class FlowController : Controller
     {
-        _flowManager = flowManager;
-    }
-    
-    // GET
-    public IActionResult Flow(int id)
-    {
-        var Flows = _flowManager.GetParentFlowsByProjectId(id);
-        return View(Flows);
-    }
-    
-    // GET
-    public IActionResult SubFlow(int id)
-    {
-        var subFlows = _flowManager.GetFlowsByParentId(id);
-        return View(subFlows);
-    }
-    
-    // GET
-    public IActionResult StartFlow(int id)
-    {
-        var firstSubFlow = _flowManager.GetFirstSubFlowByParentId(id);
-        return RedirectToAction("PlaySubFlow", new { id = firstSubFlow.Id });
-    }
-    
-    // GET
-    public IActionResult PlaySubFlow(int id)
-    {
-        // Get the current question index from the session
-        var questionIndex = HttpContext.Session.GetInt32("questionIndex") ?? 0;
+        private readonly IFlowManager _flowManager;
 
-        // Get the questions for the subflow and convert to a list
-        var questions = _flowManager.GetQuestionsByFlowId(id).ToList();
-
-        // Check if there are any more questions
-        if (questionIndex >= questions.Count)
+        public FlowController(IFlowManager flowManager)
         {
-            // No more questions, end the subflow
-            HttpContext.Session.Remove("questionIndex");
-            return RedirectToAction("EndSubFlow");
+            _flowManager = flowManager;
         }
 
-        // Get the current question
-        var question = questions[questionIndex];
+        public IActionResult Flow(int id) => View(_flowManager.GetParentFlowsByProjectId(id));
 
-        // Increment the question index for the next request
-        HttpContext.Session.SetInt32("questionIndex", questionIndex + 1);
-
-        // Pass the question index to the view
-        ViewData["QuestionNumber"] = questionIndex + 1;
-
-        // Check the type of the question and return the corresponding view
-        return question.Type switch
+        public IActionResult SubFlow(int id) => View(_flowManager.GetFlowsByParentId(id));
+        
+        public IActionResult PlayFlow(int id)
         {
-            QuestionType.MultipleChoice => View("Questions/MultipleChoice", question as MultipleChoiceQuestion),
-            QuestionType.Open => View("Questions/Open", question as OpenQuestion),
-            QuestionType.Range => View("Questions/Range", question as RangeQuestion),
-            QuestionType.SingleChoice => View("Questions/SingleChoice", question as SingleChoiceQuestion),
-            _ => throw new Exception("Unknown question type")
-        };
-    }
-    public IActionResult EndSubFlow()
-    {
-        ViewData["Message"] = "Thank you for completing the subflow!";
-        return View(EndSubFlow);
+            // Retrieve the flow and its associated questions.
+            var questionIds = _flowManager.GetQuestionsByFlowId(id).Select(q => q.Id).ToList();
+
+            // Retrieve the dictionary of queues from the session.
+            var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ?? new Dictionary<int, Queue<int>>();
+
+            // Add the new queue to the dictionary.
+            queues[id] = new Queue<int>(questionIds);
+
+            // Store the dictionary in the session.
+            HttpContext.Session.Set("queues", queues);
+
+            // Redirect to the first question.
+            return RedirectToAction("Question", new { id });
+        }
+        
+        public IActionResult Question(int id)
+        {
+            // Retrieve the dictionary of queues from the session.
+            var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
+
+            // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
+            if (queues == null || !queues.ContainsKey(id) || !queues[id].Any())
+            {
+                return RedirectToAction("EndSubFlow");
+            }
+
+            // Retrieve the queue of question IDs for the current flow.
+            var questionQueue = queues[id];
+
+            // Retrieve the current index from the session.
+            int currentIndex = HttpContext.Session.GetInt32("currentIndex") ?? 0;
+
+            // If the index is out of range, redirect to the end of the flow.
+            if (currentIndex < 0 || currentIndex >= questionQueue.Count)
+            {
+                return RedirectToAction("EndSubFlow");
+            }
+
+            // Get the question ID at the current index.
+            var questionId = questionQueue.ElementAt(currentIndex);
+            var question = _flowManager.GetQuestionById(questionId);
+
+            // Increment the current index and store it in the session.
+            currentIndex++;
+            HttpContext.Session.SetInt32("currentIndex", currentIndex);
+
+            // Display the question view based on the question type.
+            return question.Type switch
+            {
+                QuestionType.RangeEnum => View("Questions/RangeView", question as RangeQuestion),
+                QuestionType.MultipleChoice => View("Questions/MultipleChoice", question as MultipleChoiceQuestion),
+                QuestionType.Open => View("Questions/Open", question as OpenQuestion),
+                QuestionType.SingleChoice => View("Questions/SingleChoice", question as SingleChoiceQuestion),
+                _ => throw new Exception("Unknown question type")
+            };
+        }
+        
+        public IActionResult EndSubFlow()
+        {
+            ViewData["Message"] = "Thank you for completing the subflow!";
+            return View();
+        }
     }
 }
