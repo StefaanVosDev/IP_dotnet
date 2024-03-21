@@ -118,12 +118,10 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult SaveAndNext(int flowId, int id, AnswerViewModel model)
         {
-            if (model.Answer != null && model.Answer.Any())
-            {
-                var answerText = string.Join(",", model.Answer);
-                var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0; // Retrieve the session Id from the HttpContext
-                SaveAnswer(answerText, id, sessionId); // Pass the session Id to SaveAnswer
-            }
+            if (model.Answer == null || !model.Answer.Any()) return RedirectToAction("Question", new { id = flowId });
+            var answerText = string.Join(";", model.Answer);
+            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0; // Retrieve the session Id from the HttpContext
+            SaveAnswer(answerText, model.QuestionId, sessionId); // Pass the QuestionId from the model to SaveAnswer
 
             return RedirectToAction("Question", new { id = flowId });
         }
