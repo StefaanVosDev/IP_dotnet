@@ -12,16 +12,14 @@
     <p class="text-start fw-bold">Question</p>
     <p>@Model.Text</p>
 </div>
-<div class="row my-2">
-    <textarea class="form-control"></textarea>
-</div>
 <div class="row py-2">
-    <div class="col-auto">
-        <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
-            <input type="hidden" name="flowId" value="@Model.FlowId"/>
-            <input type="hidden" name="id" value="@Model.Id"/>
-            <input type="text" name="Answer"/>
-            <input type="submit" value="Next"/>
-        </form>
-    </div>
+    <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+        <div class="row my-2">
+            <textarea class="form-control" name="Answer"></textarea>
+        </div>
+        <input type="hidden" name="flowId" value="@Model.FlowId"/>
+        <input type="hidden" name="id" value="@Model.Id"/>
+        <input type="hidden" name="QuestionId" value="@Model.Id"/>
+        <input type="submit" value="Next"/>
+    </form>
 </div>
