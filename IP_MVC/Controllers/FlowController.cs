@@ -35,6 +35,19 @@ namespace IP_MVC.Controllers
             // Retrieve the flow and its associated questions.
             var questionIds = _flowManager.GetQuestionsByFlowId(id).Select(q => q.Id).ToList();
 
+            // Create a new session.
+            var newSession = new Session
+            {
+                FlowId = id,
+                Answers = new List<Answer>()
+            };
+
+            // Save the new session.
+            _sessionManager.AddAsync(newSession).Wait();
+            
+            // Store the session Id in the HttpContext.
+            HttpContext.Session.SetInt32("sessionId", newSession.Id);
+
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
@@ -52,7 +65,7 @@ namespace IP_MVC.Controllers
             return RedirectToAction("Question", new { id });
         }
 
-        public IActionResult Question(int id, AnswerViewModel model)
+        public IActionResult Question(int id)
         {
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
@@ -74,10 +87,10 @@ namespace IP_MVC.Controllers
             {
                 return RedirectToAction("EndSubFlow");
             }
-            
+
             // Retrieve the current question ID from the queue.
             var questionId = questionQueue.ElementAt(currentIndex);
-            
+
             // Retrieve the question based on the ID.
             var question = _questionManager.GetQuestionById(questionId);
 
@@ -101,29 +114,36 @@ namespace IP_MVC.Controllers
             ViewData["Message"] = "Thank you for completing the subflow!";
             return View();
         }
-        
+
         [HttpPost]
         public IActionResult SaveAndNext(int flowId, int id, AnswerViewModel model)
         {
-            if (!string.IsNullOrEmpty(model.Answer))
+            if (model.Answer != null && model.Answer.Any())
             {
-                SaveAnswer(model, id);
+                var answerText = string.Join(",", model.Answer);
+                var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0; // Retrieve the session Id from the HttpContext
+                SaveAnswer(answerText, id, sessionId); // Pass the session Id to SaveAnswer
             }
 
             return RedirectToAction("Question", new { id = flowId });
         }
-        
-        private void SaveAnswer(AnswerViewModel model, int questionId)
-        {
-            var answer = new Answer
-            {
-                Id = _sessionManager.GetSession(User.Identity.Name).Id,
-                QuestionId = questionId,
-                AnswerText = model.Answer
-            };
 
-            _sessionManager.GetSession(User.Identity.Name).Answers.Add(answer);
-            _sessionManager.UpdateSession(_sessionManager.GetSession(User.Identity.Name));
+        private void SaveAnswer(string answerText, int questionId, int sessionId)
+        {
+            var session = _sessionManager.GetSessionById(sessionId);
+            if (session == null)
+            {
+                //TODO: Handle error
+                return;
+            }
+
+            var answer = new Answer
+            {   Session = session,
+                QuestionId = questionId,
+                AnswerText = answerText
+            };
+            
+            _sessionManager.AddAnswerToSession(sessionId, answer);
         }
     }
 }

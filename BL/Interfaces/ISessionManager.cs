@@ -5,7 +5,8 @@ namespace BL.Interfaces;
 
 public interface ISessionManager : IManager<Session>
 {
-    Session GetSession(string userId);
-    void AddAnswerToSession(Answer answer, string userId);
-    void UpdateSession(Session session);
+    public Session GetSessionById(int id);
+
+    public void UpdateSession(Session session);
+    public void AddAnswerToSession(int sessionId, Answer answer);
 }
