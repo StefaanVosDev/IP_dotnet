@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Domain.Answers;
 using BL.Domain.Questions;
 using BL.Interfaces;
 using DAL.Interfaces;
@@ -41,6 +42,11 @@ namespace BL.Implementations
         public Question GetQuestionById(int questionId)
         {
             return repository.GetQuestionById(questionId);
+        }
+
+        public void StoreAnswers(int id, List<Answer> answers)
+        {
+            repository.StoreAnswers(id, answers);
         }
     }
 }

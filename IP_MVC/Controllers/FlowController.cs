@@ -4,6 +4,7 @@ using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using System.Linq;
+using BL.Domain.Answers;
 
 namespace IP_MVC.Controllers
 {
@@ -19,7 +20,7 @@ namespace IP_MVC.Controllers
         public IActionResult Flow(int id) => View(_flowManager.GetParentFlowsByProjectId(id));
 
         public IActionResult SubFlow(int id) => View(_flowManager.GetFlowsByParentId(id));
-        
+
         public IActionResult PlayFlow(int id)
         {
             // Retrieve the flow and its associated questions.
@@ -33,6 +34,9 @@ namespace IP_MVC.Controllers
 
             // Store the dictionary in the session.
             HttpContext.Session.Set("queues", queues);
+            
+            // Reset the current index.
+            HttpContext.Session.SetInt32("currentIndex", 0);
 
             // Redirect to the first question.
             return RedirectToAction("Question", new { id });
@@ -85,5 +89,6 @@ namespace IP_MVC.Controllers
             ViewData["Message"] = "Thank you for completing the subflow!";
             return View();
         }
+
     }
 }

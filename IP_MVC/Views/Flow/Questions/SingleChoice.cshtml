@@ -27,11 +27,9 @@
     </form>
 </div>
 <div class="row py-2">
-    <div class="col-auto me-auto">
-        <a asp-action="PlayFlow" asp-controller="Flow" asp-route-id="@ViewBag.CurrentFlowId" asp-route-direction="previous" class="btn btn-secondary">Previous</a>
-    </div>
     <div class="col-auto">
         <form asp-action="Question" asp-controller="Flow" method="post">
+            <input type="hidden" name="direction" value="next" />
             <input type="submit" value="Next" class="btn btn-secondary" />
         </form>
     </div>

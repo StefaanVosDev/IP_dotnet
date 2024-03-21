@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Domain.Answers;
 using BL.Domain.Questions;
 
 namespace DAL.Interfaces;
@@ -11,4 +12,5 @@ public interface IFlowRepository : IRepository
     public Flow getFlowById(int id);
     public IEnumerable<Question> GetQuestionsByFlowId(int id);
     public Question GetQuestionById(int questionId);
+    void StoreAnswers(int id, List<Answer> answers);
 }

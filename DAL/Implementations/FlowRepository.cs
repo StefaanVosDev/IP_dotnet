@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Domain.Answers;
 using BL.Domain.Questions;
 using DAL.EF;
 using DAL.Interfaces;
@@ -34,5 +35,10 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     public Question GetQuestionById(int questionId)
     {
         return _context.Set<Question>().Find(questionId);
+    }
+
+    public void StoreAnswers(int id, List<Answer> answers)
+    {
+        throw new NotImplementedException();
     }
 } 
