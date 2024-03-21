@@ -12,9 +12,12 @@
     <p class="text-start fw-bold">Question</p>
     <p>@Model.Text</p>
 </div>
-<div class="row py-2 slider-container">
-    <div class="slider-values">
-        
+<div class="row py-2 slider-container" style="text-align: center">
+    <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
+        @for (int i = Model.Min; i <= Model.Max; i++)
+        {
+            <span>@i</span>
+        }
     </div>
     <input type="range" min="@Model.Min" max="@Model.Max"/>
 </div>
@@ -26,3 +29,8 @@
         </form>
     </div>
 </div>
+
+
+@*<span class="slider-label">Tevreden</span>
+        <span class="slider-label">Neutraal</span>
+        <span class="slider-label">Heel ontevreden</span>*@
