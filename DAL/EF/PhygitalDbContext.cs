@@ -1,11 +1,13 @@
 ﻿using BL.Domain;
 using BL.Domain.Answers;
 using BL.Domain.Questions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.EF;
 
-public class PhygitalDbContext : DbContext
+public class PhygitalDbContext : IdentityDbContext<IdentityUser>
 {
     #region Constructors
 

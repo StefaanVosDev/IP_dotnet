@@ -14,7 +14,7 @@ public class DataSeeder
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var project = new Project("Phygital");
+        var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
         context.Add(project);
         context.SaveChanges();
 
@@ -22,12 +22,14 @@ public class DataSeeder
         {
             new(
                 "Betrokkenheid bij het lokale beleid",
+                "dit is de interesante beschrijving van de flow",
                 project.Id,
                 FlowType.LINEAR,
                 null,
                 [
                     new Flow(
                         "Betrokkenheid en participatie",
+                        "dit is de interesante beschrijving van de flow",
                         project.Id,
                         FlowType.LINEAR,
                         [
@@ -62,6 +64,7 @@ public class DataSeeder
                     ),
                     new Flow(
                         "Kiesintenties en participatie aan verkiezingen",
+                        "dit is de interesante beschrijving van de flow",
                         project.Id,
                         FlowType.LINEAR,
                         [
