@@ -10,15 +10,7 @@ namespace DAL.Implementations;
 public class FlowRepository(PhygitalDbContext context) : Repository(context), IFlowRepository
 {
     private readonly DbContext _context = context;
-
-    public IEnumerable<Flow> GetFlowsByProjectIdAsync(int projectId)
-    {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId);
-    }
-    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
-    {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId && f.ParentFlowId == null);
-    }
+    
     public IEnumerable<Flow> GetFlowsByParentId(int flowId)
     {
         return _context.Set<Flow>().Where(f => f.ParentFlowId == flowId);
@@ -31,14 +23,6 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     {
         return _context.Set<Question>().Where(q => q.FlowId == id);
     }
+    
 
-    public Question GetQuestionById(int questionId)
-    {
-        return _context.Set<Question>().Find(questionId);
-    }
-
-    public void StoreAnswers(int id, List<Answer> answers)
-    {
-        throw new NotImplementedException();
-    }
 } 
