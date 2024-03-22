@@ -24,5 +24,10 @@ namespace BL.Implementations
         {
             repository.AddAnswerToSession(sessionId, answer);
         }
+
+        public IEnumerable<Answer> GetAnswersBySessionId(int sessionId)
+        {
+            return repository.GetAnswersBySessionId(sessionId);
+        }
     }
 }
