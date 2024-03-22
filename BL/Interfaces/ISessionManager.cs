@@ -9,4 +9,5 @@ public interface ISessionManager : IManager<Session>
 
     public void UpdateSession(Session session);
     public void AddAnswerToSession(int sessionId, Answer answer);
+    public IEnumerable<Answer> GetAnswersBySessionId(int sessionId);
 }

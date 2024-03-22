@@ -44,6 +44,11 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
         }
     }
 
+    public IEnumerable<Answer> GetAnswersBySessionId(int sessionId)
+    {
+        return context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.Id == sessionId)?.Answers;
+    }
+
     private bool SessionExists(int id)
     {
         return context.Sessions.Any(e => e.Id == id);

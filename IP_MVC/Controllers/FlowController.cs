@@ -111,8 +111,29 @@ namespace IP_MVC.Controllers
 
         public IActionResult EndSubFlow()
         {
+            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
+            var session = _sessionManager.GetSessionById(sessionId);
+            if (session == null)
+            {
+                //TODO: Handle error
+                return View();
+            }
+
+            var answers = _sessionManager.GetAnswersBySessionId(sessionId).ToList();
+            var questions = answers.Select(a => _questionManager.GetQuestionById(a.QuestionId)).ToList();
+            
+            var flow = _flowManager.GetFlowById(session.FlowId);
+            var parentId = flow.ParentFlowId;
+            
+            var model = new EndSubFlowViewModel
+            {
+                Questions = questions,
+                Answers = answers,
+                FlowId = parentId ?? 0
+            };
+
             ViewData["Message"] = "Thank you for completing the subflow!";
-            return View();
+            return View(model);
         }
 
         [HttpPost]
