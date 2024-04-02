@@ -11,6 +11,7 @@ using IP_MVC;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +20,32 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PhygitalDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("Connection");
-    options.UseNpgsql(connectionString);
+    try
+    {
+        var connectionString = builder.Configuration.GetConnectionString("Connection");
+        var testConnection = new NpgsqlConnection(connectionString);
+        testConnection.Open();
+        testConnection.Close();
+        options.UseNpgsql(connectionString);
+    }
+    catch (NpgsqlException)
+    {
+        Console.WriteLine("Google Cloud database not available. Trying local database.");
+        try
+        {
+            var localConnectionString = builder.Configuration.GetConnectionString("LocalConnection");
+            var localTestConnection = new NpgsqlConnection(localConnectionString);
+            localTestConnection.Open();
+            localTestConnection.Close();
+            options.UseNpgsql(localConnectionString);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("No valid database available. Check database or connection string in appsettings.json.");
+            Console.WriteLine(e.Message);
+            Environment.Exit(1);
+        }
+    }
 });
 
 builder.Services.AddSession(options =>
