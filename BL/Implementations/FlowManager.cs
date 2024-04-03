@@ -6,7 +6,7 @@ using DAL.Interfaces;
 
 namespace BL.Implementations;
 
-public class FlowManager(IFlowRepository repository) : Manager<Flow>(repository), IFlowManager
+public class FlowManager(IFlowRepository repository, ISessionManager sessionManager) : Manager<Flow>(repository), IFlowManager
 {
     public IEnumerable<Flow> GetFlowsByParentId(int flowId)
     {
@@ -26,5 +26,17 @@ public class FlowManager(IFlowRepository repository) : Manager<Flow>(repository)
     public IEnumerable<Question> GetQuestionsByFlowId(int id)
     {
         return repository.GetQuestionsByFlowId(id);
+    }
+    
+    public Queue<int> GetQuestionQueueByFlowId(int flowId)
+    {
+        var questionIds = GetQuestionsByFlowId(flowId).Select(q => q.Id).ToList();
+        return new Queue<int>(questionIds);
+    }
+    
+    public int? GetParentFlowIdBySessionId(int sessionId)
+    {
+        var flow = GetFlowById(sessionManager.GetSessionById(sessionId).FlowId);
+        return flow.ParentFlowId;
     }
 }
