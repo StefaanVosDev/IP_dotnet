@@ -10,58 +10,28 @@ using IP_MVC.Models;
 
 namespace IP_MVC.Controllers
 {
-    public class FlowController : Controller
+    public class FlowController(
+        IFlowManager flowManager,
+        ISessionManager sessionManager,
+        IProjectManager projectManager,
+        IQuestionManager questionManager)
+        : Controller
     {
-        private readonly IFlowManager _flowManager;
-        private readonly ISessionManager _sessionManager;
-        private readonly IProjectManager _projectManager;
-        private readonly IQuestionManager _questionManager;
+        public IActionResult Flow(int id) => View(projectManager.GetParentFlowsByProjectId(id));
 
-        public FlowController(IFlowManager flowManager, ISessionManager sessionManager, IProjectManager projectManager,
-            IQuestionManager questionManager)
+        public IActionResult SubFlow(int id) => View(flowManager.GetFlowsByParentId(id));
+
+        public async Task<IActionResult> PlayFlow(int id)
         {
-            _flowManager = flowManager;
-            _sessionManager = sessionManager;
-            _projectManager = projectManager;
-            _questionManager = questionManager;
-        }
-
-        public IActionResult Flow(int id) => View(_projectManager.GetParentFlowsByProjectId(id));
-
-        public IActionResult SubFlow(int id) => View(_flowManager.GetFlowsByParentId(id));
-
-        public IActionResult PlayFlow(int id)
-        {
-            // Retrieve the flow and its associated questions.
-            var questionIds = _flowManager.GetQuestionsByFlowId(id).Select(q => q.Id).ToList();
-
-            // Create a new session.
-            var newSession = new Session
-            {
-                FlowId = id,
-                Answers = new List<Answer>()
-            };
-
-            // Save the new session.
-            _sessionManager.AddAsync(newSession).Wait();
-            
-            // Store the session Id in the HttpContext.
+            var newSession = await sessionManager.CreateNewSession(id);
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
-            // Retrieve the dictionary of queues from the session.
-            var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
-                         new Dictionary<int, Queue<int>>();
-
-            // Add the new queue to the dictionary.
-            queues[id] = new Queue<int>(questionIds);
-
-            // Store the dictionary in the session.
+            var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ?? new Dictionary<int, Queue<int>>();
+            queues[id] = flowManager.GetQuestionQueueByFlowId(id);
             HttpContext.Session.Set("queues", queues);
 
-            // Reset the current index.
             HttpContext.Session.SetInt32("currentIndex", 0);
 
-            // Redirect to the first question.
             return RedirectToAction("Question", new { id });
         }
 
@@ -91,40 +61,32 @@ namespace IP_MVC.Controllers
             // Retrieve the current question ID from the queue.
             var questionId = questionQueue.ElementAt(currentIndex);
 
-            // Retrieve the question based on the ID.
-            var question = _questionManager.GetQuestionById(questionId);
+            // Retrieve the question based on the ID and type.
+            var question = questionManager.GetQuestionByIdAndType(questionId);
 
             // Increment the current index and store it in the session.
             currentIndex++;
             HttpContext.Session.SetInt32("currentIndex", currentIndex);
 
             // Display the question view based on the question type.
-            return question.Type switch
-            {
-                QuestionType.RangeEnum => View("Questions/RangeView", question as RangeQuestion),
-                QuestionType.MultipleChoice => View("Questions/MultipleChoice", question as MultipleChoiceQuestion),
-                QuestionType.Open => View("Questions/Open", question as OpenQuestion),
-                QuestionType.SingleChoice => View("Questions/SingleChoice", question as SingleChoiceQuestion),
-                _ => throw new Exception("Unknown question type")
-            };
+            return View($"Questions/{question.Type}", question);
         }
-
+        
         public IActionResult EndSubFlow()
         {
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
-            var session = _sessionManager.GetSessionById(sessionId);
+            var session = sessionManager.GetSessionById(sessionId);
             if (session == null)
             {
                 //TODO: Handle error
                 return View();
             }
 
-            var answers = _sessionManager.GetAnswersBySessionId(sessionId).ToList();
-            var questions = answers.Select(a => _questionManager.GetQuestionById(a.QuestionId)).ToList();
-            
-            var flow = _flowManager.GetFlowById(session.FlowId);
-            var parentId = flow.ParentFlowId;
-            
+            var answers = sessionManager.GetAnswersBySessionId(sessionId).ToList();
+            var questions = sessionManager.GetQuestionsBySessionId(sessionId).ToList();
+
+            var parentId = flowManager.GetParentFlowIdBySessionId(sessionId);
+
             var model = new EndSubFlowViewModel
             {
                 Questions = questions,
@@ -142,27 +104,9 @@ namespace IP_MVC.Controllers
             if (model.Answer == null || !model.Answer.Any()) return RedirectToAction("Question", new { id = flowId });
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0; // Retrieve the session Id from the HttpContext
-            SaveAnswer(answerText, model.QuestionId, sessionId); // Pass the QuestionId from the model to SaveAnswer
+            sessionManager.SaveAnswer(answerText, model.QuestionId, sessionId); // Pass the QuestionId from the model to SaveAnswer
 
             return RedirectToAction("Question", new { id = flowId });
-        }
-
-        private void SaveAnswer(string answerText, int questionId, int sessionId)
-        {
-            var session = _sessionManager.GetSessionById(sessionId);
-            if (session == null)
-            {
-                //TODO: Handle error
-                return;
-            }
-
-            var answer = new Answer
-            {   Session = session,
-                QuestionId = questionId,
-                AnswerText = answerText
-            };
-            
-            _sessionManager.AddAnswerToSession(sessionId, answer);
         }
     }
 }
