@@ -4,6 +4,7 @@ using BL.Domain.Questions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace DAL.EF;
 
@@ -14,7 +15,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     public PhygitalDbContext()
     {
     }
-    
+
     public PhygitalDbContext(DbContextOptions<PhygitalDbContext> options) : base(options)
     {
     }
@@ -22,6 +23,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     #endregion
 
     //TODO: Add the users needed in the DB
+
     #region vars
 
     public DbSet<Answer> Answers { get; set; }
@@ -32,8 +34,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Flow> Flows { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Session> Sessions { get; set; }
-    
-    
+
     #endregion
 
     #region On... override methods
@@ -43,9 +44,27 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         base.OnConfiguring(optionsBuilder);
         if (optionsBuilder.IsConfigured) return;
         const string connectionString = "Host=35.240.22.60;Database=postgres;Username=postgres;Password=%^c~JK,s-H^1}sde;";
-        optionsBuilder.UseNpgsql(connectionString);
+        const string localConnection = "Host=localhost;Database=postgres;Username=postgres;Password=password123;";
+        try
+        {
+            optionsBuilder.UseNpgsql(connectionString);
+            var context = new NpgsqlConnection(connectionString);
+            context.Open();
+        }
+        catch (NpgsqlException)
+        {
+            try
+            {
+                optionsBuilder.UseNpgsql(localConnection);
+            }
+            catch (NpgsqlException)
+            {
+                // Log error or throw custom exception
+                Console.WriteLine("local database not available. Check connection string in appsettings.json.");
+            }
+        }
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -55,7 +74,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
             .WithOne(s => s.ParentFlow)
             .HasForeignKey(s => s.ParentFlowId);
     }
-    
+
     public bool CreateDatabase(bool wipeDatabase = true)
     {
         if (!wipeDatabase) return false;
@@ -66,7 +85,8 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     private void EmptyDatabase()
     {
         // Get all the DbSets properties
-        var dbSets = GetType().GetProperties().Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
+        var dbSets = GetType().GetProperties().Where(p =>
+            p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>));
 
         foreach (var dbSet in dbSets)
         {
@@ -75,7 +95,9 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
             if (dbSetInstance != null)
             {
                 // Get the RemoveRange method
-                var removeRangeMethod = typeof(DbContext).GetMethod(nameof(DbContext.RemoveRange), new Type[] { typeof(IEnumerable<>) })?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
+                var removeRangeMethod = typeof(DbContext)
+                    .GetMethod(nameof(DbContext.RemoveRange), new Type[] { typeof(IEnumerable<>) })
+                    ?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
 
                 // Invoke the RemoveRange method with the DbSet instance
                 if (removeRangeMethod != null)
@@ -87,9 +109,10 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
 
         SaveChanges();
     }
+
     #endregion
-     
-    
+
+
     //TODO: run database migrations.
     //TODO:ProjectDirectory>cd DAL
     //TODO:ProjectDirectory\DAL>dotnet ef migrations add {{migrationName}}
