@@ -48,8 +48,12 @@ builder.Services.AddDbContext<PhygitalDbContext>(options =>
     }
 });
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<PhygitalDbContext>();
+// Add Identity
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<PhygitalDbContext>();
 
+// Add session
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -68,6 +72,30 @@ builder.Services.AddScoped<IProjectManager, ProjectManager>();
 builder.Services.AddScoped<IQuestionManager, QuestionManager>();
 builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddScoped<IFlowManager, FlowManager>();
+
+// Add authorization
+builder.Services.ConfigureApplicationCookie(cfg =>
+{
+    cfg.Events.OnRedirectToLogin += ctx =>
+    {
+        if (ctx.Request.Path.StartsWithSegments("/api"))
+        {
+            ctx.Response.StatusCode = 401;
+        }
+
+        return Task.CompletedTask;
+    };
+
+    cfg.Events.OnRedirectToAccessDenied += ctx =>
+    {
+        if (ctx.Request.Path.StartsWithSegments("/api"))
+        {
+            ctx.Response.StatusCode = 403;
+        }
+
+        return Task.CompletedTask;
+    };
+});
 
 var app = builder.Build();
 
@@ -106,20 +134,23 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+app.MapRazorPages();
 
-void SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+app.Run();
+return;
+
+async Task SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 {
     var userRole = new IdentityRole
     {
         Name = CustomIdentityConstants.FacilitatorRole
     };
-    roleManager.CreateAsync(userRole).Wait();
+    await roleManager.CreateAsync(userRole);
     var adminRole = new IdentityRole
     {
         Name = CustomIdentityConstants.AdminRole
     };
-    roleManager.CreateAsync(adminRole).Wait();
+    await roleManager.CreateAsync(adminRole);
 
     var adminUser = new IdentityUser
     {
@@ -127,17 +158,17 @@ void SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRol
         UserName = "admin@kdg.be",
         EmailConfirmed = true
     };
-    userManager.CreateAsync(adminUser, "Password1!").Wait();
-    userManager.AddToRoleAsync(adminUser, CustomIdentityConstants.AdminRole);
-    
+    await userManager.CreateAsync(adminUser, "Password1!");
+    await userManager.AddToRoleAsync(adminUser, CustomIdentityConstants.AdminRole);
+
     var facilitatorUser = new IdentityUser
     {
         Email = "fac@kdg.be",
         UserName = "fac@kdg.be",
         EmailConfirmed = true
     };
-    userManager.CreateAsync(facilitatorUser, "Password1!").Wait();
-    userManager.AddToRoleAsync(facilitatorUser, CustomIdentityConstants.FacilitatorRole);
+    await userManager.CreateAsync(facilitatorUser, "Password1!");
+    await userManager.AddToRoleAsync(facilitatorUser, CustomIdentityConstants.FacilitatorRole);
 }
 
 //Do not delete
