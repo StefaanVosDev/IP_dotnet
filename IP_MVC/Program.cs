@@ -48,6 +48,8 @@ builder.Services.AddDbContext<PhygitalDbContext>(options =>
     }
 });
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<PhygitalDbContext>();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -110,7 +112,7 @@ void SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRol
 {
     var userRole = new IdentityRole
     {
-        Name = CustomIdentityConstants.UserRole
+        Name = CustomIdentityConstants.FacilitatorRole
     };
     roleManager.CreateAsync(userRole).Wait();
     var adminRole = new IdentityRole
@@ -119,17 +121,26 @@ void SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRol
     };
     roleManager.CreateAsync(adminRole).Wait();
 
-    var user = new IdentityUser
+    var adminUser = new IdentityUser
     {
         Email = "admin@kdg.be",
         UserName = "admin@kdg.be",
         EmailConfirmed = true
     };
-    userManager.CreateAsync(user, "Password1!").Wait();
-
-    userManager.AddToRoleAsync(user, CustomIdentityConstants.AdminRole);
+    userManager.CreateAsync(adminUser, "Password1!").Wait();
+    userManager.AddToRoleAsync(adminUser, CustomIdentityConstants.AdminRole);
+    
+    var facilitatorUser = new IdentityUser
+    {
+        Email = "fac@kdg.be",
+        UserName = "fac@kdg.be",
+        EmailConfirmed = true
+    };
+    userManager.CreateAsync(facilitatorUser, "Password1!").Wait();
+    userManager.AddToRoleAsync(facilitatorUser, CustomIdentityConstants.FacilitatorRole);
 }
 
+//Do not delete
 public partial class Program
 {
 }
