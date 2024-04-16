@@ -1,1 +1,0 @@
-{"version":3,"file":"index.entry.js","mappings":";;;;;AAAA,qD","sources":["webpack://IP_MVC/./src/js/index.js"],"sourcesContent":["console.log('The \\'index\\' bundle has been loaded!');"],"names":[],"sourceRoot":""}
