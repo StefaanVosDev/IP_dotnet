@@ -16,7 +16,7 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
         var question = GetQuestionById(id);
         return question.Type switch
         {
-            QuestionType.RangeEnum => question as RangeQuestion,
+            QuestionType.Range => question as RangeQuestion,
             QuestionType.MultipleChoice => question as MultipleChoiceQuestion,
             QuestionType.Open => question as OpenQuestion,
             QuestionType.SingleChoice => question as SingleChoiceQuestion,
