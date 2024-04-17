@@ -13,12 +13,22 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
         return context.Set<Session>().Find(id);
     }
 
-    public void AddAnswerToSession(int sessionId, Answer answer)
+    public void AddAnswerToSession(int sessionId, Answer answer, bool linearFlow)
     {
         var session = context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.Id == sessionId);
         if (session == null)
         {
             throw new Exception("No session found with this id");
+        }
+
+        if (linearFlow)
+        {
+            //efficient way to see if there already is an answer coupled to a question with this sessionId
+            if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))
+            {
+                //if an answer already exists, ovveride it with the new answer
+                session.Answers.Remove(session.Answers.First(a => a.QuestionId == answer.QuestionId));
+            }
         }
         session.Answers.Add(answer);
         context.SaveChanges();

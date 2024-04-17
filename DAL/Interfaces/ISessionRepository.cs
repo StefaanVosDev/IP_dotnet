@@ -6,7 +6,7 @@ namespace DAL.Interfaces;
 public interface ISessionRepository : IRepository
 {
     Session GetSessionById(int id);
-    void AddAnswerToSession(int sessionId, Answer answer);
+    void AddAnswerToSession(int sessionId, Answer answer, bool linearFlow);
     void Update(Session session);
     IEnumerable<Answer> GetAnswersBySessionId(int sessionId);
 }

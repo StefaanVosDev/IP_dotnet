@@ -3,6 +3,16 @@
 @{
     ViewBag.Title = "RangeEnum";
     Layout = "_Layout";
+    var currentIndex = ViewData["currentIndex"] as int? ?? 0;
+    var linearFlow = ViewData["linearFlow"] as bool? ?? false;
+    @*@if (ViewData.ContainsKey("linearFlow"))
+    {
+        <p>@($"linearFlow exists in ViewData. Its actual type is {ViewData["linearFlow"].GetType().Name}.")</p>
+    }
+    else
+    {
+        <p>"linearFlow does not exist in ViewData."</p>
+    }*@
 }
 
 <div class="row py-2">
@@ -13,27 +23,42 @@
     <p>@Model.Text</p>
 </div>
 <div class="row py-2 slider-container" style="text-align: center">
-
-    <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+    <form id="myForm" asp-controller="Flow" method="post">
         <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
             @for (int i = Model.Min; i <= Model.Max; i++)
             {
                 <span>@i</span>
             }
         </div>
-        <input type="range" min="@Model.Min" max="@Model.Max"/>
+        <input type="range" min="@Model.Min" max="@Model.Max" value="@Model.Min"/>
         <input type="hidden" id="selectedValue" name="Answer"/>
         <input type="hidden" name="flowId" value="@Model.FlowId"/>
         <input type="hidden" name="id" value="@Model.Id"/>
         <input type="hidden" name="QuestionId" value="@Model.Id"/>
+        <input type="hidden" name="linearFlow" value="@linearFlow.ToString()"/>
+
         <br/>
-        <input type="submit" value="Next"/>
+        @if (linearFlow)
+        {
+            @if (currentIndex != 1)
+            {
+                <input type="submit" value="Previous" asp-action="SaveAndPrevious"/>
+            }
+       
+            <input type="submit" value="Next" asp-action="SaveAndNext"/>
+        }
+        else
+        {
+            <div class="row py-2">
+                <span id="countdown"></span>
+            </div>
+            //todo: redirect to login page, user can't close circular flow
+            <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
+       
+            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
+        }
     </form>
+    <button id="exitButton" class="btn btn-danger">Exit</button>
 </div>
 
-<!-- TODO Move this to different file -->
-<script>
-    document.querySelector('input[type="range"]').addEventListener('input', function(e) {
-        document.getElementById('selectedValue').value = e.target.value;
-    });
-</script>
+<script src="/dist/Views/Flow/Questions/Range.js" defer="defer"></script>
