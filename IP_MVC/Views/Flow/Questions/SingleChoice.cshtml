@@ -1,11 +1,12 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using BL.Domain
 @model BL.Domain.Questions.SingleChoiceQuestion
 
 @{
     ViewBag.Title = "Single Choice";
     Layout = "_Layout";
     var currentIndex = ViewData["currentIndex"] as int? ?? 0;
-    var linearFlow = ViewData["linearFlow"] as bool? ?? false;
+    var flowType = ViewData["flowType"] as FlowType? ?? FlowType.LINEAR;
 }
 
 <div class="row py-2">
@@ -29,9 +30,9 @@
         <input type="hidden" name="flowId" value="@Model.FlowId"/>
         <input type="hidden" name="id" value="@Model.Id"/>
         <input type="hidden" name="QuestionId" value="@Model.Id"/>
-        <input type="hidden" name="linearFlow" value="@linearFlow.ToString()"/>
+        <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
 
-        @if (linearFlow)
+        @if (flowType == FlowType.LINEAR)
         {
             @if (currentIndex != 1)
             {

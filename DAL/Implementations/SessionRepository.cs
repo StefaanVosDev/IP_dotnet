@@ -13,7 +13,7 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
         return context.Set<Session>().Find(id);
     }
 
-    public void AddAnswerToSession(int sessionId, Answer answer, bool linearFlow)
+    public void AddAnswerToSession(int sessionId, Answer answer, FlowType flowType)
     {
         var session = context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.Id == sessionId);
         if (session == null)
@@ -21,7 +21,7 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
             throw new Exception("No session found with this id");
         }
 
-        if (linearFlow)
+        if (flowType == FlowType.LINEAR)
         {
             //efficient way to see if there already is an answer coupled to a question with this sessionId
             if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))

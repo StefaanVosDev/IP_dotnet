@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function () {
     var selectedValue = document.getElementById('selectedValue');
-    selectedValue.value = String(window.Model.Min); // Assuming @Model.Min is defined globally
+    selectedValue.value = selectedValue.dataset.min;
 });
 document.querySelector('input[type="range"]').addEventListener('input', function (e) {
     var selectedValue = document.getElementById('selectedValue');
