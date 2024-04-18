@@ -1,8 +1,11 @@
+@using BL.Domain
 @model BL.Domain.Questions.MultipleChoiceQuestion
 
 @{
     ViewBag.Title = "Multiple Choice";
     Layout = "_Layout";
+    var currentIndex = ViewData["currentIndex"] as int? ?? 0;
+    var flowType = ViewData["flowType"] as FlowType? ?? FlowType.LINEAR;
 }
 
 <div class="row py-2">
@@ -13,7 +16,7 @@
     <p>@Model.Text</p>
 </div>
 <div class="row bg-secondary-subtle border border-black my-2">
-    <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+    <form id="myForm" asp-controller="Flow" method="post">
         @if (Model.Options != null)
         {
             var i = 0;
@@ -31,6 +34,27 @@
         <input type="hidden" name="flowId" value="@Model.FlowId"/>
         <input type="hidden" name="id" value="@Model.Id"/>
         <input type="hidden" name="QuestionId" value="@Model.Id"/>
-        <input type="submit" value="Next"/>
+        <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
+        
+        @if (flowType == FlowType.LINEAR)
+        {
+            @if (currentIndex != 1)
+            {
+                <input type="submit" value="Previous" asp-action="SaveAndPrevious"/>
+            }
+
+            <input type="submit" value="Next" asp-action="SaveAndNext"/>
+        }
+        else
+        {
+            <div class="row py-2">
+                <span id="countdown"></span>
+            </div>
+            //todo: redirect to login page, user can't close circular flow
+            <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
+
+            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
+        }
     </form>
+    <button id="exitButton" class="btn btn-danger">Exit</button>
 </div>

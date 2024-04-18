@@ -21,9 +21,9 @@ public class SessionManager(ISessionRepository repository, IQuestionManager ques
         repository.Update(session);
     }
 
-    public void AddAnswerToSession(int sessionId, Answer answer)
+    public void AddAnswerToSession(int sessionId, Answer answer, FlowType flowType)
     {
-        repository.AddAnswerToSession(sessionId, answer);
+        repository.AddAnswerToSession(sessionId, answer, flowType);
     }
 
     public IEnumerable<Answer> GetAnswersBySessionId(int sessionId)
@@ -50,7 +50,7 @@ public class SessionManager(ISessionRepository repository, IQuestionManager ques
         return answers.Select(a => questionManager.GetQuestionById(a.QuestionId)).ToList();
     }
     
-    public void SaveAnswer(string answerText, int questionId, int sessionId)
+    public void SaveAnswer(string answerText, int questionId, int sessionId, FlowType flowType)
     {
         var session = GetSessionById(sessionId);
         if (session == null)
@@ -66,6 +66,6 @@ public class SessionManager(ISessionRepository repository, IQuestionManager ques
             AnswerText = answerText
         };
 
-        AddAnswerToSession(sessionId, answer);
+        AddAnswerToSession(sessionId, answer, flowType);
     }
 }

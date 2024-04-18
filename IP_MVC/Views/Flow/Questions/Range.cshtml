@@ -1,8 +1,12 @@
+@using BL.Domain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model BL.Domain.Questions.RangeQuestion
 
 @{
     ViewBag.Title = "RangeEnum";
     Layout = "_Layout";
+    var currentIndex = ViewData["currentIndex"] as int? ?? 0;
+    var flowType = ViewData["flowType"] as FlowType? ?? FlowType.LINEAR;
 }
 
 <div class="row py-2">
@@ -13,27 +17,43 @@
     <p>@Model.Text</p>
 </div>
 <div class="row py-2 slider-container" style="text-align: center">
-
-    <form asp-action="SaveAndNext" asp-controller="Flow" method="post">
+    <form id="myForm" asp-controller="Flow" method="post">
         <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
             @for (int i = Model.Min; i <= Model.Max; i++)
             {
                 <span>@i</span>
             }
         </div>
-        <input type="range" min="@Model.Min" max="@Model.Max"/>
-        <input type="hidden" id="selectedValue" name="Answer"/>
+        <input type="range" min="@Model.Min" max="@Model.Max" value="@Model.Min"/>
+        <input type="hidden" id="selectedValue" name="Answer" data-min="@Model.Min"/>
         <input type="hidden" name="flowId" value="@Model.FlowId"/>
         <input type="hidden" name="id" value="@Model.Id"/>
         <input type="hidden" name="QuestionId" value="@Model.Id"/>
-        <br/>
-        <input type="submit" value="Next"/>
-    </form>
-</div>
+        <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
+        
 
-<!-- TODO Move this to different file -->
-<script>
-    document.querySelector('input[type="range"]').addEventListener('input', function(e) {
-        document.getElementById('selectedValue').value = e.target.value;
-    });
-</script>
+        <br/>
+        @if (flowType == FlowType.LINEAR)
+        {
+            @if (currentIndex != 1)
+            {
+                <input type="submit" value="Previous" asp-action="SaveAndPrevious"/>
+            }
+       
+            <input type="submit" value="Next" asp-action="SaveAndNext"/>
+        }
+        else
+        {
+            <div class="row py-2">
+                <span id="countdown"></span>
+            </div>
+            //todo: redirect to login page, user can't close circular flow
+            <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
+       
+            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
+        }
+    </form>
+    <button id="exitButton" class="btn btn-danger">Exit</button>
+</div>
+@* todo: still something wrong here: range used to work, bug in link? *@
+<script src="/dist/Views/Flow/Questions/Range.js" defer="defer"></script>
