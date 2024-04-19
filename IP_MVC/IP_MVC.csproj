@@ -35,6 +35,16 @@
       <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Open\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Range\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Respondent\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\bootstrap_js.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\bootstrap_js.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\site.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\site.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
