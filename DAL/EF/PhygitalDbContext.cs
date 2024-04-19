@@ -92,18 +92,16 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         {
             // Get the DbSet instance
             var dbSetInstance = dbSet.GetValue(this);
-            if (dbSetInstance != null)
-            {
-                // Get the RemoveRange method
-                var removeRangeMethod = typeof(DbContext)
-                    .GetMethod(nameof(DbContext.RemoveRange), new Type[] { typeof(IEnumerable<>) })
-                    ?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
+            if (dbSetInstance == null) continue;
+            // Get the RemoveRange method
+            var removeRangeMethod = typeof(DbContext)
+                .GetMethod(nameof(DbContext.RemoveRange), new Type[] { typeof(IEnumerable<>) })
+                ?.MakeGenericMethod(dbSet.PropertyType.GetGenericArguments());
 
-                // Invoke the RemoveRange method with the DbSet instance
-                if (removeRangeMethod != null)
-                {
-                    removeRangeMethod.Invoke(this, new object[] { dbSetInstance });
-                }
+            // Invoke the RemoveRange method with the DbSet instance
+            if (removeRangeMethod != null)
+            {
+                removeRangeMethod.Invoke(this, new object[] { dbSetInstance });
             }
         }
 
