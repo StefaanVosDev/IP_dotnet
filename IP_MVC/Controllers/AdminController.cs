@@ -8,7 +8,7 @@ namespace IP_MVC.Controllers;
 public class AdminController : Controller
 {
     private readonly IProjectManager _projectManager;
-    AdminController(IProjectManager projectManager)
+    public AdminController(IProjectManager projectManager)
     {
         _projectManager = projectManager;
     }
