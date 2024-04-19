@@ -66,7 +66,8 @@ builder.Services.AddScoped<IProjectManager, ProjectManager>();
 builder.Services.AddScoped<IQuestionManager, QuestionManager>();
 builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddScoped<IFlowManager, FlowManager>();
-
+builder.Services.AddScoped<ICloudManager, CloudManager>();
+builder.Services.AddScoped<ICloudStorageRepository, CloudStorageRepository>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
