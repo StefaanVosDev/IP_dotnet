@@ -20,4 +20,12 @@ public class CloudManager : ICloudManager
     {
         return _storage.FileExists(fileName);
     }
+    public string GetFileExtenstion(string fileName)
+    {
+        return _storage.GetFileExtension(fileName);
+    }
+    public string GetSecret(string secretId)
+    {
+        return _storage.AccessSecret(secretId);
+    }
 }

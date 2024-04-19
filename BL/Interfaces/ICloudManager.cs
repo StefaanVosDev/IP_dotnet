@@ -6,4 +6,6 @@ public interface ICloudManager
 {
     void UploadFile(IFormFile file, string fileName, string folderName);
     bool FileExists(string fileName);
+    string GetFileExtenstion(string fileName);
+    string GetSecret(string secretId);
 }

@@ -6,4 +6,6 @@ public interface ICloudStorageRepository
 {
     void UploadFile(IFormFile file, string fileName,string folderName);
     bool FileExists(string fileName);
+    string GetFileExtension(string fileName);
+    string AccessSecret(string secretId);
 }

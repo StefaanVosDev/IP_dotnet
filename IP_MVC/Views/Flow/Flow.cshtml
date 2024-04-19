@@ -1,7 +1,4 @@
-@using System.Web
 @model IEnumerable<BL.Domain.Flow>
-@inject DAL.Interfaces.ICloudStorageRepository CloudStorageRepository
-
 
 @{
     ViewBag.Title = "Flows";
@@ -11,6 +8,6 @@
 <div class="row row-cols-3">
     @foreach (var flow in Model)
     {
-        <partial name="UploadPictureToBucketPartial" model="flow" />
+        <partial name="_UploadPictureToBucketPartial" model="flow" />
     }
 </div>

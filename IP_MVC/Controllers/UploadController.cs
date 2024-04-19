@@ -17,5 +17,6 @@ public class UploadController : Controller
     {
         _cloudManager.UploadFile(file, fileName, folderName);
         return Ok();
+        //TODO: Return to flows page
     }
 }
