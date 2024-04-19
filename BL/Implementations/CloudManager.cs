@@ -24,8 +24,8 @@ public class CloudManager : ICloudManager
     {
         return _storage.GetFileExtension(fileName);
     }
-    public string GetSecret(string secretId)
+    public void DeleteFile(string fileName)
     {
-        return _storage.AccessSecret(secretId);
+        _storage.DeleteFile(fileName);
     }
 }

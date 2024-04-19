@@ -64,7 +64,7 @@ public class CloudStorageRepository : ICloudStorageRepository
         }
         return null;
     }
-    public string AccessSecret(string secretId)
+    private string AccessSecret(string secretId)
     {
         // Create the Secret Manager client.
         SecretManagerServiceClient client = SecretManagerServiceClient.Create();
@@ -79,5 +79,12 @@ public class CloudStorageRepository : ICloudStorageRepository
         string payload = result.Payload.Data.ToStringUtf8();
 
         return payload;
+    }
+    public void DeleteFile(string fileName)
+    {
+        var storage = StorageClient.Create();
+        string fullFileName = storage.ListObjects(_bucketName, "").FirstOrDefault(obj => obj.Name.Contains(fileName))?.Name;
+        // Delete the file from the bucket
+        storage.DeleteObject(_bucketName, fullFileName);
     }
 }
