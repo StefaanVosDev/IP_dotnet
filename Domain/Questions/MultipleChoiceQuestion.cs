@@ -8,7 +8,7 @@ public class MultipleChoiceQuestion : Question
     {
     }
 
-    public MultipleChoiceQuestion(string text, List<string> options) : base(text, QuestionType.MultipleChoice)
+    public MultipleChoiceQuestion(string text, List<string> options, Media media) : base(text, QuestionType.MultipleChoice, media)
     {
         Options = options;
     }

@@ -58,6 +58,9 @@ namespace DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<int?>("Mediaid")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -72,11 +75,35 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Mediaid");
+
                     b.HasIndex("ParentFlowId");
 
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Flows");
+                });
+
+            modelBuilder.Entity("BL.Domain.Media", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("url")
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Media");
                 });
 
             modelBuilder.Entity("BL.Domain.Project", b =>
@@ -86,6 +113,9 @@ namespace DAL.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminId")
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -113,6 +143,9 @@ namespace DAL.Migrations
                     b.Property<int>("FlowId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("Mediaid")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Text")
                         .HasColumnType("text");
 
@@ -122,6 +155,8 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FlowId");
+
+                    b.HasIndex("Mediaid");
 
                     b.ToTable("Question");
 
@@ -399,6 +434,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BL.Domain.Flow", b =>
                 {
+                    b.HasOne("BL.Domain.Media", "Media")
+                        .WithMany()
+                        .HasForeignKey("Mediaid");
+
                     b.HasOne("BL.Domain.Flow", "ParentFlow")
                         .WithMany("SubFlows")
                         .HasForeignKey("ParentFlowId");
@@ -408,6 +447,8 @@ namespace DAL.Migrations
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Media");
 
                     b.Navigation("ParentFlow");
 
@@ -421,6 +462,12 @@ namespace DAL.Migrations
                         .HasForeignKey("FlowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BL.Domain.Media", "Media")
+                        .WithMany()
+                        .HasForeignKey("Mediaid");
+
+                    b.Navigation("Media");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
