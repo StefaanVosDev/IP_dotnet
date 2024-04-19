@@ -6,12 +6,14 @@ public class Project
     public string Name { get; set; }
     public string Description { get; set; }
     public List<Flow> Flows { get; set; }
+    public string AdminId { get; set; }
     
-    public Project(string name, List<Flow> flows, string description)
+    public Project(string name, List<Flow> flows, string description, string adminId)
     {
         Name = name;
         Flows = flows;
         Description = description;
+        AdminId = adminId;
     }
     
     public Project(string name, string description)
