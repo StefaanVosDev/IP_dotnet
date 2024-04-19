@@ -21,4 +21,9 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
     {
         repository.StoreAnswers(id, answers);
     }
+
+    public IEnumerable<Project> GetProjectsByAdminId(string adminId)
+    {
+        return repository.GetProjectsByAdminId(adminId);
+    }
 }
