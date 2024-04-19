@@ -35,7 +35,7 @@ namespace IP_MVC.Controllers
             return RedirectToAction("Question", new { id, flowType = flowType.ToString() });
         }
 
-        public IActionResult Question(int id, bool previous, string flowType)
+        public IActionResult Question(int id, int redirectedQuestionId, string flowType, string answer)
         {
             Enum.TryParse(flowType, out FlowType flowTypeEnum);
 
@@ -50,11 +50,6 @@ namespace IP_MVC.Controllers
 
             // Retrieve the current index from the session.
             int currentIndex = HttpContext.Session.GetInt32("currentIndex") ?? 0;
-
-            if (previous)
-            {
-                currentIndex -= 2;
-            }
 
             // Retrieve the queue of question IDs for the current flow.
             var questionQueue = queues[id];
@@ -114,31 +109,22 @@ namespace IP_MVC.Controllers
             ViewData["Message"] = "Thank you for completing the subflow!";
             return View(model);
         }
-
+        
         [HttpPost]
-        public IActionResult SaveAndNext(int flowId, int id, AnswerViewModel model, FlowType flowType)
-        {
-            return SaveAnswerAndRedirect(flowId, id, model, flowType, false);
-        }
-
-        [HttpPost]
-        public IActionResult SaveAndPrevious(int flowId, int id, AnswerViewModel model)
-        {
-            return SaveAnswerAndRedirect(flowId, id, model, FlowType.LINEAR, true);
-        }
-
-        private IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, FlowType flowType, bool previous)
+        private IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, FlowType flowType, int redirectedQuestionId)
         {
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = flowId, previous = previous, flowType = flowType });
+                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId, flowType = flowType });
             }
 
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             sessionManager.SaveAnswer(answerText, model.QuestionId, sessionId, flowType);
-
-            return RedirectToAction("Question", new { id = flowId, previous = previous, flowType = flowType });
+            
+            //als het antwoord al bestaat, haal het uit de database
+            var answer = sessionManager.GetAnswersBySessionId(sessionId).FirstOrDefault(a => a.QuestionId == model.QuestionId);
+            return RedirectToAction("Question", new { id = flowId, redirectedQuestionId=redirectedQuestionId, flowType = flowType, answer= answer?.AnswerText});
         }
     }
 }

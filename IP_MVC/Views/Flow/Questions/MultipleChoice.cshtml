@@ -6,6 +6,7 @@
     Layout = "_Layout";
     var currentIndex = ViewData["currentIndex"] as int? ?? 0;
     var flowType = ViewData["flowType"] as FlowType? ?? FlowType.LINEAR;
+    var questionCount = ViewData["questionCount"] as int? ?? 0;
 }
 
 <div class="row py-2">
@@ -16,6 +17,41 @@
     <p>@Model.Text</p>
 </div>
 <div class="row bg-secondary-subtle border border-black my-2">
+    <div class="col-md-4">
+        <!-- Quick navigation to all questions -->
+        <div class="card">
+            <div class="card-header">
+                Quick Navigation
+            </div>
+            @* make an easy navigation to all questions *@
+            <div class="question-list-container">
+                <ul class="list-group list-group-flush">
+                    @for (int i = 0; i < questionCount; i++)
+                    {
+                        @if (i == currentIndex)
+                        {
+                            //hightlight the current question
+                            <li class="list-group list-group-flush" style="list-style-type: none;">
+                                //todo: in flow controller
+                                <a href="#question@i" style="color: red;">Question @(i + 1)</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="list-group" style="list-style-type: none;">
+                                <a href="#question@i">Question @(i + 1)</a>
+                            </li>
+                        }
+                    }
+                </ul>
+                @*<ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="#question1">Question 1</a></li>
+                <li class="list-group-item"><a href="#question2">Question 2</a></li>
+                <!-- Add links for other questions -->
+            </ul>*@
+            </div>
+        </div>
+    </div>
     <form id="myForm" asp-controller="Flow" method="post">
         @if (Model.Options != null)
         {
@@ -35,7 +71,7 @@
         <input type="hidden" name="id" value="@Model.Id"/>
         <input type="hidden" name="QuestionId" value="@Model.Id"/>
         <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
-        
+
         @if (flowType == FlowType.LINEAR)
         {
             @if (currentIndex != 1)
