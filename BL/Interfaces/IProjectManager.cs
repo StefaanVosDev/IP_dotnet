@@ -7,5 +7,6 @@ public interface IProjectManager : IManager<Project>
 {
     public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId);
     public IEnumerable<Flow> GetFlowsByProjectId(int projectId);
-    void StoreAnswers(int id, List<Answer> answers);
+    public void StoreAnswers(int id, List<Answer> answers);
+    public IEnumerable<Project> GetProjectsByAdminId(string adminId);
 }

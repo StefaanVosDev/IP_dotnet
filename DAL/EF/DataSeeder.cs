@@ -43,7 +43,8 @@ public class DataSeeder
                                     "Gezondheidszorg en welzijn",
                                     "Verkeersveiligheid en mobiliteit",
                                     "Ondersteunen van lokale handel"
-                                ]
+                                ],
+                                null
                             ),
                             new MultipleChoiceQuestion(
                                 "Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?",
@@ -53,13 +54,16 @@ public class DataSeeder
                                     "Een bezoek van de partijen aan mijn school, jeugd/sportclub, …",
                                     "Een gesprek met mijn ouders rond de gemeentepolitiek",
                                     "Een debat georganiseerd door een jeugdhuis met de verschillende partijen"
-                                ]
+                                ],
+                                null
                             ),
                             new RangeQuestion(
                                 "Voel jij je betrokken bij het beleid dat wordt uitgestippeld door je gemeente of stad?",
                                 1,
-                                5)
+                                5,
+                                null)
                         ],
+                        null,
                         null
                     ),
                     new Flow(
@@ -76,7 +80,8 @@ public class DataSeeder
                                     "Zitbanken en picknickplaatsen",
                                     "Ruimte voor kleine evenementen",
                                     "Drank- en eetmogelijkheden"
-                                ]
+                                ],
+                                null
                             ),
                             new MultipleChoiceQuestion(
                                 "Jij gaf aan dat je waarschijnlijk niet zal gaan stemmen. Om welke reden(en) zeg je dit?",
@@ -86,24 +91,30 @@ public class DataSeeder
                                     "Ik weet niet waarover de verkiezingen gaan",
                                     "Ik weet niet wat de verschillende partijen willen doen",
                                     "Ik weet niet wat de verschillende partijen willen doen"
-                                ]
+                                ],
+                                null
                             ),
                             new RangeQuestion(
                                 "Hoe sta jij tegenover deze stelling? “Mijn stad moet meer investeren in fietspaden",
                                 1,
-                                2
+                                2,
+                                null
                             ),
                             new OpenQuestion(
-                                "Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?"
+                                "Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?",
+                                null
                             )
                         ],
+                        null,
                         null
                     )
-                ]
+                ],
+                null
             )
         };
         
         project.Flows = flows;
+        project.AdminId = "1";
         context.Update(project);
         context.SaveChanges();
     }
