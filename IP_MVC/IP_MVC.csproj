@@ -43,7 +43,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\" />
+      <TypeScriptCompile Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
+      <TypeScriptCompile Include="wwwroot\dist\Views\Flow\Questions\Range.ts" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
