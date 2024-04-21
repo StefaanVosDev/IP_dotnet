@@ -5,18 +5,20 @@
     Layout = "_Layout";
 }
 
-<div class="row row-cols-3">
-    @foreach (var flow in Model)
-    {
-        <div class="col">
+<div class="container">
+    <div class="card-group vgr-cards">
+        @foreach (var flow in Model)
+        {
             <div class="card">
-                <img src="https://via.placeholder.com/10x10" alt="Foto flow">
+                <div class="card-img-body">
+                    <img class="card-img" src="https://picsum.photos/500/230" alt="Card image cap">
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">@flow.Name</h5>
                     <p class="card-text">@flow.Description</p>
                     <a href="@Url.Action("SubFlow", "Flow", new { id = flow.Id })" class="btn btn-primary">View Subflows</a>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
