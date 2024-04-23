@@ -16,8 +16,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
         <PackageReference Include="RangeSlider" Version="1.0.0" />
@@ -28,39 +28,39 @@
         <Content Remove="$(MpaRoot)**" />
         <None Remove="$(MpaRoot)**" />
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
-        <None Include="wwwroot\dist\Views\goingToNextQuestionCircularFlow.js" />
-        <None Include="wwwroot\dist\Views\goingToNextQuestionCircularFlow.ts" />
-        <None Include="wwwroot\dist\Views\Questions\range.js" />
-        <None Include="wwwroot\dist\Views\Questions\range.ts" />
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Respondent\Questions\MultipleChoice\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Open\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Range\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Respondent\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\bootstrap_js.entry.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\bootstrap_js.entry.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\site.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\site.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js.map" />
+        <_ContentIncludedByDefault Remove="Views\Respondent\Questions\MultipleChoice\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Open\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Respondent\Questions\Range\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Respondent\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\bootstrap_js.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\bootstrap_js.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.css" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BL\BL.csproj" />
-      <ProjectReference Include="..\DAL\DAL.csproj" />
+        <ProjectReference Include="..\BL\BL.csproj" />
+        <ProjectReference Include="..\DAL\DAL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <TypeScriptCompile Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
         <TypeScriptCompile Include="wwwroot\dist\Views\Flow\Questions\Range.ts" />
     </ItemGroup>
-    
+
+    <ItemGroup>
+        <Folder Include="Pages\" />
+    </ItemGroup>
+
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->
         <Exec Command="node --version" ContinueOnError="true">
