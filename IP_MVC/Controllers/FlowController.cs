@@ -140,5 +140,46 @@ namespace IP_MVC.Controllers
 
             return RedirectToAction("Question", new { id = flowId, previous = previous, flowType = flowType });
         }
+
+        public IActionResult Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+        
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            return View();
+        }
+        
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult CreateParentFlow(Flow flow, int? parentFlowId)
+        {
+            if (!ModelState.IsValid) return View(flow);
+
+            // Set the ProjectId and ParentFlowId of the new flow
+            //flow.ProjectId = projectManager.;
+            flow.ParentFlowId = parentFlowId;
+            
+            flowManager.AddAsync(flow);
+            return RedirectToAction("Edit", new { id = flow.Id });
+        }
+        
+        [HttpPost]
+        public IActionResult CreateSubFlow(Flow flow, int? parentFlowId)
+        {
+            if (!ModelState.IsValid) return View(flow);
+
+            
+
+            flowManager.AddAsync(flow);
+            return RedirectToAction("Edit", new { id = flow.Id });
+        }
     }
 }

@@ -111,7 +111,7 @@ using (var scope = app.Services.CreateScope())
             .GetRequiredService<UserManager<IdentityUser>>();
         var roleManager = scope.ServiceProvider
             .GetRequiredService<RoleManager<IdentityRole>>();
-        SeedIdentity(userManager, roleManager);
+        await SeedIdentity(userManager, roleManager);
         
         DataSeeder.Seed(context);
     }

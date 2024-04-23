@@ -22,7 +22,7 @@ public class Flow
     {
     }
 
-    public Flow(string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows, Media media)
+    public Flow(string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows, Media media) 
     {
         Name = name;
         Description = description;
@@ -31,5 +31,13 @@ public class Flow
         Questions = questions;
         SubFlows = subFlows;
         Media = media;
+    }
+    
+    public Flow(string name, string description, int projectId, Flow parentFlow) 
+    {
+        Name = name;
+        Description = description;
+        ProjectId = projectId;
+        ParentFlow = parentFlow;
     }
 }
