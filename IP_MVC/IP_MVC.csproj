@@ -28,6 +28,10 @@
         <Content Remove="$(MpaRoot)**" />
         <None Remove="$(MpaRoot)**" />
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
+        <None Include="wwwroot\dist\Views\goingToNextQuestionCircularFlow.js" />
+        <None Include="wwwroot\dist\Views\goingToNextQuestionCircularFlow.ts" />
+        <None Include="wwwroot\dist\Views\Questions\range.js" />
+        <None Include="wwwroot\dist\Views\Questions\range.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -52,6 +56,11 @@
       <ProjectReference Include="..\DAL\DAL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <TypeScriptCompile Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
+        <TypeScriptCompile Include="wwwroot\dist\Views\Flow\Questions\Range.ts" />
+    </ItemGroup>
+    
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->
         <Exec Command="node --version" ContinueOnError="true">
