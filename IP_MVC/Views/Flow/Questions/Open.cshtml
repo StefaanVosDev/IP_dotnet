@@ -1,4 +1,5 @@
 @using BL.Domain
+@using BL.Domain.Answers
 @model BL.Domain.Questions.OpenQuestion
 
 @{
@@ -6,6 +7,8 @@
     Layout = "_Layout";
     var currentIndex = ViewData["currentIndex"] as int? ?? 0;
     var flowType = ViewData["flowType"] as FlowType? ?? FlowType.LINEAR;
+    var questionCount = ViewData["questionCount"] as int? ?? 0;
+    var earlierAnswer = ViewData["earlierAnswer"] as Answer;
 }
 
 <div class="row py-2">
@@ -15,23 +18,56 @@
     <p class="text-start fw-bold">Question</p>
     <p>@Model.Text</p>
 </div>
+
 <div class="row py-2">
     <form id="myForm" asp-controller="Flow" method="post">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Quick navigation
+            </button>
+            <ul class="dropdown-menu">
+                @for (var i = 0; i < questionCount; i++)
+                {
+                    if (i == currentIndex)
+                    {
+                        <li>
+                            <input style="background-color: #b7b1b1" class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <input class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+
+
         <div class="row my-2">
-            <textarea class="form-control" name="Answer"></textarea>
+            <textarea class="form-control" name="Answer">
+                @if (earlierAnswer != null)
+                {
+                    @earlierAnswer.AnswerText
+                }
+            </textarea>
         </div>
         <input type="hidden" name="flowId" value="@Model.FlowId"/>
         <input type="hidden" name="id" value="@Model.Id"/>
         <input type="hidden" name="QuestionId" value="@Model.Id"/>
         <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
+
+        <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="">
+
         @if (flowType == FlowType.LINEAR)
         {
-            @if (currentIndex != 1)
+            @if (currentIndex != 0)
             {
-                <input type="submit" value="Previous" asp-action="SaveAndPrevious"/>
+                <input type="submit" name="Previous" value="Previous" onclick="setRedirectedQuestionId(@(currentIndex - 1))" asp-action="SaveAnswerAndRedirect"/>
             }
-       
-            <input type="submit" value="Next" asp-action="SaveAndNext"/>
+
+            <input type="submit" name="Next" value="Next" onclick="setRedirectedQuestionId(@(currentIndex + 1))" asp-action="SaveAnswerAndRedirect"/>
         }
         else
         {
@@ -40,9 +76,10 @@
             </div>
             //todo: redirect to login page, user can't close circular flow
             <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
-       
-            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
+
+            <script src=""></script>
         }
     </form>
     <button id="exitButton" class="btn btn-danger">Exit</button>
 </div>
+<script src="/dist/Views/Flow/Questions/redirectedQuestionId.js" defer="defer"></script>

@@ -52,11 +52,6 @@
       <ProjectReference Include="..\DAL\DAL.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <TypeScriptCompile Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
-      <TypeScriptCompile Include="wwwroot\dist\Views\Flow\Questions\Range.ts" />
-    </ItemGroup>
-
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
         <!-- Ensure Node.js is installed -->
         <Exec Command="node --version" ContinueOnError="true">
@@ -67,9 +62,9 @@
         <Exec WorkingDirectory="$(MpaRoot)" Command="npm install" />
     </Target>
 
-<!--    <Target Name="NpmRunBuild" BeforeTargets="Build" DependsOnTargets="NpmInstall">-->
-<!--        <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build" />-->
-<!--    </Target>-->
+    <Target Name="NpmRunBuild" BeforeTargets="Build" DependsOnTargets="NpmInstall">
+        <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build" />
+    </Target>
 
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

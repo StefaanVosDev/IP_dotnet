@@ -35,7 +35,7 @@ namespace IP_MVC.Controllers
             return RedirectToAction("Question", new { id, flowType = flowType.ToString() });
         }
 
-        public IActionResult Question(int id, int redirectedQuestionId, string flowType, string answer)
+        public IActionResult Question(int id, int redirectedQuestionId, string flowType)
         {
             Enum.TryParse(flowType, out FlowType flowTypeEnum);
 
@@ -47,24 +47,20 @@ namespace IP_MVC.Controllers
             {
                 return RedirectToAction("EndSubFlow");
             }
-
-            // Retrieve the current index from the session.
-            int currentIndex = HttpContext.Session.GetInt32("currentIndex") ?? 0;
-
+            
             // Retrieve the queue of question IDs for the current flow.
             var questionQueue = queues[id];
 
+            var currentIndex = redirectedQuestionId;
+            
             // If the index is out of range, redirect to the end of the flow.
-            if (currentIndex < 0 || currentIndex >= questionQueue.Count)
+            if (currentIndex < 0 || currentIndex>= questionQueue.Count)
             {
                 if (flowTypeEnum == FlowType.LINEAR)
                 {
                     return RedirectToAction("EndSubFlow");
                 }
-                else
-                {
-                    currentIndex = 0;
-                }
+                currentIndex = 0;
             }
 
             // Retrieve the current question ID from the queue.
@@ -73,14 +69,16 @@ namespace IP_MVC.Controllers
             // Retrieve the question based on the ID and type.
             var question = questionManager.GetQuestionByIdAndType(questionId);
 
-            // Increment the current index and store it in the session.
-            currentIndex++;
-            HttpContext.Session.SetInt32("currentIndex", currentIndex);
+            // Get the earlier answer given
+            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
+            var earlierAnswer = sessionManager.GetAnswerByQuestionId(sessionId, questionId);
 
-            // Display the question view based on the question type.
             ViewData["currentIndex"] = currentIndex;
             ViewData["flowType"] = flowTypeEnum;
+            ViewData["questionCount"] = questionQueue.Count;
+            ViewData["earlierAnswer"] = earlierAnswer;
 
+            // Display the question view based on the question type.
             return View($"Questions/{question.Type}", question);
         }
 
@@ -109,22 +107,42 @@ namespace IP_MVC.Controllers
             ViewData["Message"] = "Thank you for completing the subflow!";
             return View(model);
         }
-        
+
         [HttpPost]
-        private IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, FlowType flowType, int redirectedQuestionId)
+        public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, FlowType flowType, int redirectedQuestionId)
         {
+            // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
                 return RedirectToAction("Question", new { id = flowId, redirectedQuestionId, flowType = flowType });
             }
-
+            
+            // Join the answer, in case of multiple answers
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
-            sessionManager.SaveAnswer(answerText, model.QuestionId, sessionId, flowType);
             
-            //als het antwoord al bestaat, haal het uit de database
-            var answer = sessionManager.GetAnswersBySessionId(sessionId).FirstOrDefault(a => a.QuestionId == model.QuestionId);
-            return RedirectToAction("Question", new { id = flowId, redirectedQuestionId=redirectedQuestionId, flowType = flowType, answer= answer?.AnswerText});
+            // If no answers are given yet, save the answer
+            var newAnswer = new Answer
+            {
+                QuestionId = model.QuestionId,
+                AnswerText = answerText,
+                Session = sessionManager.GetSessionById(sessionId)
+            };
+            
+            // If there is no answer given to this question yet, add the answer to the session
+            if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
+            {
+                sessionManager.AddAnswerToSession(sessionId, newAnswer, flowType);
+            }
+            else
+            {
+                // If an answer is already given, search the old answer and update it
+                var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId);
+                sessionManager.UpdateAnswer(oldAnswer, newAnswer);
+            }
+
+            return RedirectToAction("Question",
+                new { id = flowId, redirectedQuestionId = redirectedQuestionId, flowType = flowType });
         }
     }
 }
