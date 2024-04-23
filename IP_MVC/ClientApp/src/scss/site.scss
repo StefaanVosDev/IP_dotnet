@@ -2,6 +2,7 @@ $button-bg-color: #1b6ec2;
 
 html {
     font-size: 14px;
+    background-color: #ded5f3;
 }
 
 @media (min-width: 768px) {
@@ -21,6 +22,7 @@ html {
 
 body {
     margin-bottom: 60px;
+    background-color: #ded5f3;
 }
 
 a.navbar-brand {
@@ -28,9 +30,8 @@ a.navbar-brand {
     text-align: center;
     word-break: break-all;
 }
-
-a {
-    color: #0077cc;
+.navbar {
+    background-color: #ffffff;
 }
 
 .btn-primary {
