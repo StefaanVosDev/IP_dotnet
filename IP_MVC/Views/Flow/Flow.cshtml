@@ -1,22 +1,55 @@
+@using BL.Domain
+@using IP_MVC
 @model IEnumerable<BL.Domain.Flow>
+@inject BL.Interfaces.IFlowManager FlowManager
 
 @{
     ViewBag.Title = "Flows";
     Layout = "_Layout";
 }
 
-<div class="row row-cols-3">
-    @foreach (var flow in Model)
-    {
-        <div class="col">
+<<<<<<< IP_MVC/Views/Flow/Flow.cshtml
+<div class="container">
+    <div class="card-group vgr-cards">
+        @foreach (var flow in Model)
+        {
             <div class="card">
-                <img src="https://via.placeholder.com/10x10" alt="Foto flow">
+                <div class="card-img-body">
+                    <img class="card-img" src="https://storage.googleapis.com/phygital-public/Flows/@(Uri.EscapeDataString(flow.Name)).png" alt="Card image cap">
+                </div>
+=======
+
+>>>>>>> IP_MVC/Views/Flow/Flow.cshtml
                 <div class="card-body">
                     <h5 class="card-title">@flow.Name</h5>
                     <p class="card-text">@flow.Description</p>
-                    <a href="@Url.Action("SubFlow", "Flow", new { id = flow.Id })" class="btn btn-primary">View Subflows</a>
+                    @if (FlowManager.IsParentFlow(flow.Id))
+                    {
+                        <a href="@Url.Action("SubFlow", "Flow", new { id = flow.Id })" class="btn btn-primary">View Subflows</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id, FlowType.LINEAR })" class="btn btn-primary">Start Flow</a>
+                        <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id, FlowType.CIRCULAR })" class="btn btn-primary">Start Circular Flow</a>
+                    }
+                    @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                    {
+                        <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "Flow", new { id = flow.Id })">Edit</a>
+                        <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Flow", new { id = flow.Id })" onclick="return confirm('Are you sure you want to delete this flow?')">Delete</a>
+                    }
                 </div>
             </div>
+<<<<<<< IP_MVC/Views/Flow/Flow.cshtml
+        }
+    </div>
+</div>
+=======
         </div>
     }
 </div>
+
+@if (User.IsInRole(CustomIdentityConstants.AdminRole))
+{
+    <a class="btn btn-success" href="@Url.Action("Create", "Flow")">Create New Flow</a>
+}
+>>>>>>> IP_MVC/Views/Flow/Flow.cshtml
