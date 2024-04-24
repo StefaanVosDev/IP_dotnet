@@ -1,0 +1,21 @@
+#youth-speak {
+  h1 {
+    margin: 0; 
+  }
+
+  .up {
+    position: relative;
+    top: -0.5em; 
+  }
+}
+
+#login-submit {
+  overflow: hidden;
+
+  &::after {
+    content: "\2192";
+    top: 10%;
+    transform: translateY(-50%);
+    font-size: 60px;
+  }
+}
