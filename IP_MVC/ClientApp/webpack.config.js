@@ -6,7 +6,7 @@ module.exports = {
     entry: {
         site: './src/ts/site.ts',
         validation: './src/ts/validation.ts',
-        index: './src/ts/index.ts'
+        index: './src/ts/index.ts',
     },
     output: {
         filename: '[name].entry.js',
