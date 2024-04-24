@@ -12,75 +12,84 @@
     var earlierAnswer = ViewData["earlierAnswer"] as Answer ?? null;
 }
 
-<div class="row py-2">
-    <img src="https://via.placeholder.com/200x100" alt="Afbeeldingsplaatsaanduiding">
-</div>
-<div class="row bg-secondary-subtle border border-black my-2">
-    <form id="myForm" asp-controller="Flow" method="post">
-        <div class="row py-2">
-            <p class="text-start fw-bold">Question</p>
-            <p>@Model.Text</p>
-        </div>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Quick navigation
-            </button>
-            <ul class="dropdown-menu">
-                @for (var i = 0; i < questionCount; i++)
-                {
-                    if (i == currentIndex)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col py-2 d-flex justify-content-center align-items-center">
+            <div>
+                <p class="text-start fw-bold">Question</p>
+                <p>@Model.Text</p>
+                <form id="myForm" asp-controller="Flow" method="post">
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Quick navigation
+                        </button>
+                        <ul class="dropdown-menu">
+                            @for (var i = 0; i < questionCount; i++)
+                            {
+                                if (i == currentIndex)
+                                {
+                                    <li>
+                                        <input style="background-color: #b7b1b1" class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <input class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    @foreach (var option in Model.Options)
                     {
-                        <li>
-                            <input style="background-color: #b7b1b1" class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
-                        </li>
+                        bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
+                        <div class="form-check m-3">
+                            <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option" @(isSelected ? "checked" : "")>
+                            <label class="form-check-label" for="radio@i">
+                                @option
+                            </label>
+                        </div>
                     }
-                    else
-                    {
-                        <li>
-                            <input class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
-                        </li>
-                    }
-                }
-            </ul>
+                    <input type="hidden" name="flowId" value="@Model.FlowId"/>
+                    <input type="hidden" name="id" value="@Model.Id"/>
+                    <input type="hidden" name="QuestionId" value="@Model.Id"/>
+                    <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
+
+                    <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        @if (flowType == FlowType.LINEAR)
+                        {
+                            @if (currentIndex != 0)
+                            {
+                                <input type="submit" name="redirectedQuestionId" value="Previous" onclick="setRedirectedQuestionId(@(currentIndex - 1))" asp-action="SaveAnswerAndRedirect"/>
+                            }
+
+                            <button id="exitButton" class="btn btn-danger">Exit</button>
+                            <input type="submit" name="redirectedQuestionId" value="Next" onclick="setRedirectedQuestionId(@(currentIndex + 1))" asp-action="SaveAnswerAndRedirect"/>
+                        }
+                        else
+                        {
+                            <div class="row py-2">
+                                <span id="countdown"></span>
+                            </div>
+                            //todo: redirect to login page, user can't close circular flow
+                            <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
+
+                            <button id="exitButton" class="btn btn-danger">Exit</button>
+                            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
+                        }
+                    </div>
+                </form>
+            </div>
         </div>
-        @foreach (var option in Model.Options)
-        {
-            bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
-            <div class="form-check m-3">
-                <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option" @(isSelected ? "checked" : "")>
-                <label class="form-check-label" for="radio@i">
-                    @option
-                </label>
-            </div>
-        }
-        <input type="hidden" name="flowId" value="@Model.FlowId"/>
-        <input type="hidden" name="id" value="@Model.Id"/>
-        <input type="hidden" name="QuestionId" value="@Model.Id"/>
-        <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
-
-        <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="">
-
-
-        @if (flowType == FlowType.LINEAR)
-        {
-            @if (currentIndex != 0)
-            {
-                <input type="submit" name="redirectedQuestionId" value="Previous" onclick="setRedirectedQuestionId(@(currentIndex - 1))" asp-action="SaveAnswerAndRedirect"/>
-            }
-
-            <input type="submit" name="redirectedQuestionId" value="Next" onclick="setRedirectedQuestionId(@(currentIndex + 1))" asp-action="SaveAnswerAndRedirect"/>
-        }
-        else
-        {
-            <div class="row py-2">
-                <span id="countdown"></span>
-            </div>
-            //todo: redirect to login page, user can't close circular flow
-            <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
-
-            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
-        }
-    </form>
-    <button id="exitButton" class="btn btn-danger">Exit</button>
+        <div class="col py-2 d-flex justify-content-center align-items-center">
+            <img src="https://via.placeholder.com/50x50" class="img-fluid w-100" alt="Afbeeldingsplaatsaanduiding">
+        </div>
+    </div>
 </div>
+
 <script src="/dist/Views/Flow/Questions/redirectedQuestionId.js" defer="defer"></script>
