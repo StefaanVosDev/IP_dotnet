@@ -29,4 +29,9 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
     {
         return _context.Set<Project>().Where(p => p.AdminId == adminId);
     }
+
+    public ValueTask<Project> FindByIdAsync(int id)
+    {
+        return _context.Set<Project>().FindAsync(id);
+    }
 }
