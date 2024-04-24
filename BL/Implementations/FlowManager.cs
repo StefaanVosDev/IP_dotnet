@@ -39,4 +39,6 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
         var flow = GetFlowById(sessionManager.GetSessionById(sessionId).FlowId);
         return flow.ParentFlowId;
     }
+    
+    public bool IsParentFlow(int flowId) { return GetFlowById(flowId).ParentFlowId == null; }
 }

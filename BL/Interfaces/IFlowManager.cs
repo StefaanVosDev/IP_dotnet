@@ -10,6 +10,7 @@ public interface IFlowManager : IManager<Flow>
     public Flow GetFlowById(int id);
     public Flow GetFirstSubFlowByParentId(int id);
     public IEnumerable<Question> GetQuestionsByFlowId(int id);
-    Queue<int> GetQuestionQueueByFlowId(int flowId);
-    int? GetParentFlowIdBySessionId(int sessionId);
+    public Queue<int> GetQuestionQueueByFlowId(int flowId);
+    public int? GetParentFlowIdBySessionId(int sessionId);
+    public bool IsParentFlow(int flowId);
 }

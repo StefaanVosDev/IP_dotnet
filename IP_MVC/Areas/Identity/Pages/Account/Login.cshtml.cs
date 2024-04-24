@@ -119,15 +119,9 @@ namespace IP_MVC.Areas.Identity.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null) return LocalRedirect(returnUrl);
                 var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles.Contains(CustomIdentityConstants.AdminRole))
-                {
-                    return RedirectToAction("Index", "Admin");
-                }
-                if (roles.Contains(CustomIdentityConstants.FacilitatorRole))
-                {
-                    return RedirectToAction("Index", "Facilitator");
-                }
+                
+                return RedirectToAction("Index", "Project");
+                
 
                 return LocalRedirect(returnUrl);
             }

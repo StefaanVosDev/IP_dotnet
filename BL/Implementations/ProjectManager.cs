@@ -12,6 +12,11 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
         return repository.GetFlowsByProjectIdAsync(projectId);
     }
 
+    public ValueTask<Project> FindByIdAsync(int id)
+    {
+        return repository.FindByIdAsync(id);
+    }
+
     public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
     {
         return repository.GetParentFlowsByProjectId(projectId);

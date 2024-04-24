@@ -1,18 +1,26 @@
 using BL.Domain;
 using BL.Domain.Answers;
 using BL.Domain.Questions;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL.EF;
 
 public class DataSeeder
 {
-    public DataSeeder(PhygitalDbContext context)
+
+    public DataSeeder()
     {
     }
 
     public static void Seed(PhygitalDbContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
+        
+        /*var adminUser = _userManager.FindByNameAsync("admin@kdg.be").Result;
+        if (adminUser == null)
+        {
+            throw new Exception("Admin user not found");
+        }*/
 
         var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
         context.Add(project);
