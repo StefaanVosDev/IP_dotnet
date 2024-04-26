@@ -7,8 +7,6 @@
     ViewBag.Title = "Flows";
     Layout = "_Layout";
 }
-
-<<<<<<< IP_MVC/Views/Flow/Flow.cshtml
 <div class="container">
     <div class="card-group vgr-cards">
         @foreach (var flow in Model)
@@ -17,9 +15,6 @@
                 <div class="card-img-body">
                     <img class="card-img" src="https://storage.googleapis.com/phygital-public/Flows/@(Uri.EscapeDataString(flow.Name)).png" alt="Card image cap">
                 </div>
-=======
-
->>>>>>> IP_MVC/Views/Flow/Flow.cshtml
                 <div class="card-body">
                     <h5 class="card-title">@flow.Name</h5>
                     <p class="card-text">@flow.Description</p>
@@ -39,17 +34,11 @@
                     }
                 </div>
             </div>
-<<<<<<< IP_MVC/Views/Flow/Flow.cshtml
         }
     </div>
-</div>
-=======
-        </div>
-    }
 </div>
 
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
     <a class="btn btn-success" href="@Url.Action("Create", "Flow")">Create New Flow</a>
 }
->>>>>>> IP_MVC/Views/Flow/Flow.cshtml
