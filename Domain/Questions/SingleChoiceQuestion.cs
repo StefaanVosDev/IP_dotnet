@@ -6,7 +6,7 @@ namespace BL.Domain.Questions
         {
         }
 
-        public SingleChoiceQuestion(string text, List<string> options, Media media) : base(text, QuestionType.SingleChoice, media)
+        public SingleChoiceQuestion(int position, string text, List<string> options, Media media) : base(position, text, QuestionType.SingleChoice, media)
         {
             Options = options;
         }

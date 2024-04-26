@@ -120,7 +120,7 @@ namespace IP_MVC.Areas.Identity.Pages.Account
                 if (user == null) return LocalRedirect(returnUrl);
                 var roles = await _userManager.GetRolesAsync(user);
                 
-                return RedirectToAction("Index", "Project");
+                return RedirectToAction("Project", "Project");
                 
 
                 return LocalRedirect(returnUrl);

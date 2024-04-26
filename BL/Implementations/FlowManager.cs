@@ -41,4 +41,8 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
     }
     
     public bool IsParentFlow(int flowId) { return GetFlowById(flowId).ParentFlowId == null; }
+    public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
+    {
+        return repository.GetFlowsBetweenPositions(newPosition, oldPosition);
+    }
 }
