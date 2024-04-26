@@ -23,9 +23,9 @@ public class ProjectController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> Edit(int parentFlowId)
     {
-        var project = await _projectManager.FindByIdAsync(id);
+        var project = await _projectManager.FindByIdAsync(parentFlowId);
         if (project == null)
         {
             return NotFound();
@@ -35,11 +35,11 @@ public class ProjectController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(int id, Project newProject)
+    public async Task<IActionResult> Edit(int parentFlowId, Project newProject)
     {
         if (!ModelState.IsValid) return View(newProject);
 
-        var existingProject = await _projectManager.FindByIdAsync(id);
+        var existingProject = await _projectManager.FindByIdAsync(parentFlowId);
         if (existingProject == null)
         {
             return NotFound();
@@ -52,9 +52,9 @@ public class ProjectController : Controller
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int parentFlowId)
     {
-        var project = await _projectManager.FindByIdAsync(id);
+        var project = await _projectManager.FindByIdAsync(parentFlowId);
         await _projectManager.DeleteAsync(project);
         return RedirectToAction("Index");
     }
@@ -74,6 +74,6 @@ public class ProjectController : Controller
         project.AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         await _projectManager.AddAsync(project);
-        return RedirectToAction("Index");
+        return RedirectToAction("Project");
     }
 }

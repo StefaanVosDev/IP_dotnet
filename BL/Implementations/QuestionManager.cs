@@ -23,4 +23,14 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
             _ => throw new Exception("Unknown question type")
         };
     }
+
+    public IEnumerable<Question> GetQuestionsByFlowId(int flowId)
+    {
+        return repository.GetQuestionsByFlowId(flowId);
+    }
+
+    public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition)
+    {
+        return repository.GetQuestionsBetweenPositions(newPosition, oldPosition);
+    }
 }

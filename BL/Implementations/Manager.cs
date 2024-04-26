@@ -19,10 +19,15 @@ public class Manager<TEntity>(IRepository repository) : IManager<TEntity>
 
     public async Task UpdateAsync(TEntity entityToUpdate, TEntity entity) =>
         await repository.UpdateAsync(entityToUpdate, entity);
-
+    
+    public async Task UpdateAllAsync(IEnumerable<TEntity> entitiesToUpdate)
+    {
+        await repository.UpdateAllAsync(entitiesToUpdate);
+    }
     public async Task DeleteAsync(TEntity entity) => await repository.DeleteAsync(entity);
     public Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return repository.FindAsync(predicate);
     }
+    
 }

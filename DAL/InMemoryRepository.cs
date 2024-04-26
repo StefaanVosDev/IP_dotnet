@@ -52,6 +52,9 @@ public class InMemoryRepository : IRepository
     {
         throw new NotImplementedException("This method is not implemented for the InMemoryRepository.");
     }
-    
-    
+
+    public Task UpdateAllAsync<TEntity>(IEnumerable<TEntity> entitiesToUpdate) where TEntity : class
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -22,8 +22,6 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
 
     #endregion
 
-    //TODO: Add the users needed in the DB
-
     #region vars
 
     public DbSet<Answer> Answers { get; set; }
