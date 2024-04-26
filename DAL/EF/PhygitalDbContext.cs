@@ -4,6 +4,7 @@ using BL.Domain.Questions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Google.Cloud.SecretManager.V1;
 using Npgsql;
 
 namespace DAL.EF;
@@ -14,6 +15,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
 
     public PhygitalDbContext()
     {
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", AccessSecret("service-account-key"));
     }
 
     public PhygitalDbContext(DbContextOptions<PhygitalDbContext> options) : base(options)
@@ -43,7 +45,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnConfiguring(optionsBuilder);
         if (optionsBuilder.IsConfigured) return;
-        const string connectionString = "Host=35.240.22.60;Database=postgres;Username=postgres;Password=%^c~JK,s-H^1}sde;";
+        string connectionString = $"Host=35.240.22.60;Database=postgres;Username=postgres;Password={AccessSecret("db_password")};";
         const string localConnection = "Host=localhost;Database=postgres;Username=postgres;Password=password123;";
         try
         {
@@ -109,8 +111,25 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     }
 
     #endregion
+    
+    #region AccessSecret
+    private string AccessSecret(string secretId)
+    {
+        // Create the Secret Manager client.
+        SecretManagerServiceClient client = SecretManagerServiceClient.Create();
 
+        // Build the resource name of the secret version.
+        SecretVersionName secretVersionName = new SecretVersionName("269636205630", secretId, "latest");
 
+        // Access the secret version.
+        AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);
+
+        // Get the secret payload and decode it.
+        string payload = result.Payload.Data.ToStringUtf8();
+
+        return payload;
+    }
+    #endregion
     //TODO: run database migrations.
     //TODO:ProjectDirectory>cd DAL
     //TODO:ProjectDirectory\DAL>dotnet ef migrations add {{migrationName}}
