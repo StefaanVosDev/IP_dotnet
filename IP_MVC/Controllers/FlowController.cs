@@ -1,11 +1,8 @@
 using BL.Domain;
-using BL.Domain.Questions;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
-using System.Linq;
 using BL.Domain.Answers;
-using BL.Implementations;
 using IP_MVC.Models;
 
 namespace IP_MVC.Controllers
@@ -37,16 +34,19 @@ namespace IP_MVC.Controllers
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);
-            return RedirectToAction("Question", new { id = parentFlowId, flowType = flowType.ToString() });
+
+            HttpContext.Session.Set("flowType", flowType);
+            return RedirectToAction("Question", new {id});
         }
 
-        public IActionResult Question(int id, int redirectedQuestionId, string flowType)
+        public IActionResult Question(int id, int redirectedQuestionId)
         {
-            Enum.TryParse(flowType, out FlowType flowTypeEnum);
-
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
-
+            
+            // Retrieve the flow type from the session.
+            var flowType = HttpContext.Session.Get<FlowType>("flowType");
+            
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
             if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
             {
@@ -61,7 +61,7 @@ namespace IP_MVC.Controllers
             // If the index is out of range, redirect to the end of the flow.
             if (currentIndex < 0 || currentIndex>= questionQueue.Count)
             {
-                if (flowTypeEnum == FlowType.LINEAR)
+                if (flowType == FlowType.LINEAR)
                 {
                     return RedirectToAction("EndSubFlow");
                 }
@@ -79,9 +79,10 @@ namespace IP_MVC.Controllers
             var earlierAnswer = sessionManager.GetAnswerByQuestionId(sessionId, questionId);
 
             ViewData["currentIndex"] = currentIndex;
-            ViewData["flowType"] = flowTypeEnum;
             ViewData["questionCount"] = questionQueue.Count;
             ViewData["earlierAnswer"] = earlierAnswer;
+            ViewBag.FlowType = flowType;
+            ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
 
             // Display the question view based on the question type.
             return View($"Questions/{question.Type}", question);
@@ -114,17 +115,18 @@ namespace IP_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, FlowType flowType, int redirectedQuestionId)
+        public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, int redirectedQuestionId)
         {
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId, flowType = flowType });
+                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
+            var flowType = HttpContext.Session.Get<FlowType>("flowType");
             
             // If no answers are given yet, save the answer
             var newAnswer = new Answer
@@ -147,7 +149,7 @@ namespace IP_MVC.Controllers
             }
 
             return RedirectToAction("Question",
-                new { id = flowId, redirectedQuestionId = redirectedQuestionId, flowType = flowType });
+                new { id = flowId, redirectedQuestionId});
         }
 
         public IActionResult Delete(int flowId)

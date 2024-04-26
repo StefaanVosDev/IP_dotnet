@@ -28,9 +28,6 @@
         <Content Remove="$(MpaRoot)**" />
         <None Remove="$(MpaRoot)**" />
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
-        <None Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.js" />
-        <None Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
-        <None Include="wwwroot\dist\Views\Flow\Questions\range.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -51,6 +48,12 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\39795c0b4513de014cf8 2.woff" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\39795c0b4513de014cf8.woff" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\b7bcc075b395c14ce8c2.woff2" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\goingToNextQuestionCircularFlow.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\goingToNextQuestionCircularFlow.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\range.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\range.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\redirectedQuestionId.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\redirectedQuestionId.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
