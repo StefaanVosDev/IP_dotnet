@@ -4,12 +4,15 @@
 @model BL.Domain.Questions.SingleChoiceQuestion
 
 @{
+    <script src="/dist/redirectedQuestionId.entry.js" defer="defer"></script>
+    
     ViewBag.Title = "Single Choice";
     Layout = "_Layout";
     var currentIndex = ViewData["currentIndex"] as int? ?? 0;
-    var flowType = ViewData["flowType"] as FlowType? ?? FlowType.LINEAR;
     var questionCount = ViewData["questionCount"] as int? ?? 0;
-    var earlierAnswer = ViewData["earlierAnswer"] as Answer ?? null;
+    var earlierAnswer = ViewData["earlierAnswer"] as Answer;
+    var flowType = ViewBag.FlowType as FlowType? ?? FlowType.LINEAR;
+    var subFlowId = ViewBag.subFlowId;
 }
 
 <div class="container-fluid">
@@ -18,30 +21,33 @@
             <div>
                 <p class="text-start fw-bold">Question</p>
                 <p>@Model.Text</p>
-                <form id="myForm" asp-controller="Flow" method="post">
-
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Quick navigation
-                        </button>
-                        <ul class="dropdown-menu">
-                            @for (var i = 0; i < questionCount; i++)
-                            {
-                                if (i == currentIndex)
+                <form id="myForm" asp-controller="Flow" method="post" asp-action="SaveAnswerAndRedirect">
+                    @if (flowType == FlowType.LINEAR)
+                    {
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Quick navigation
+                            </button>
+                            <ul class="dropdown-menu">
+                                @for (var i = 0; i < questionCount; i++)
                                 {
-                                    <li>
-                                        <input style="background-color: #b7b1b1" class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
-                                    </li>
+                                    if (i == currentIndex)
+                                    {
+                                        <li>
+                                            <input style="background-color: #b7b1b1" class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" asp-action="SaveAnswerAndRedirect"/>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <input class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" asp-action="SaveAnswerAndRedirect"/>
+                                        </li>
+                                    }
                                 }
-                                else
-                                {
-                                    <li>
-                                        <input class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" value="Question @(i + 1)" onclick="setRedirectedQuestionId(@(i))" asp-action="SaveAnswerAndRedirect"/>
-                                    </li>
-                                }
-                            }
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    }
+                    
                     @foreach (var option in Model.Options)
                     {
                         bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
@@ -55,9 +61,8 @@
                     <input type="hidden" name="flowId" value="@Model.FlowId"/>
                     <input type="hidden" name="id" value="@Model.Id"/>
                     <input type="hidden" name="QuestionId" value="@Model.Id"/>
-                    <input type="hidden" name="linearFlow" value="@flowType.ToString()"/>
 
-                    <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="">
+                    <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
 
                     <div class="d-flex justify-content-between align-items-center">
 
@@ -65,11 +70,12 @@
                         {
                             @if (currentIndex != 0)
                             {
-                                <input type="submit" name="redirectedQuestionId" value="Previous" onclick="setRedirectedQuestionId(@(currentIndex - 1))" asp-action="SaveAnswerAndRedirect"/>
+                                <input type="submit" name="redirectedQuestionId@(currentIndex-1)" value="Previous" asp-action="SaveAnswerAndRedirect"/>
                             }
 
-                            <button id="exitButton" class="btn btn-danger">Exit</button>
-                            <input type="submit" name="redirectedQuestionId" value="Next" onclick="setRedirectedQuestionId(@(currentIndex + 1))" asp-action="SaveAnswerAndRedirect"/>
+                            <a href="@Url.Action("SubFlow", "Flow", new { id = subFlowId })" class="btn btn-primary">Return to SubFlow</a>
+
+                            <input type="submit" name="redirectedQuestionId@(currentIndex+1)" value="Next" asp-action="SaveAnswerAndRedirect"/>
                         }
                         else
                         {
@@ -77,10 +83,9 @@
                                 <span id="countdown"></span>
                             </div>
                             //todo: redirect to login page, user can't close circular flow
-                            <a href="@Url.Action("Flow", "Flow", new { id = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
+                            <a href="@Url.Action("SubFlow", "Flow", new { id = subFlowId })" class="btn btn-primary">Return to SubFlow</a>
 
-                            <button id="exitButton" class="btn btn-danger">Exit</button>
-                            <script src="/dist/Views/Flow/goingToNextQuestionCircularFlow.js" defer="defer"></script>
+                            <script src="/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
                         }
                     </div>
                 </form>
@@ -91,5 +96,3 @@
         </div>
     </div>
 </div>
-
-<script src="/dist/Views/Flow/Questions/redirectedQuestionId.js" defer="defer"></script>
