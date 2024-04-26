@@ -13,5 +13,6 @@ public interface ISessionManager : IManager<Session>
     public IEnumerable<Answer> GetAnswersBySessionId(int sessionId);
     Task<Session> CreateNewSession(int flowId);
     IEnumerable<Question> GetQuestionsBySessionId(int sessionId);
-    void SaveAnswer(string answerText, int questionId, int sessionId, FlowType flowType);
+    public Answer UpdateAnswer(Answer answerToUpdate, Answer answer);
+    Answer GetAnswerByQuestionId(int sessionId, int questionId);
 }

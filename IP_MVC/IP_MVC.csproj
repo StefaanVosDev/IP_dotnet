@@ -16,8 +16,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.11">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
         <PackageReference Include="RangeSlider" Version="1.0.0" />
@@ -28,6 +28,9 @@
         <Content Remove="$(MpaRoot)**" />
         <None Remove="$(MpaRoot)**" />
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
+        <None Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.js" />
+        <None Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
+        <None Include="wwwroot\dist\Views\Flow\Questions\range.ts" />
     </ItemGroup>
 
     <ItemGroup>
@@ -51,8 +54,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BL\BL.csproj" />
-      <ProjectReference Include="..\DAL\DAL.csproj" />
+        <ProjectReference Include="..\BL\BL.csproj" />
+        <ProjectReference Include="..\DAL\DAL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
