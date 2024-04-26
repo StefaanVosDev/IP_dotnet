@@ -165,7 +165,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult CreateParentFlow(Flow flow, int? parentFlowId)
         {
-            if (!ModelState.IsValid) return View(flow);
+            //if (!ModelState.IsValid) return View(flow);
 
             // Set the ProjectId and ParentFlowId of the new flow
             //flow.ProjectId = projectManager.;
@@ -178,7 +178,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult CreateSubFlow(Flow flow, int? parentFlowId)
         {
-            if (!ModelState.IsValid) return View(flow);
+            //if (!ModelState.IsValid) return View(flow);
 
             
 

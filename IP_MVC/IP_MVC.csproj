@@ -28,9 +28,6 @@
         <Content Remove="$(MpaRoot)**" />
         <None Remove="$(MpaRoot)**" />
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
-        <None Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.js" />
-        <None Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
-        <None Include="wwwroot\dist\Views\Flow\Questions\range.ts" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,5 +1,11 @@
+.login{
+  background-image: url('https://storage.googleapis.com/phygital-public/Login/Applicatie%20design%20rune%20%2333.jpeg');
+  background-size: 100% 100%;
+}
+
 #youth-speak {
   h1 {
+    font-family: 'signalcompressed-regular-TRIAL.otf', serif;
     margin: 0; 
   }
 
@@ -11,11 +17,12 @@
 
 #login-submit {
   overflow: hidden;
+  font-family: 'signalcompressed-regular-TRIAL.otf', serif;
 
   &::after {
     content: "\2192";
     top: 10%;
     transform: translateY(-50%);
-    font-size: 60px;
+    font-size: 3.5em;
   }
 }

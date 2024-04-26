@@ -76,4 +76,9 @@ public class ProjectController : Controller
         await _projectManager.AddAsync(project);
         return RedirectToAction("Index");
     }
+
+    public IActionResult Index()
+    {
+        throw new NotImplementedException();
+    }
 }

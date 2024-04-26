@@ -4,8 +4,8 @@
 @{
     ViewData["Title"] = "Log in";
 }
-
-<div class="container-fluid">
+<body class="login">
+<div class="container-fluid ">
     <div class="row justify-content-center align-items-center">
         <div id="youth-speak" class="py-3 text-center d-flex flex-column justify-content-center align-items-center">
             <h1 class="display-3">YouthSpeak<span class="up">Up</span></h1>
@@ -24,9 +24,9 @@
                         <label asp-for="Input.Password" class="form-label">Password</label>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-                    <div class="checkbox mb-3">
+                    <div class="checkbox d-flex align-items-center"> <!-- Voeg de d-flex en align-items-center klassen toe -->
+                        <input class="form-check-input" asp-for="Input.RememberMe"/>
                         <label asp-for="Input.RememberMe" class="form-label">
-                            <input class="form-check-input" asp-for="Input.RememberMe"/>
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
                         </label>
                     </div>
@@ -49,6 +49,7 @@
         </div>
     </div>
 </div>
+</body>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>
