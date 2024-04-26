@@ -45,16 +45,13 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\39795c0b4513de014cf8.woff" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\b7bcc075b395c14ce8c2.woff2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BL\BL.csproj" />
       <ProjectReference Include="..\DAL\DAL.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <TypeScriptCompile Include="wwwroot\dist\Views\Flow\goingToNextQuestionCircularFlow.ts" />
-      <TypeScriptCompile Include="wwwroot\dist\Views\Flow\Questions\Range.ts" />
     </ItemGroup>
 
     <ItemGroup>
