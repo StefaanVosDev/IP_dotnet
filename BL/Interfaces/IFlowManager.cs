@@ -13,4 +13,5 @@ public interface IFlowManager : IManager<Flow>
     public Queue<int> GetQuestionQueueByFlowId(int flowId);
     public int? GetParentFlowIdBySessionId(int sessionId);
     public bool IsParentFlow(int flowId);
+    public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition);
 }

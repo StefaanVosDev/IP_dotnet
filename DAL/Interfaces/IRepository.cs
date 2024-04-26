@@ -14,4 +14,5 @@ public interface IRepository
     Task UpdateAsync<TEntity>(TEntity entityToUpdate, TEntity entity) where TEntity : class;
     Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
     Task<IEnumerable<TEntity>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
+    Task UpdateAllAsync<TEntity>(IEnumerable<TEntity> entitiesToUpdate) where TEntity : class;
 }

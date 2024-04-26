@@ -10,9 +10,11 @@ namespace DAL;
 /// </summary>
 public class Repository(PhygitalDbContext context) : IRepository
 {
-    public async Task<IEnumerable<TEntity>> GetAllAsync<TEntity>() where TEntity : class => await context.Set<TEntity>().ToListAsync();
+    public async Task<IEnumerable<TEntity>> GetAllAsync<TEntity>() where TEntity : class =>
+        await context.Set<TEntity>().ToListAsync();
 
-    public async Task<TEntity> GetAsync<TEntity>(int id) where TEntity : class => await context.Set<TEntity>().FindAsync(id);
+    public async Task<TEntity> GetAsync<TEntity>(int id) where TEntity : class =>
+        await context.Set<TEntity>().FindAsync(id);
 
     public async Task AddAsync<TEntity>(TEntity entity) where TEntity : class
     {
@@ -32,8 +34,15 @@ public class Repository(PhygitalDbContext context) : IRepository
         await context.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<TEntity>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+    public Task<IEnumerable<TEntity>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+        where TEntity : class
     {
         return Task.FromResult(context.Set<TEntity>().Where(predicate).AsEnumerable());
+    }
+
+    public async Task UpdateAllAsync<TEntity>(IEnumerable<TEntity> entitiesToUpdate) where TEntity : class
+    {
+        context.UpdateRange(entitiesToUpdate);
+        await context.SaveChangesAsync();
     }
 }

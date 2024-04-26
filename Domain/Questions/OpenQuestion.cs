@@ -6,7 +6,7 @@ public class OpenQuestion : Question
     {
     }
 
-    public OpenQuestion(string text, Media media) : base(text, QuestionType.Open, media)
+    public OpenQuestion(int position, string text, Media media) : base(position, text, QuestionType.Open, media)
     {
     }
     
