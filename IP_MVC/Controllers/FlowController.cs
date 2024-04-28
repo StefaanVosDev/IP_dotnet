@@ -186,7 +186,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
-            if (!ModelState.IsValid) return View(flow);
+            //if (!ModelState.IsValid) return View(flow);
 
             flow.ProjectId = projectId;
             flow.ParentFlowId = parentFlowId;
