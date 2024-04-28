@@ -13,6 +13,7 @@ public interface IManager<TEntity> where TEntity : class
     Task<TEntity> GetAsync(int id);
     Task AddAsync(TEntity entity);
     Task UpdateAsync(TEntity entityToUpdate, TEntity entity);
+    Task UpdateAllAsync(IEnumerable<TEntity> entitiesToUpdate);
     Task DeleteAsync(TEntity entity);
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 }

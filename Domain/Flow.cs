@@ -7,6 +7,7 @@ namespace BL.Domain;
 public class Flow
 {
     public int Id { get; set; }
+    public int Position { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public FlowType Type { get; set; }
@@ -22,8 +23,9 @@ public class Flow
     {
     }
 
-    public Flow(string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows, Media media) 
+    public Flow(int position, string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows, Media media) 
     {
+        Position = position;
         Name = name;
         Description = description;
         ProjectId = projectId;

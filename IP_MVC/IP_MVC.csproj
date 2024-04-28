@@ -48,6 +48,12 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\39795c0b4513de014cf8 2.woff" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\39795c0b4513de014cf8.woff" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\b7bcc075b395c14ce8c2.woff2" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\goingToNextQuestionCircularFlow.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\goingToNextQuestionCircularFlow.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\range.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\range.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\redirectedQuestionId.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\redirectedQuestionId.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
@@ -60,7 +66,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\" />
+      <AdditionalFiles Include="Views\Question\Edit.cshtml" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
