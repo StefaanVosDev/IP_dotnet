@@ -9,7 +9,7 @@ module.exports = {
         index: './src/ts/index.ts',
         range: './src/ts/Views/Flow/Questions/range.ts',
         redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
-        goingToNextQuestionCircularFlow: './src/ts/Views/Flow/Questions/goingToNextQuestionCircularFlow.ts',
+        goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
     },
     output: {
         filename: '[name].entry.js',

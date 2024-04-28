@@ -4,18 +4,17 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - IP_MVC</title>
+    <title>@ViewData["Title"] - YOUTHSPEAKUP</title>
     <script src="~/dist/site.entry.js" defer></script>
     <script src="~/dist/index.entry.js" defer></script>
-
     @await RenderSectionAsync("Scripts", required: false)
     <link rel="stylesheet" href="~/dist/site.css">
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">IP_MVC</a>
+            <a id="youth-speak" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> YouthSpeak<span class="up">Up</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,15 +39,15 @@
         </div>
     </nav>
 </header>
-<div class="container">
+<div class="container-fluid">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        <i class="bi bi-c-circle"></i> 2024 - IP_MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<footer class="footer text-muted">
+    <div class="container ">
+        <i class="bi bi-c-circle" id="youth-speak"></i> 2024 - YouthSpeak<span class="up">Up</span> - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
 </footer>
 </body>
