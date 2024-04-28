@@ -23,6 +23,9 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     {
         return _context.Set<Question>().Where(q => q.FlowId == id);
     }
-    
 
+    public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
+    {
+        return _context.Set<Flow>().Where(f => f.Position >= oldPosition && f.Position <= newPosition);
+    }
 } 

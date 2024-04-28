@@ -1,0 +1,22 @@
+@import '../scss/_variables.scss';
+
+.login{
+  background-image: url('https://storage.googleapis.com/phygital-public/Login/Applicatie%20design%20rune%20%2333.jpeg');
+  background-size: 100% 100%;
+}
+
+#login-submit {
+  overflow: hidden;
+  font-family: 'signalcompressed-regular-TRIAL.otf', serif;
+  position: relative;
+  width: 3.5em; /* Breedte van de knop aanpassen aan de grootte van de pijl */
+
+  &::after {
+    content: "\2192";
+    position: absolute; /* Zet de positie van de pijl absoluut */
+    top: 50%; /* Plaats de pijl verticaal in het midden van de knop */
+    left: 50%; /* Plaats de pijl horizontaal in het midden van de knop */
+    transform: translate(-50%, -50%); /* Verplaats de pijl naar het midden van de knop */
+    font-size: 3.5em;
+  }
+}

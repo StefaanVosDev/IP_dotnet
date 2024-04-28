@@ -26,7 +26,6 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
             //efficient way to see if there already is an answer coupled to a question with this sessionId
             if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))
             {
-                //if an answer already exists, ovveride it with the new answer
                 session.Answers.Remove(session.Answers.First(a => a.QuestionId == answer.QuestionId));
             }
         }
@@ -59,8 +58,30 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
         return context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.Id == sessionId)?.Answers;
     }
 
+    public Answer UpdateAnswer(Answer answerToUpdate, Answer answer)
+    {
+        var session = context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.Id == answerToUpdate.Session.Id);
+        if (session == null)
+        {
+            throw new Exception("No session found with this id");
+        }
+        
+        if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))
+        {
+          context.Answers.Remove(session.Answers.First(a => a.QuestionId == answer.QuestionId));
+        }
+        session.Answers.Add(answer);
+        context.SaveChanges();
+        return answer;
+    }
+
     private bool SessionExists(int id)
     {
         return context.Sessions.Any(e => e.Id == id);
+    }
+
+    public Answer GetAnswerByQuestionId(int sessionId, int questionId)
+    {
+        return context.Answers.FirstOrDefault(a => a.Session.Id == sessionId && a.QuestionId == questionId);
     }
 }

@@ -18,5 +18,8 @@
         <textarea asp-for="Description" class="form-control"></textarea>
     </div>
 
+    <input type="hidden" asp-for="ProjectId" />
+    <input type="hidden" asp-for="ParentFlowId" value="@ViewBag.ParentFlowId" />
+
     <button type="submit" class="btn btn-primary">Create Flow</button>
 </form>

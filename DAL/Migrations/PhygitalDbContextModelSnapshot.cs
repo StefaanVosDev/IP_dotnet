@@ -67,6 +67,9 @@ namespace DAL.Migrations
                     b.Property<int?>("ParentFlowId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
 
@@ -144,6 +147,9 @@ namespace DAL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int?>("Mediaid")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Position")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")

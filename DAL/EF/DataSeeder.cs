@@ -29,6 +29,7 @@ public class DataSeeder
         var flows = new List<Flow>
         {
             new(
+                1,
                 "Betrokkenheid bij het lokale beleid",
                 "dit is de interesante beschrijving van de flow",
                 project.Id,
@@ -36,12 +37,14 @@ public class DataSeeder
                 null,
                 [
                     new Flow(
+                        1,
                         "Betrokkenheid en participatie",
                         "dit is de interesante beschrijving van de flow",
                         project.Id,
                         FlowType.LINEAR,
                         [
                             new SingleChoiceQuestion(
+                                1,
                                 "Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten?",
                                 [
                                     "Natuur en ecologie",
@@ -55,6 +58,7 @@ public class DataSeeder
                                 null
                             ),
                             new MultipleChoiceQuestion(
+                                2,
                                 "Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?",
                                 [
                                     "Meer lessen op school rond de partijprogramma’s",
@@ -66,6 +70,7 @@ public class DataSeeder
                                 null
                             ),
                             new RangeQuestion(
+                                3,
                                 "Voel jij je betrokken bij het beleid dat wordt uitgestippeld door je gemeente of stad?",
                                 1,
                                 5,
@@ -75,12 +80,14 @@ public class DataSeeder
                         null
                     ),
                     new Flow(
+                        2,
                         "Kiesintenties en participatie aan verkiezingen",
                         "dit is de interesante beschrijving van de flow",
                         project.Id,
                         FlowType.LINEAR,
                         [
                             new SingleChoiceQuestion(
+                                1,
                                 "Waarop wil jij dat de focus wordt gelegd in het nieuwe stadspark?",
                                 [
                                     "Sportinfrastructuur",
@@ -92,6 +99,7 @@ public class DataSeeder
                                 null
                             ),
                             new MultipleChoiceQuestion(
+                                2,
                                 "Jij gaf aan dat je waarschijnlijk niet zal gaan stemmen. Om welke reden(en) zeg je dit?",
                                 [
                                     "Ik ben niet geïnteresseerd in politiek",
@@ -103,12 +111,14 @@ public class DataSeeder
                                 null
                             ),
                             new RangeQuestion(
+                                3,
                                 "Hoe sta jij tegenover deze stelling? “Mijn stad moet meer investeren in fietspaden",
                                 1,
                                 2,
                                 null
                             ),
                             new OpenQuestion(
+                                4,
                                 "Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?",
                                 null
                             )

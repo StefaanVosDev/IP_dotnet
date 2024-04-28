@@ -7,6 +7,7 @@ using DAL;
 using DAL.EF;
 using DAL.Implementations;
 using DAL.Interfaces;
+using Google.Cloud.SecretManager.V1;
 using IP_MVC;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,14 +16,17 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PhygitalDbContext>(options =>
 {
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     try
     {
-        var connectionString = builder.Configuration.GetConnectionString("Connection");
+        var connectionString = builder.Configuration.GetConnectionString("Connection") + AccessSecret("db_password") + ";";
         var testConnection = new NpgsqlConnection(connectionString);
         testConnection.Open();
         testConnection.Close();
@@ -135,7 +139,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{parentFlowId?}");
 
 app.MapRazorPages();
 
@@ -172,6 +176,23 @@ async Task SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<Ident
     };
     await userManager.CreateAsync(facilitatorUser, "Password1!");
     await userManager.AddToRoleAsync(facilitatorUser, CustomIdentityConstants.FacilitatorRole);
+}
+
+string AccessSecret(string secretId)
+{
+    // Create the Secret Manager client.
+    SecretManagerServiceClient client = SecretManagerServiceClient.Create();
+
+    // Build the resource name of the secret version.
+    SecretVersionName secretVersionName = new SecretVersionName("269636205630", secretId, "latest");
+
+    // Access the secret version.
+    AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);
+
+    // Get the secret payload and decode it.
+    string payload = result.Payload.Data.ToStringUtf8();
+
+    return payload;
 }
 
 //Do not delete

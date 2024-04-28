@@ -49,23 +49,17 @@ public class SessionManager(ISessionRepository repository, IQuestionManager ques
         var answers = GetAnswersBySessionId(sessionId).ToList();
         return answers.Select(a => questionManager.GetQuestionById(a.QuestionId)).ToList();
     }
-    
-    public void SaveAnswer(string answerText, int questionId, int sessionId, FlowType flowType)
+    public Answer UpdateAnswer(Answer answerToUpdate, Answer answer)
     {
-        var session = GetSessionById(sessionId);
-        if (session == null)
+        if (answerToUpdate == null)
         {
-            //TODO: Handle error
-            return;
+            AddAnswerToSession(answer.Session.Id, answer, FlowType.LINEAR);
         }
+        return repository.UpdateAnswer(answerToUpdate, answer);
+    }
 
-        var answer = new Answer
-        {   
-            Session = session,
-            QuestionId = questionId,
-            AnswerText = answerText
-        };
-
-        AddAnswerToSession(sessionId, answer, flowType);
+    public Answer GetAnswerByQuestionId(int sessionId, int questionId)
+    {
+        return repository.GetAnswerByQuestionId(sessionId, questionId);
     }
 }

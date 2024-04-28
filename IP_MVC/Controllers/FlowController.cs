@@ -1,11 +1,8 @@
 using BL.Domain;
-using BL.Domain.Questions;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
-using System.Linq;
 using BL.Domain.Answers;
-using BL.Implementations;
 using IP_MVC.Models;
 
 namespace IP_MVC.Controllers
@@ -17,59 +14,58 @@ namespace IP_MVC.Controllers
         IQuestionManager questionManager)
         : Controller
     {
-        public IActionResult Flow(int id) => View(projectManager.GetParentFlowsByProjectId(id));
-
-        public IActionResult SubFlow(int id) => View(flowManager.GetFlowsByParentId(id));
-
-        public async Task<IActionResult> PlayFlow(int id, FlowType flowType)
+        public IActionResult Flow(int projectId, int? parentFlowId)
         {
-            var newSession = await sessionManager.CreateNewSession(id);
+            ViewBag.ProjectId = projectId;
+            ViewBag.ParentFlowId = parentFlowId;
+            return View(projectManager.GetParentFlowsByProjectId(projectId));
+        }
+
+        public IActionResult SubFlow(int parentFlowId) => View(flowManager.GetFlowsByParentId(parentFlowId));
+
+        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType)
+        {
+            var newSession = await sessionManager.CreateNewSession(parentFlowId);
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
-            queues[id] = flowManager.GetQuestionQueueByFlowId(id);
+            queues[parentFlowId] = flowManager.GetQuestionQueueByFlowId(parentFlowId);
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);
-            return RedirectToAction("Question", new { id, flowType = flowType.ToString() });
+
+            HttpContext.Session.Set("flowType", flowType);
+            return RedirectToAction("Question", new {id});
         }
 
-        public IActionResult Question(int id, bool previous, string flowType)
+        public IActionResult Question(int id, int redirectedQuestionId)
         {
-            Enum.TryParse(flowType, out FlowType flowTypeEnum);
-
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
-
+            
+            // Retrieve the flow type from the session.
+            var flowType = HttpContext.Session.Get<FlowType>("flowType");
+            
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
-            if (queues == null || !queues.ContainsKey(id) || !queues[id].Any())
+            if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
             {
                 return RedirectToAction("EndSubFlow");
             }
-
-            // Retrieve the current index from the session.
-            int currentIndex = HttpContext.Session.GetInt32("currentIndex") ?? 0;
-
-            if (previous)
-            {
-                currentIndex -= 2;
-            }
-
+            
             // Retrieve the queue of question IDs for the current flow.
-            var questionQueue = queues[id];
+            var questionQueue = queues[parentFlowId];
 
+            var currentIndex = redirectedQuestionId;
+            
             // If the index is out of range, redirect to the end of the flow.
-            if (currentIndex < 0 || currentIndex >= questionQueue.Count)
+            if (currentIndex < 0 || currentIndex>= questionQueue.Count)
             {
-                if (flowTypeEnum == FlowType.LINEAR)
+                if (flowType == FlowType.LINEAR)
                 {
                     return RedirectToAction("EndSubFlow");
                 }
-                else
-                {
-                    currentIndex = 0;
-                }
+                currentIndex = 0;
             }
 
             // Retrieve the current question ID from the queue.
@@ -78,14 +74,17 @@ namespace IP_MVC.Controllers
             // Retrieve the question based on the ID and type.
             var question = questionManager.GetQuestionByIdAndType(questionId);
 
-            // Increment the current index and store it in the session.
-            currentIndex++;
-            HttpContext.Session.SetInt32("currentIndex", currentIndex);
+            // Get the earlier answer given
+            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
+            var earlierAnswer = sessionManager.GetAnswerByQuestionId(sessionId, questionId);
+
+            ViewData["currentIndex"] = currentIndex;
+            ViewData["questionCount"] = questionQueue.Count;
+            ViewData["earlierAnswer"] = earlierAnswer;
+            ViewBag.FlowType = flowType;
+            ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
 
             // Display the question view based on the question type.
-            ViewData["currentIndex"] = currentIndex;
-            ViewData["flowType"] = flowTypeEnum;
-
             return View($"Questions/{question.Type}", question);
         }
 
@@ -116,70 +115,120 @@ namespace IP_MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveAndNext(int flowId, int id, AnswerViewModel model, FlowType flowType)
+        public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, int redirectedQuestionId)
         {
-            return SaveAnswerAndRedirect(flowId, id, model, flowType, false);
-        }
-
-        [HttpPost]
-        public IActionResult SaveAndPrevious(int flowId, int id, AnswerViewModel model)
-        {
-            return SaveAnswerAndRedirect(flowId, id, model, FlowType.LINEAR, true);
-        }
-
-        private IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, FlowType flowType, bool previous)
-        {
+            // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = flowId, previous = previous, flowType = flowType });
+                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
             }
-
+            
+            // Join the answer, in case of multiple answers
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
-            sessionManager.SaveAnswer(answerText, model.QuestionId, sessionId, flowType);
+            var flowType = HttpContext.Session.Get<FlowType>("flowType");
+            
+            // If no answers are given yet, save the answer
+            var newAnswer = new Answer
+            {
+                QuestionId = model.QuestionId,
+                AnswerText = answerText,
+                Session = sessionManager.GetSessionById(sessionId)
+            };
+            
+            // If there is no answer given to this question yet, add the answer to the session
+            if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
+            {
+                sessionManager.AddAnswerToSession(sessionId, newAnswer, flowType);
+            }
+            else
+            {
+                // If an answer is already given, search the old answer and update it
+                var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId);
+                sessionManager.UpdateAnswer(oldAnswer, newAnswer);
+            }
 
-            return RedirectToAction("Question", new { id = flowId, previous = previous, flowType = flowType });
+            return RedirectToAction("Question",
+                new { id = flowId, redirectedQuestionId});
         }
 
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int flowId)
         {
-            throw new NotImplementedException();
+            flowManager.DeleteAsync(flowManager.GetFlowById(flowId));
+            return RedirectToAction("Flow");
         }
-        
+
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int parentFlowId)
         {
+            var flow = flowManager.GetFlowById(parentFlowId);
+            var subflows = flowManager.GetFlowsByParentId(parentFlowId);
+            var questions = questionManager.GetQuestionsByFlowId(parentFlowId);
+
+            var model = new FlowEditViewModel
+            {
+                Flow = flow,
+                SubFlows = subflows,
+                Questions = questions
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Create(int? parentFlowId, int projectId)
+        {
+            ViewBag.ParentFlowId = parentFlowId;
+            ViewBag.ProjectId = projectId;
             return View();
         }
-        
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        
+
         [HttpPost]
-        public IActionResult CreateParentFlow(Flow flow, int? parentFlowId)
+        public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
-            if (!ModelState.IsValid) return View(flow);
+            //if (!ModelState.IsValid) return View(flow);
 
-            // Set the ProjectId and ParentFlowId of the new flow
-            //flow.ProjectId = projectManager.;
+            flow.ProjectId = projectId;
             flow.ParentFlowId = parentFlowId;
-            
             flowManager.AddAsync(flow);
+
             return RedirectToAction("Edit", new { id = flow.Id });
         }
-        
+
         [HttpPost]
-        public IActionResult CreateSubFlow(Flow flow, int? parentFlowId)
+        public IActionResult Reorder(int parentFlowId, int newPosition)
         {
-            if (!ModelState.IsValid) return View(flow);
+            var flow = flowManager.GetFlowById(parentFlowId);
+            var oldPosition = flow.Position;
+            flow.Position = newPosition;
 
-            
+            List<Flow> affectedFlows;
+            if (newPosition < oldPosition)
+            {
+                // The flow has been moved up, so increment the position of all flows between the old and new position
+                affectedFlows = flowManager.GetFlowsBetweenPositions(newPosition, oldPosition - 1).ToList();
+                foreach (var affectedFlow in affectedFlows)
+                {
+                    affectedFlow.Position++;
+                }
+            }
+            else
+            {
+                // The flow has been moved down, so decrement the position of all flows between the old and new position
+                affectedFlows = flowManager.GetFlowsBetweenPositions(oldPosition + 1, newPosition).ToList();
+                foreach (var affectedFlow in affectedFlows)
+                {
+                    affectedFlow.Position--;
+                }
+            }
 
-            flowManager.AddAsync(flow);
-            return RedirectToAction("Edit", new { id = flow.Id });
+            // Add the initially moved flow to the list of affected flows
+            affectedFlows.Add(flow);
+
+            // Update all affected flows at once
+            flowManager.UpdateAllAsync(affectedFlows);
+
+            return RedirectToAction("Edit");
         }
     }
 }
