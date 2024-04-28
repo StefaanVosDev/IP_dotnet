@@ -1,4 +1,4 @@
-@import '../scss/_variables.scss';
+@import '_variables.scss';
 
 html {
     font-size: 14px;
@@ -29,6 +29,22 @@ body {
     .up {
         position: relative;
         top: -0.3em;
+    }
+}
+
+#arrow-submit {
+    overflow: hidden;
+    font-family: $signalcompressed-font, serif;
+    position: relative;
+    width: 3.5em;
+
+    &::after {
+        content: "\2192";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3.5em;
     }
 }
 

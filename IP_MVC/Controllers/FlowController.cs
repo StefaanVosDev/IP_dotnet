@@ -36,7 +36,7 @@ namespace IP_MVC.Controllers
             HttpContext.Session.SetInt32("currentIndex", 0);
 
             HttpContext.Session.Set("flowType", flowType);
-            return RedirectToAction("Question", new {id});
+            return RedirectToAction("Question", new {parentFlowId});
         }
 
         public IActionResult Question(int id, int redirectedQuestionId)
@@ -48,13 +48,13 @@ namespace IP_MVC.Controllers
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
-            if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
+            if (queues == null || !queues.ContainsKey(redirectedQuestionId) || !queues[redirectedQuestionId].Any())
             {
                 return RedirectToAction("EndSubFlow");
             }
             
             // Retrieve the queue of question IDs for the current flow.
-            var questionQueue = queues[parentFlowId];
+            var questionQueue = queues[redirectedQuestionId];
 
             var currentIndex = redirectedQuestionId;
             
