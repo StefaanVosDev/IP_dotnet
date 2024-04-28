@@ -7,6 +7,9 @@ module.exports = {
         site: './src/ts/site.ts',
         validation: './src/ts/validation.ts',
         index: './src/ts/index.ts',
+        range: './src/ts/Views/Flow/Questions/range.ts',
+        redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
+        goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
         createFlow: './src/ts/create.ts'
     },
     output: {
