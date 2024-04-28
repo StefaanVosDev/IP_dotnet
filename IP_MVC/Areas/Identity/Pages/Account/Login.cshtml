@@ -7,8 +7,8 @@
 <body class="login">
 <div class="container-fluid ">
     <div class="row justify-content-center align-items-center">
-        <div id="youth-speak" class="py-3 text-center d-flex flex-column justify-content-center align-items-center">
-            <h1 class="display-3">YouthSpeak<span class="up">Up</span></h1>
+        <div id="youth-speak" class="pb-4 pt-5 text-center d-flex flex-column justify-content-center align-items-center">
+            <h1 class="display-5">YouthSpeak<span class="up">Up</span></h1>
         </div>
         <div class="col-md-4">
             <section>
@@ -24,14 +24,14 @@
                         <label asp-for="Input.Password" class="form-label">Password</label>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-                    <div class="checkbox d-flex align-items-center"> <!-- Voeg de d-flex en align-items-center klassen toe -->
-                        <input class="form-check-input" asp-for="Input.RememberMe"/>
-                        <label asp-for="Input.RememberMe" class="form-label">
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button id="login-submit" type="submit" class="btn py-0"></button>
+                    <div class="checkbox d-flex py-2 mb-3">
+                        <div>
+                            <input class="form-check-input" asp-for="Input.RememberMe"/>
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                        <button id="login-submit" type="submit" class="btn  ms-auto"></button> 
                     </div>
                     <div>
                         <p>
