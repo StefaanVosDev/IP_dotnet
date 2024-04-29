@@ -18,9 +18,9 @@
                 <div class="card-body">
                     <h5 class="card-title">@flow.Name</h5>
                     <p class="card-text">@flow.Description</p>
-                    <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id, flowtype = FlowType.LINEAR})" class="btn btn-primary">Start linear Flow</a>
+                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR})" class="btn btn-primary">Start linear Flow</a>
                     @* @if (User.IsInRole("UpperRole"))  a user can't start up a circular flow*@
-                    <a href="@Url.Action("PlayFlow", "Flow", new { id = flow.Id, flowtype = FlowType.CIRCULAR})" class="btn btn-primary">Start circular Flow</a>
+                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR})" class="btn btn-primary">Start circular Flow</a>
                 </div>
             </div>
         </div>

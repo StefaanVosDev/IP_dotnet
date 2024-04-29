@@ -28,6 +28,7 @@ namespace IP_MVC.Controllers
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
+
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
             queues[parentFlowId] = flowManager.GetQuestionQueueByFlowId(parentFlowId);
@@ -36,9 +37,11 @@ namespace IP_MVC.Controllers
             HttpContext.Session.SetInt32("currentIndex", 0);
 
             HttpContext.Session.Set("flowType", flowType);
-            return RedirectToAction("Question", new {id});
+            HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
+            
+            return RedirectToAction("Question", new { id = newSession.Id });
         }
-
+        
         public IActionResult Question(int id, int redirectedQuestionId)
         {
             // Retrieve the dictionary of queues from the session.
@@ -46,6 +49,10 @@ namespace IP_MVC.Controllers
             
             // Retrieve the flow type from the session.
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
+            
+            // Retrieve parentFlowId from the session.
+            var parentFlowId = HttpContext.Session.GetInt32("parentFlowId") ?? 0;
+
             
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
             if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
