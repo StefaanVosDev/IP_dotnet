@@ -120,7 +120,7 @@ namespace IP_MVC.Controllers
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
+                return RedirectToAction("Question", new { parentFlowId = flowId, redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers
@@ -192,7 +192,7 @@ namespace IP_MVC.Controllers
             flow.ParentFlowId = parentFlowId;
             flowManager.AddAsync(flow);
 
-            return RedirectToAction("Edit", new { id = flow.Id });
+            return RedirectToAction("Edit", new { parentFlowId = flow.Id });
         }
 
         [HttpPost]
