@@ -16,14 +16,11 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<PhygitalDbContext>(options =>
 {
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     try
     {
         var connectionString = builder.Configuration.GetConnectionString("Connection") + AccessSecret("db_password") + ";";
@@ -109,7 +106,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<PhygitalDbContext>();
-    if (context.CreateDatabase(false))
+    if (context.CreateDatabase(true))
     {
         var userManager = scope.ServiceProvider
             .GetRequiredService<UserManager<IdentityUser>>();
