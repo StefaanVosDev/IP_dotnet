@@ -55,7 +55,12 @@ public class DataSeeder
                                     "Verkeersveiligheid en mobiliteit",
                                     "Ondersteunen van lokale handel"
                                 ],
-                                null
+                                new Media()
+                                {
+                                    description = "Dit is een video over hoe de bevolking naar de politiek kijkt",
+                                    url = "https://www.youtube.com/watch?v=JGfXiIz5nqQ",
+                                    type = MediaType.VIDEO
+                                }
                             ),
                             new MultipleChoiceQuestion(
                                 2,
@@ -67,17 +72,32 @@ public class DataSeeder
                                     "Een gesprek met mijn ouders rond de gemeentepolitiek",
                                     "Een debat georganiseerd door een jeugdhuis met de verschillende partijen"
                                 ],
-                                null
+                                new Media()
+                                {
+                                    description = "Afbeelding van alle partijen",
+                                    url = "https://images.vrt.be/width960/2019/04/26/10341807-6837-11e9-abcc-02b7b76bf47f.png",
+                                    type = MediaType.IMAGE
+                                }
                             ),
                             new RangeQuestion(
                                 3,
                                 "Voel jij je betrokken bij het beleid dat wordt uitgestippeld door je gemeente of stad?",
                                 1,
                                 5,
-                                null)
+                                new Media()
+                                {
+                                    description = "Dit is een afbeelding over de betrokkenheid van de bevolking bij de politiek",
+                                    url="https://assets.antwerpen.be/srv/assets/api/image/1a6473b3-e416-4112-90e6-5fd7b26a9c60/Illustratie_00_ALL_02_website.jpg/contentimage_full",
+                                    type = MediaType.IMAGE
+                                })
                         ],
                         null,
-                        null
+                        new Media()
+                        {
+                            description = "Dit is een afbeelding over de betrokkenheid van jongeren",
+                            url="https://www.onderwijsvanmorgen.nl/wp-content/uploads/2022/12/OVM-Jongeren-betrekken-bij-de-politiek-hoe-doe-je-dat.jpg",
+                            type = MediaType.IMAGE
+                        }
                     ),
                     new Flow(
                         2,
@@ -96,7 +116,12 @@ public class DataSeeder
                                     "Ruimte voor kleine evenementen",
                                     "Drank- en eetmogelijkheden"
                                 ],
-                                null
+                                new Media()
+                                {
+                                    description = "Video over het nieuwe stadspark in Mechelen",
+                                    url = "https://www.google.com/search?q=nieuw+stadspark+video&sca_esv=114751fe4ad266cf&sca_upv=1&rlz=1C1QPHC_nlBE1075BE1075&ei=K-IuZoPCLeWYkdUP_7GCyA0&ved=0ahUKEwjDg-CUjuaFAxVlTKQEHf-YANkQ4dUDCBA&uact=5&oq=nieuw+stadspark+video&gs_lp=Egxnd3Mtd2l6LXNlcnAiFW5pZXV3IHN0YWRzcGFyayB2aWRlbzIFECEYoAEyBRAhGKABMgUQIRigAUjmDFCSAljRC3ABeACQAQCYAWCgAe0EqgEBObgBA8gBAPgBAZgCCaAC1ATCAgsQABiABBiwAxiiBMICCxAAGLADGKIEGIkFwgIFEAAYgATCAggQABiABBiiBMICCBAAGKIEGIkFwgIGEAAYFhgewgIFECEYnwWYAwCIBgGQBgOSBwM4LjGgB78c&sclient=gws-wiz-serp#fpstate=ive&vld=cid:b5ff1d6c,vid:4kfe77stM-s,st:0",
+                                    type = MediaType.VIDEO
+                                }
                             ),
                             new MultipleChoiceQuestion(
                                 2,
@@ -108,26 +133,51 @@ public class DataSeeder
                                     "Ik weet niet wat de verschillende partijen willen doen",
                                     "Ik weet niet wat de verschillende partijen willen doen"
                                 ],
-                                null
+                                new Media()
+                                {
+                                    description = "Video over hoe het stemmen werkt",
+                                    url = "/audio/hoeWerkthetStemmen.mp3",
+                                    type = MediaType.AUDIO
+                                }
                             ),
                             new RangeQuestion(
                                 3,
                                 "Hoe sta jij tegenover deze stelling? “Mijn stad moet meer investeren in fietspaden",
                                 1,
                                 2,
-                                null
+                                new Media()
+                                {
+                                    description = "Fietser op een fietspad",
+                                    url = "/images/fietser.jpg",
+                                    type = MediaType.IMAGE
+                                }
                             ),
                             new OpenQuestion(
                                 4,
                                 "Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?",
-                                null
+                                new Media()
+                                {
+                                    description = "Afbeelding van de schepen van onderwijs",
+                                    url = "/images/schepenOnderwijs.jpg",
+                                    type = MediaType.IMAGE
+                                }
                             )
                         ],
                         null,
-                        null
+                        new Media()
+                        {
+                            description = "Afbeelding over de kiesintenties en participatie aan verkiezingen",
+                            url = "https://www.vlaamsparlement.be/sites/default/files/styles/social_media_image/public/2023-06/shutterstock_1937926147_1.jpg?h=55c51ed5&itok=jGJL2iNw",
+                            type = MediaType.IMAGE
+                        }
                     )
                 ],
-                null
+                new Media()
+                {
+                    description = "Afbeelding over de betrokkenheid bij het lokale beleid",
+                    url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36v1EQLdgUmzyTsY8tDOJCKA2ZH3_-seFCZYmWEGq8w&s",
+                    type = MediaType.IMAGE
+                }
             )
         };
         

@@ -37,6 +37,8 @@ namespace IP_MVC.Controllers
             HttpContext.Session.SetInt32("currentIndex", 0);
 
             HttpContext.Session.Set("flowType", flowType);
+            HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
+            
             return RedirectToAction("Question", new { id = newSession.Id });
         }
         

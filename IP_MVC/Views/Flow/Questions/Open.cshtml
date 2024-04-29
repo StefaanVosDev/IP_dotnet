@@ -71,7 +71,7 @@
                             }
 
                             @* <button id="exitButton" class="btn btn-danger">Exit</button> *@
-                            <a href="@Url.Action("SubFlow", "Flow", new { id = subFlowId })" class="btn btn-primary">Return to SubFlow</a>
+                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = subFlowId })" class="btn btn-primary">Return to SubFlow</a>
 
                             <input type="submit" name="redirectedQuestionId@(currentIndex+1)" value="Next" asp-action="SaveAnswerAndRedirect"/>
                         }
@@ -81,7 +81,7 @@
                                 <span id="countdown"></span>
                             </div>
                             //todo: redirect to login page, user can't close circular flow
-                            <a href="@Url.Action("SubFlow", "Flow", new { id = subFlowId })" class="btn btn-primary">Return to SubFlow</a>
+                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = subFlowId })" class="btn btn-primary">Return to SubFlow</a>
 
                             <script src="/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
                             @* <button id="exitButton" class="btn btn-danger">Exit</button> *@
@@ -90,8 +90,30 @@
                 </form>
             </div>
         </div>
-        <div class="col py-2 d-flex justify-content-center align-items-center">
-            <img src="https://via.placeholder.com/50x50" class="img-fluid w-100" alt="Afbeeldingsplaatsaanduiding">
-        </div>
+         @if (Model.Media != null)
+        {
+            switch (Model.Media.type)
+            {
+                case MediaType.VIDEO:
+                    <div class="col py-2 d-flex justify-content-center align-items-center">
+                        <iframe src="https://www.youtube.com/embed/d-LmGRjRhs8" class="img-fluid w-100" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+                        @Model.Media.description
+                    </div>
+                    break;
+                case MediaType.IMAGE:
+                    <div class="col py-2 d-flex justify-content-center align-items-center">
+                        <img src="https://images.vrt.be/width960/2019/04/26/10341807-6837-11e9-abcc-02b7b76bf47f.png" class="img-fluid w-100" alt="Dit is een mooie afbeelding">
+                    </div>
+                    break;
+                case MediaType.AUDIO:
+                    <div class="col py-2 d-flex justify-content-center align-items-center">
+                        <audio controls>
+                            <source src="https://www.buzzsprout.com/2357072/14950714-alleen-in-brussel-aflevering-1-de-verloren-stem.mp3?client_source=small_player&referrer=https%3A%2F%2Fwww.buzzsprout.com%2F2357072%2F14950714-alleen-in-brussel-aflevering-1-de-verloren-stem.js%3Fcontainer_id%3Dbuzzsprout-player-14950714" type="audio/mpeg">
+                            @Model.Media.description
+                        </audio>
+                    </div>
+                    break;
+            }
+        }
     </div>
 </div>

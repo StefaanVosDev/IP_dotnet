@@ -62,10 +62,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\images\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <AdditionalFiles Include="Views\Question\Edit.cshtml" />
     </ItemGroup>
 
