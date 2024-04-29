@@ -10,7 +10,8 @@ module.exports = {
         range: './src/ts/Views/Flow/Questions/range.ts',
         redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
         goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
-        createFlow: './src/ts/Views/Flow/createFlow.ts'
+        createFlow: './src/ts/Views/Flow/createFlow.ts',
+        createProject: './src/ts/Views/Project/createProject.ts'
     },
     output: {
         filename: '[name].entry.js',

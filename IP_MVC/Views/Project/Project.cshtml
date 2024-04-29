@@ -19,11 +19,13 @@
             <td>@project.Name</td>
             <td>@project.Description</td>
             <td>
-                <a class="btn btn-primary btn-sm" href="@Url.Action("Flow", "Flow", new { ProjectId = project.Id })">Open</a>
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Flow", "Flow", new { projectId = project.Id })">Open</a>
                 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
                 {
-                    <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "Project", new { id = project.Id })">Edit</a>
-                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Project", new { id = project.Id })" onclick="return confirm('Are you sure you want to delete this project?')">Delete</a>
+                    <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "Project", new { parentFlowId = project.Id })">Edit</a>
+                    <button class="btn btn-success" id="popupEditButton">Edit pop-up</button>
+                    @await Html.PartialAsync("_Edit", new BL.Domain.Project())
+                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Project", new { parentFlowId = project.Id })" onclick="return confirm('Are you sure you want to delete this project?')">Delete</a>
                 }
             </td>
         </tr>
@@ -33,5 +35,12 @@
 
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <a class="btn btn-success" href="@Url.Action("Create", "Project")">Create New project</a>
+    <button class="btn btn-success" id="popupCreateButton">Create Project pop-up</button>
+    @await Html.PartialAsync("_Create", new BL.Domain.Project())
+    
+}
+
+@section Scripts
+{
+    <script src="~/dist/createProject.entry.js"></script>
 }

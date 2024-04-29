@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using BL.Domain.Answers;
 using IP_MVC.Models;
+using Microsoft.CodeAnalysis;
 
 namespace IP_MVC.Controllers
 {
@@ -37,39 +38,42 @@ namespace IP_MVC.Controllers
             HttpContext.Session.SetInt32("currentIndex", 0);
 
             HttpContext.Session.Set("flowType", flowType);
+            HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
+
             return RedirectToAction("Question", new { id = newSession.Id });
         }
-        
+
         public IActionResult Question(int id, int redirectedQuestionId)
         {
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
-            
+
             // Retrieve the flow type from the session.
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
-            
+
             // Retrieve parentFlowId from the session.
             var parentFlowId = HttpContext.Session.GetInt32("parentFlowId") ?? 0;
 
-            
+
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
             if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
             {
                 return RedirectToAction("EndSubFlow");
             }
-            
+
             // Retrieve the queue of question IDs for the current flow.
             var questionQueue = queues[parentFlowId];
 
             var currentIndex = redirectedQuestionId;
-            
+
             // If the index is out of range, redirect to the end of the flow.
-            if (currentIndex < 0 || currentIndex>= questionQueue.Count)
+            if (currentIndex < 0 || currentIndex >= questionQueue.Count)
             {
                 if (flowType == FlowType.LINEAR)
                 {
                     return RedirectToAction("EndSubFlow");
                 }
+
                 currentIndex = 0;
             }
 
@@ -127,12 +131,12 @@ namespace IP_MVC.Controllers
             {
                 return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
             }
-            
+
             // Join the answer, in case of multiple answers
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
-            
+
             // If no answers are given yet, save the answer
             var newAnswer = new Answer
             {
@@ -140,7 +144,7 @@ namespace IP_MVC.Controllers
                 AnswerText = answerText,
                 Session = sessionManager.GetSessionById(sessionId)
             };
-            
+
             // If there is no answer given to this question yet, add the answer to the session
             if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
             {
@@ -154,7 +158,7 @@ namespace IP_MVC.Controllers
             }
 
             return RedirectToAction("Question",
-                new { id = flowId, redirectedQuestionId});
+                new { id = flowId, redirectedQuestionId });
         }
 
         public IActionResult Delete(int flowId)
@@ -197,7 +201,7 @@ namespace IP_MVC.Controllers
             flow.ParentFlowId = parentFlowId;
             flowManager.AddAsync(flow);
 
-            return RedirectToAction("Flow", new { ProjectId = projectId});
+            return RedirectToAction("Flow", new { ProjectId = projectId });
             //return RedirectToAction("Edit", new { id = flow.Id });
         }
 
