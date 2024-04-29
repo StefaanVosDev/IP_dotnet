@@ -28,7 +28,6 @@ namespace IP_MVC.Controllers
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
-
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
             queues[parentFlowId] = flowManager.GetQuestionQueueByFlowId(parentFlowId);
@@ -41,7 +40,7 @@ namespace IP_MVC.Controllers
             
             return RedirectToAction("Question", new { id = newSession.Id });
         }
-        
+
         public IActionResult Question(int id, int redirectedQuestionId)
         {
             // Retrieve the dictionary of queues from the session.
@@ -50,18 +49,14 @@ namespace IP_MVC.Controllers
             // Retrieve the flow type from the session.
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             
-            // Retrieve parentFlowId from the session.
-            var parentFlowId = HttpContext.Session.GetInt32("parentFlowId") ?? 0;
-
-            
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
-            if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
+            if (queues == null || !queues.ContainsKey(redirectedQuestionId) || !queues[redirectedQuestionId].Any())
             {
                 return RedirectToAction("EndSubFlow");
             }
             
             // Retrieve the queue of question IDs for the current flow.
-            var questionQueue = queues[parentFlowId];
+            var questionQueue = queues[redirectedQuestionId];
 
             var currentIndex = redirectedQuestionId;
             
@@ -127,7 +122,7 @@ namespace IP_MVC.Controllers
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
+                return RedirectToAction("Question", new { parentFlowId = flowId, redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers
@@ -199,7 +194,7 @@ namespace IP_MVC.Controllers
             flow.ParentFlowId = parentFlowId;
             flowManager.AddAsync(flow);
 
-            return RedirectToAction("Edit", new { id = flow.Id });
+            return RedirectToAction("Edit", new { parentFlowId = flow.Id });
         }
 
         [HttpPost]

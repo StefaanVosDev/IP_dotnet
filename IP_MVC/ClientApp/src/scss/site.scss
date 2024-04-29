@@ -1,4 +1,4 @@
-@import '../scss/_variables.scss';
+@import '_variables.scss';
 
 html {
     font-size: 14px;
@@ -32,6 +32,21 @@ body {
     }
 }
 
+#arrow-submit {
+    font-family: $signalcompressed-font, serif;
+    position: relative;
+    width: 3.5em;
+
+    &::after {
+        content: "\2192";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3.5em;
+    }
+}
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -56,7 +71,6 @@ a.navbar-brand {
 .border-top {
     border-top: 1px solid #e5e5e5;
 }
-
 .border-bottom {
     border-bottom: 1px solid #e5e5e5;
 }
@@ -68,14 +82,6 @@ a.navbar-brand {
 button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
 }
 
 //Style voor popups
@@ -129,4 +135,11 @@ button.accept-policy {
       font-size: 16px;
     }
   }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }

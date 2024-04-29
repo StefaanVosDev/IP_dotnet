@@ -51,8 +51,8 @@
                 <td>@subflow.Name</td>
                 <td>@subflow.Description</td>
                 <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { id = subflow.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Flow", new { id = subflow.Id })">Delete</a>
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { parentFlowId = subflow.Id })">Edit</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "Flow", new { parentFlowId = subflow.Id })">Delete</a>
                 </td>
             </tr>
         }
@@ -65,8 +65,8 @@
                 <td>@question.Text</td>
                 <td></td>
                 <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { id = question.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { id = question.Id })">Delete</a>
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { parentFlowId = question.Id })">Edit</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { parentFlowId = question.Id })">Delete</a>
                 </td>
             </tr>
         }

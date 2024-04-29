@@ -1,11 +1,11 @@
 @using BL.Domain
 @using IP_MVC
-@model IEnumerable<BL.Domain.Flow>
+@model IEnumerable<BL.Domain.Flow> 
 @inject BL.Interfaces.IFlowManager FlowManager
 
 @{
-ViewBag.Title = "Flows";
-Layout = "_Layout";
+    ViewBag.Title = "Flows"; 
+    Layout = "_Layout";
 }
 
 <div class="container">
@@ -17,7 +17,7 @@ Layout = "_Layout";
                     <img class="card-img" src="https://storage.googleapis.com/phygital-public/Flows/@(Uri.EscapeDataString(flow.Name)).png" alt="Card image cap">
                 </div>
 
-                <div class="card-body">
+                <div class="card-body position-absolute">
                     <h5 class="card-title">@flow.Name</h5>
                     <p class="card-text">@flow.Description</p>
                     @if (FlowManager.IsParentFlow(flow.Id))
