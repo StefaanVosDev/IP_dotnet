@@ -114,18 +114,18 @@ button.accept-policy {
       color: #333;
     }
 
-    .popup-content{
+    .popup-content {
       text-align: center;
     }
 
-    .form-control{
+    .form-control {
       padding: 10px;
       margin: 10px 0;
       border: 1px solid #ddd;
       border-radius: 4px;
     }
 
-    button{
+    button {
       background-color: #4caf50;
       color: #fff;
       padding: 10px 20px;
@@ -136,10 +136,11 @@ button.accept-policy {
     }
   }
 
-.footer {
+  .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     white-space: nowrap;
     line-height: 60px;
+  }
 }

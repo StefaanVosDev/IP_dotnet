@@ -9,9 +9,10 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
 {
     private readonly DbContext _context = context;
 
-    public Question GetQuestionById(int questionId)
+    public Question GetQuestionByIdWithMedia(int questionId)
     {
-        return _context.Set<Question>().Find(questionId);
+        return
+            _context.Set<Question>().Include(q => q.Media).FirstOrDefault(q => q.Id == questionId);
     }
 
     public IEnumerable<Question> GetQuestionsByFlowId(int flowId)
