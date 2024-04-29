@@ -63,4 +63,10 @@
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
     <a class="btn btn-success" href="@Url.Action("Create", "Flow")">Create New Flow</a>
+    <button class="btn" id="popupButton">Test</button>
+}
+
+@section Scripts
+{
+    <script src="~/dist/createFlow.entry.js"></script>
 }
