@@ -15,6 +15,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     
     public PhygitalDbContext()
     {
+        //TODO fix this for migrations
         Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     }
 
