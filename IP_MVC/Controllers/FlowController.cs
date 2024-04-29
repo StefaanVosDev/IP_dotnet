@@ -197,7 +197,8 @@ namespace IP_MVC.Controllers
             flow.ParentFlowId = parentFlowId;
             flowManager.AddAsync(flow);
 
-            return RedirectToAction("Edit", new { id = flow.Id });
+            return RedirectToAction("Flow", new { ProjectId = projectId});
+            //return RedirectToAction("Edit", new { id = flow.Id });
         }
 
         [HttpPost]

@@ -28,6 +28,8 @@
 @if (Model?.SubFlows?.Any() == true || Model?.Questions?.Any() != true)
 {
     <a href="@Url.Action("Create", "Flow", new { parentFlowId = Model.Flow?.Id })" class="btn btn-primary">Add subflow</a>
+    <button class="btn" id="popupButton">Test</button>
+    @await Html.PartialAsync("_Create", new BL.Domain.Flow())
 }
 @if (Model?.Questions?.Any() == true || Model?.SubFlows?.Any() != true)
 {
@@ -73,3 +75,8 @@
     }
     </tbody>
 </table>
+
+@section Scripts
+{
+    <script src="~/dist/createFlow.entry.js"></script>
+}
