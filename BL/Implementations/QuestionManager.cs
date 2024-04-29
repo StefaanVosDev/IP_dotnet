@@ -8,7 +8,7 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
 {
     public Question GetQuestionById(int questionId)
     {
-        return repository.GetQuestionById(questionId);
+        return repository.GetQuestionByIdWithMedia(questionId);
     }
     
     public Question GetQuestionByIdAndType(int id)

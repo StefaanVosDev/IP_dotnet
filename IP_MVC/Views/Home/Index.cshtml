@@ -21,7 +21,7 @@
                             <h5 class="card-title">@project.Name</h5>
                             <p class="card-text">@project.Description</p>
                         </div>
-                        <a href="@Url.Action("Flow", "Flow", new { id = project.Id })" id="arrow-submit" class="btn ms-auto py-4"></a>
+                        <a href="@Url.Action("Flow", "Flow", new { projectId = project.Id })" id="arrow-submit" class="btn ms-auto py-4"></a>
                     </div>
                 </div>
             </div>
