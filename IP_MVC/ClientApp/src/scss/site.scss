@@ -32,7 +32,7 @@ body {
     }
 }
 
-#arrow-submit {
+#arrow-submit-right {
     font-family: $signalcompressed-font, serif;
     position: relative;
     width: 3.5em;
@@ -45,6 +45,21 @@ body {
         transform: translate(-50%, -50%);
         font-size: 3.5em;
     }
+}
+
+#arrow-submit-left {
+  font-family: $signalcompressed-font, serif;
+  position: relative;
+  width: 3.5em;
+
+  &::after {
+    content: "\2190";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3.5em;
+  }
 }
 
 a.navbar-brand {
@@ -135,8 +150,8 @@ button.accept-policy {
       font-size: 16px;
     }
   }
-
-  .footer {
+}
+.footer {
     position: absolute;
     bottom: 0;
     width: 100%;
