@@ -1,12 +1,9 @@
 @import '../_variables.scss';
 
-.inzoom{
-  background-image: url('https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_1.png');
-  background-size: 100% 100%;
-  
-  .card{
+.project-page {
+  .card {
     width: 59%;
-    top: 31%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     border: 1px solid #000000;
@@ -18,16 +15,28 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .btn{
+    .btn {
       padding: 0;
     }
 
-    .card-body{
+    .card-body {
+      flex: 3;
       overflow: scroll;
     }
+
+    .d-flex {
+      flex: 1;
+    }
   }
-  
-  img{
-    z-index: 1;
+}
+
+.create-project-btn {
+  border-color: $light-blue;
+  border-radius: 5em;
+  box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 10px 0 $yellow inset, 0 0 10px 10px $yellow;
   }
 }

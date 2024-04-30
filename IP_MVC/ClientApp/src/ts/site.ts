@@ -8,6 +8,7 @@ import '../scss/Login.scss'
 import '../scss/Flow/SubFlow.scss'
 import '../scss/Flow/Flow.scss'
 import '../scss/Flow/Inzoom.scss'
+import '../scss/Flow/Project.scss'
 import '../scss/site.scss';
 
 console.log('The \'site\' bundle has been loaded!');

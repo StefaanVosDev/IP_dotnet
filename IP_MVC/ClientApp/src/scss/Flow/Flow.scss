@@ -1,46 +1,20 @@
 @import '../_variables.scss';
 
 .flow-page {
-  .card {
-    width: 59%;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  height: 100%;
+  
+  .big-card{
     border: 1px solid #000000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translate(-50%, -50%) translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .btn {
-      padding: 0;
-    }
-
-    .card-body {
-      flex: 3;
-      overflow: scroll;
-    }
-
-    .d-flex {
-      flex: 1;
-    }
+    height: 45em;
+    overflow-y: scroll;
   }
-}
 
-.create-project-btn {
-  border-color: $light-blue;
-  border-radius: 5em;
-  box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
-  transition: all 150ms ease-in-out;
-
-  &:hover {
-    box-shadow: 0 0 10px 0 $yellow inset, 0 0 10px 10px $yellow;
+  .little-card{
+    border: 1px solid #000000;
   }
-}
 
-img{
-  pointer-events: none;
+  .overlay-image {
+    left: 0;
+    z-index: 999; /* Zorg ervoor dat de afbeelding bovenop andere inhoud staat */
+  }
 }
