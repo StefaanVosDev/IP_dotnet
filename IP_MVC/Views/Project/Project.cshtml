@@ -8,7 +8,7 @@
 {
     <a class="btn create-project-btn" href="@Url.Action("Create", "Project")">Create New project</a>
 }
-<div class="container-fluid">
+<div class="container-fluid flow-page">
     <div class="row">
         @foreach (var project in Model)
         {
@@ -39,7 +39,7 @@
                                     }
                                 </div>
                                 <div class="flex-grow-1">
-                                    <a id="arrow-submit" class="btn" href="@Url.Action("Flow", "Flow", new { projectId = project.Id })"></a>
+                                    <a id="arrow-submit-right" class="btn" href="@Url.Action("Flow", "Flow", new { parentFlowId = project.Id })"></a>
                                 </div>
                             </div>
                         </div>
