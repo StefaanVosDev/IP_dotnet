@@ -27,7 +27,7 @@
 
 @if (Model?.SubFlows?.Any() == true || Model?.Questions?.Any() != true)
 {
-    <a href="@Url.Action("Create", "Flow", new { parentFlowId = Model.Flow?.Id })" class="btn btn-primary">Add subflow</a>
+    <a href="@Url.Action("Create", "Flow", new { projectId = Model.Flow?.ProjectId , parentFlowId = Model.Flow?.Id })" class="btn btn-primary">Add subflow</a>
 }
 @if (Model?.Questions?.Any() == true || Model?.SubFlows?.Any() != true)
 {
