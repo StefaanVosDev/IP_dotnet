@@ -34,6 +34,9 @@ namespace DAL.Migrations
                     b.Property<string>("AnswerText")
                         .HasColumnType("text");
 
+                    b.Property<int?>("FlowId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
@@ -41,6 +44,8 @@ namespace DAL.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FlowId");
 
                     b.HasIndex("SessionId");
 
@@ -431,9 +436,15 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("BL.Domain.Answers.Answer", b =>
                 {
+                    b.HasOne("BL.Domain.Flow", "Flow")
+                        .WithMany()
+                        .HasForeignKey("FlowId");
+
                     b.HasOne("BL.Domain.Session", "Session")
                         .WithMany("Answers")
                         .HasForeignKey("SessionId");
+
+                    b.Navigation("Flow");
 
                     b.Navigation("Session");
                 });
