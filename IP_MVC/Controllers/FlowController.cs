@@ -49,14 +49,17 @@ namespace IP_MVC.Controllers
             // Retrieve the flow type from the session.
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             
+            // Retrieve parentFlowId from the session.
+            var parentFlowId = HttpContext.Session.GetInt32("parentFlowId") ?? 0;
+            
             // If the dictionary is null or doesn't contain a queue for the current flow, redirect to the end of the flow.
-            if (queues == null || !queues.ContainsKey(redirectedQuestionId) || !queues[redirectedQuestionId].Any())
+            if (queues == null || !queues.ContainsKey(parentFlowId) || !queues[parentFlowId].Any())
             {
                 return RedirectToAction("EndSubFlow");
             }
             
             // Retrieve the queue of question IDs for the current flow.
-            var questionQueue = queues[redirectedQuestionId];
+            var questionQueue = queues[parentFlowId];
 
             var currentIndex = redirectedQuestionId;
             
@@ -122,7 +125,7 @@ namespace IP_MVC.Controllers
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { parentFlowId = flowId, redirectedQuestionId });
+                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers

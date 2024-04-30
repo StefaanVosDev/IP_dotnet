@@ -12,14 +12,16 @@ namespace DAL.EF;
 public class PhygitalDbContext : IdentityDbContext<IdentityUser>
 {
     #region Constructors
-
+    
     public PhygitalDbContext()
     {
-        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", AccessSecret("service-account-key"));
+        //TODO fix this for migrations
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     }
 
     public PhygitalDbContext(DbContextOptions<PhygitalDbContext> options) : base(options)
-    {
+    {   
+        
     }
 
     #endregion
@@ -43,7 +45,8 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     {
         base.OnConfiguring(optionsBuilder);
         if (optionsBuilder.IsConfigured) return;
-        string connectionString = $"Host=35.240.22.60;Database=postgres;Username=postgres;Password={AccessSecret("db_password")};";
+
+        var connectionString = $"Host=35.240.22.60;Database=postgres;Username=postgres;Password={AccessSecret("db_password")};";
         const string localConnection = "Host=localhost;Database=postgres;Username=postgres;Password=password123;";
         try
         {
@@ -59,7 +62,6 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
             }
             catch (NpgsqlException)
             {
-                // Log error or throw custom exception
                 Console.WriteLine("local database not available. Check connection string in appsettings.json.");
             }
         }
@@ -128,6 +130,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         return payload;
     }
     #endregion
+    
     //TODO: run database migrations.
     //TODO:ProjectDirectory>cd DAL
     //TODO:ProjectDirectory\DAL>dotnet ef migrations add {{migrationName}}
