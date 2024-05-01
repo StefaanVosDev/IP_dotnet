@@ -28,4 +28,12 @@
         <Folder Include="Migrations\"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="service-acc-key.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

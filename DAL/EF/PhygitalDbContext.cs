@@ -1,4 +1,5 @@
-﻿using BL.Domain;
+﻿using System.Text.Json;
+using BL.Domain;
 using BL.Domain.Answers;
 using BL.Domain.Questions;
 using Microsoft.AspNetCore.Identity;
@@ -15,8 +16,6 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     
     public PhygitalDbContext()
     {
-        //TODO fix this for migrations
-        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     }
 
     public PhygitalDbContext(DbContextOptions<PhygitalDbContext> options) : base(options)
@@ -46,7 +45,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         base.OnConfiguring(optionsBuilder);
         if (optionsBuilder.IsConfigured) return;
 
-        var connectionString = $"Host=35.240.22.60;Database=postgres;Username=postgres;Password={AccessSecret("db_password")};";
+        var connectionString = $"Host={AccessSecret("DB_IP")};Database=postgres;Username=postgres;Password={AccessSecret("db_password")};";
         const string localConnection = "Host=localhost;Database=postgres;Username=postgres;Password=password123;";
         try
         {
@@ -113,13 +112,23 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     #endregion
     
     #region AccessSecret
-    private string AccessSecret(string secretId)
+    string AccessSecret(string secretId)
     {
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
+        // Read the JSON file
+        string json = File.ReadAllText("service-acc-key.json");
+
+        // Parse the JSON file
+        JsonDocument doc = JsonDocument.Parse(json);
+
+        // Extract the project_id value
+        string projectId = doc.RootElement.GetProperty("project_id").GetString();
+    
         // Create the Secret Manager client.
         SecretManagerServiceClient client = SecretManagerServiceClient.Create();
-
-        // Build the resource name of the secret version.
-        SecretVersionName secretVersionName = new SecretVersionName("269636205630", secretId, "latest");
+    
+        // Use the project_id value
+        SecretVersionName secretVersionName = new SecretVersionName(projectId, secretId, "latest");
 
         // Access the secret version.
         AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);
