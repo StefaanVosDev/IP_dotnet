@@ -9,7 +9,10 @@
     position: relative;
     padding-left: 10em; /* Ruimte toevoegen aan de linkerkant van de tekst voor de pijl */
   }
-
+  
+  .card-content{
+    width: 80%;
+  }
   .active-dropdown {
     background-color: $light-blue;
   }
