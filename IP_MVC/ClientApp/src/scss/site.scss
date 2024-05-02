@@ -1,50 +1,50 @@
 @import '_variables.scss';
 
 html {
-    font-size: 14px;
-    position: relative;
-    min-height: 100%;
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 body {
-    margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 
 @media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
+  html {
+    font-size: 16px;
+  }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 #youth-speak {
-    h1 {
-        font-family: $signalcompressed-font, serif;
-        margin: 0;
-    }
+  h1 {
+    font-family: $signalcompressed-font, serif;
+    margin: 0;
+  }
 
-    .up {
-        position: relative;
-        top: -0.3em;
-    }
+  .up {
+    position: relative;
+    top: -0.3em;
+  }
 }
 
 #arrow-submit-right {
-    font-family: $signalcompressed-font, serif;
-    position: relative;
-    width: 3.5em;
+  font-family: $signalcompressed-font, serif;
+  position: relative;
+  width: 3.5em;
 
-    &::after {
-        content: "\2192";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 3.5em;
-    }
+  &::after {
+    content: "\2192";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3.5em;
+  }
 }
 
 #arrow-submit-left {
@@ -62,41 +62,54 @@ body {
   }
 }
 
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
+.create-btn {
+  border-color: $light-blue;
+  border-radius: 5em;
+  box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 10px 0 $yellow inset, 0 0 10px 10px $yellow;
+  }
 }
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
 .navbar {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: $button-bg-color;
-    border-color: #1861ac;
+  color: #fff;
+  background-color: $button-bg-color;
+  border-color: #1861ac;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #fff;
-    background-color: $button-bg-color;
-    border-color: #1861ac;
+  color: #fff;
+  background-color: $button-bg-color;
+  border-color: #1861ac;
 }
 
 .border-top {
-    border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-    border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-    font-size: 1rem;
-    line-height: inherit;
+  font-size: 1rem;
+  line-height: inherit;
 }
 
 //Style voor popups
@@ -152,10 +165,15 @@ button.accept-policy {
   }
 }
 
+img{
+  pointer-events: none;
+}
+
+
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
-  }
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}

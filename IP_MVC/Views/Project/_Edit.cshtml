@@ -1,0 +1,22 @@
+@model BL.Domain.Project
+
+<div class="popup-overlay" id="popupEditOverlay">
+    <div class="popup" id="popupEdit">
+        <span class="close" id="closeEditPopup">&times;</span>
+        <div class="popup-content">
+            <form asp-action="Edit" asp-controller="Project" method="post">
+                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="AdminId"/> <!-- Add this line -->
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" asp-for="Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" asp-for="Description" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="updateButton">Update</button>
+            </form>
+        </div>
+    </div>
+</div>

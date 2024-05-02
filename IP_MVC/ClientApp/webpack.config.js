@@ -11,7 +11,8 @@ module.exports = {
         redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
         goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
         inzoom: './src/ts/Views/Flow/inzoom.ts',
-        createFlow: './src/ts/createFlow.ts'
+        createFlow: './src/ts/Views/Flow/createFlow.ts',
+        createProject: './src/ts/Views/Project/createProject.ts'
     },
     output: {
         filename: '[name].entry.js',

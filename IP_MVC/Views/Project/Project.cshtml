@@ -1,14 +1,14 @@
 @using IP_MVC
 @model IEnumerable<BL.Domain.Project>
 
-<script src="~/dist/inzoom.entry.js"></script>
 
-<body class="flow-page">
+<body class="project-page">
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <a class="btn create-project-btn" href="@Url.Action("Create", "Project")">Create New project</a>
+    <button class="btn create-btn" id="popupCreateButton">Create Project</button>
+    @await Html.PartialAsync("_Create", new BL.Domain.Project())
 }
-<div class="container-fluid flow-page">
+<div class="container-fluid">
     <div class="row">
         @foreach (var project in Model)
         {
@@ -20,7 +20,7 @@
                     }
 
                     <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
-                        <div class="card h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
+                        <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
                             <div class="card-body">
                                 <h5 class="card-title ">@project.Name</h5>
                                 <p class="card-text">@project.Description</p>
@@ -39,7 +39,7 @@
                                     }
                                 </div>
                                 <div class="flex-grow-1">
-                                    <a id="arrow-submit-right" class="btn" href="@Url.Action("Flow", "Flow", new { parentFlowId = project.Id })"></a>
+                                    <a id="arrow-submit-right" class="btn" href="@Url.Action("Flow", "Flow", new { projectId = project.Id })"></a>
                                 </div>
                             </div>
                         </div>
@@ -49,3 +49,9 @@
     </div>
 </div>
 </body>
+
+@section Scripts
+{
+    <script src="~/dist/createProject.entry.js"></script>
+    <script src="~/dist/inzoom.entry.js"></script>
+}
