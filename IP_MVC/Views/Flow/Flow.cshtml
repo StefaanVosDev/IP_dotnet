@@ -43,7 +43,7 @@
                                     <div class="flex-grow-1">
                                         @if (FlowManager.IsParentFlow(flow.Id))
                                         {
-                                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn" id="arrow-submit-right"></a>
+                                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn arrow-submit-right"></a>
                                         }
                                         else
                                         {
