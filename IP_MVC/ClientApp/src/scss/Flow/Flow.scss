@@ -6,15 +6,28 @@
   .big-card{
     border: 1px solid #000000;
     height: 45em;
+  }
+
+  .big-card-content{
     overflow-y: scroll;
+    height: 40em;
   }
 
   .little-card{
     border: 1px solid #000000;
+    height: 12.5em;
+    background-color: $light-blue;
+
+    transition: z-index 0.3s;
+    
+    &:hover {
+      z-index: 2; 
+    }
+    
   }
 
   .overlay-image {
     left: 0;
-    z-index: 999; /* Zorg ervoor dat de afbeelding bovenop andere inhoud staat */
+    z-index: 1;
   }
 }

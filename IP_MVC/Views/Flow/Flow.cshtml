@@ -10,65 +10,72 @@
 
 <body class="flow-page">
 <div class="container-fluid">
-    <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_design.png" alt="Beschrijving van de afbeelding">
+    <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
 
     <div class="card big-card py-3 position-relative">
-        <div class="row">
-            @foreach (var flow in Model)
-            {
-                <div class="col col-sm-12 col-md-6 col-lg-4 col-xl-4 pb-3">
-                    <div class="position-relative">
-                        <div class="card little-card">
-                            <div class="card-body">
-                                <h5 class="card-title">@flow.Name</h5>
-                                <p class="card-text">@flow.Description</p>
-
-                                @if (FlowManager.IsParentFlow(flow.Id))
-                                {
-                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn btn-primary">View Subflows</a>
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.LINEAR })" class="btn btn-primary">Start Flow</a>
-                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.CIRCULAR })" class="btn btn-primary">Start Circular Flow</a>
-                                }
-                                @if (User.IsInRole(CustomIdentityConstants.AdminRole))
-                                {
-                                    <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id })">Edit</a>
-                                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Flow", new { flowId = flow.Id })" onclick="return confirm('Are you sure you want to delete this flow?')">Delete</a>
-                                }
+        <div class="big-card-content">
+            <div class="row m-0">
+                @foreach (var flow in Model)
+                {
+                    <div class="col col-sm-12 col-md-6 col-lg-4 col-xl-4 pb-3">
+                        <div class="position-relative">
+                            <div class="card little-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">@flow.Name</h5>
+                                    <p class="card-text">@flow.Description</p>
+                                    <div class="d-flex align-items-center text-center position-sticky">
+                                        <div class="flex-grow-1">
+                                            @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                                            {
+                                                <a class="btn bi bi-trash" href="@Url.Action("Delete", "Flow", new { flowId = flow.Id })" onclick="return confirm('Are you sure you want to delete this flow?')"></a>
+                                                <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id })">Edit</a>
+                                            }
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            @if (FlowManager.IsParentFlow(flow.Id))
+                                            {
+                                                <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn arrow-submit-right"></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.LINEAR })" class="btn btn-primary">Start Flow</a>
+                                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.CIRCULAR })" class="btn btn-primary">Start Circular Flow</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+            </div>
+        </div>
+        <div class="popup-overlay " id="popupOverlay">
+            <div class="popup" id="popup">
+                <span class="close" id="closePopup"> &times;</span >
+                <div class="popup-content">
+                    <form >
+                        <h5 > Create Flow </h5 >
+                        <div class="form-group">
+                            <label > Name </label >
+                            <input class="form-control"/>
+                        </div >
+                        <div class="form-group">
+                            <label > Description </label >
+                            <textarea class ="form-control" ></textarea >
+                        </div >
+                        <button type="submit" class="btn btn-primary" id="createButton"> Create Flow </button >
+                    </form >
+                </div >
+            </div >
+            @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+            {
+                <a class="btn btn-success" href="@Url.Action("Create", "Flow")">Create New Flow</a>
+                <button class="btn" id="popupButton">Test</button>
             }
+
         </div>
     </div >
-    <div class="popup-overlay position-relative" id="popupOverlay">
-        <div class="popup" id="popup">
-            <span class="close" id="closePopup"> &times;</span >
-            <div class="popup-content">
-                <form >
-                    <h5 > Create Flow </h5 >
-                    <div class="form-group">
-                        <label > Name </label >
-                        <input class="form-control"/>
-                    </div >
-                    <div class="form-group">
-                        <label > Description </label >
-                        <textarea class ="form-control" ></textarea >
-                    </div >
-                    <button type="submit" class="btn btn-primary" id="createButton"> Create Flow </button >
-                </form >
-            </div >
-        </div >
-        @if (User.IsInRole(CustomIdentityConstants.AdminRole))
-        {
-            <a class="btn btn-success" href="@Url.Action("Create", "Flow")">Create New Flow</a>
-            <button class="btn" id="popupButton">Test</button>
-        }
-
-    </div>
 </div >
 </body >
 
