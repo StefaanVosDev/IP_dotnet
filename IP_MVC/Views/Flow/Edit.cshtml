@@ -20,16 +20,15 @@
         <label asp-for="Flow.Description"></label>
         <textarea asp-for="Flow.Description" class="form-control"></textarea>
     </div>
+    <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 <hr>
 <h3>Elements</h3>
 
-@if (Model?.SubFlows?.Any() == true || Model?.Questions?.Any() != true)
+@if (Model?.SubFlows?.Any() == true || Model?.Questions?.Any() != true && Model?.Flow?.ParentFlowId == null)
 {
-    <a href="@Url.Action("Create", "Flow", new { parentFlowId = Model.Flow?.Id })" class="btn btn-primary">Add subflow</a>
-    <button class="btn" id="popupButton">Test</button>
-    @await Html.PartialAsync("_Create", new BL.Domain.Flow())
+    <a href="@Url.Action("Create", "Flow", new { parentFlowId = Model.Flow?.Id, projectId = Model.Flow.ProjectId })" class="btn btn-primary">Add subflow</a>
 }
 @if (Model?.Questions?.Any() == true || Model?.SubFlows?.Any() != true)
 {
@@ -53,8 +52,8 @@
                 <td>@subflow.Name</td>
                 <td>@subflow.Description</td>
                 <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { id = subflow.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Flow", new { id = subflow.Id })">Delete</a>
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { parentFlowId = subflow.Id })">Edit</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "Flow", new { flowId = subflow.Id })">Delete</a>
                 </td>
             </tr>
         }

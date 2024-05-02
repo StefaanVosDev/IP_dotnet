@@ -42,8 +42,7 @@ Layout = "_Layout";
 
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <a class="btn btn-success" href="@Url.Action("Create", "Flow")">Create New Flow</a>
-    <button class="btn" id="popupButton">Test</button>
+    <button class="btn btn-success" id="popupButton">Create New Flow</button>
     @await Html.PartialAsync("_Create", new BL.Domain.Flow())
 }
 

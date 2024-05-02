@@ -163,8 +163,16 @@ namespace IP_MVC.Controllers
 
         public IActionResult Delete(int flowId)
         {
-            flowManager.DeleteAsync(flowManager.GetFlowById(flowId));
-            return RedirectToAction("Flow");
+            var flowToRemove = flowManager.GetFlowById(flowId);
+            var parentFlowId1 = flowToRemove.ParentFlowId;
+            var projectId1 = flowToRemove.ProjectId;
+            flowManager.DeleteAsync(flowToRemove);
+
+            if (parentFlowId1 == null)
+            {
+                return RedirectToAction("Flow", new { projectId = projectId1 });
+            }
+            return RedirectToAction("Edit", new {parentFlowId = parentFlowId1});
         }
 
         [HttpGet]
@@ -184,6 +192,24 @@ namespace IP_MVC.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public IActionResult Edit(int parentFlowId, FlowEditViewModel newFlowModel)
+        {
+            var existingFlow = flowManager.GetFlowById(parentFlowId);
+            if (existingFlow == null)
+            {
+                return NotFound();
+            }
+
+            var newFlow = existingFlow;
+            newFlow.Name = newFlowModel.Flow.Name;
+            newFlow.Description = newFlowModel.Flow.Description;
+            
+            flowManager.UpdateAsync(existingFlow, newFlow);
+            
+            return RedirectToAction("Flow", new { projectId = newFlow.ProjectId});
+        }
+
         [HttpGet]
         public IActionResult Create(int? parentFlowId, int projectId)
         {
@@ -201,8 +227,11 @@ namespace IP_MVC.Controllers
             flow.ParentFlowId = parentFlowId;
             flowManager.AddAsync(flow);
 
-            return RedirectToAction("Flow", new { ProjectId = projectId });
-            //return RedirectToAction("Edit", new { id = flow.Id });
+            if (parentFlowId == null)
+            {
+                return RedirectToAction("Flow", new { ProjectId = projectId });
+            }
+            return RedirectToAction("Edit", new { parentFlowId = flow.ParentFlowId });
         }
 
         [HttpPost]
