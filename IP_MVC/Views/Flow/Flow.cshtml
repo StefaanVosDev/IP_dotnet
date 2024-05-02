@@ -59,29 +59,12 @@
             </div>
         </div>
         <div class="py-3 d-flex justify-content-center align-items-center">
+        
             @if (User.IsInRole(CustomIdentityConstants.AdminRole))
             {
-                <a class="btn create-btn" href="@Url.Action("Create", "Flow")">Create New Flow</a>
+                <button class="btn create-btn" id="popupButton">Create New Flow</button>
+                @await Html.PartialAsync("_Create", new BL.Domain.Flow())
             }
-        </div>
-        <div class="popup-overlay " id="popupOverlay">
-            <div class="popup" id="popup">
-                <span class="close" id="closePopup"> &times;</span >
-                <div class="popup-content">
-                    <form >
-                        <h5 > Create Flow </h5 >
-                        <div class="form-group">
-                            <label > Name </label >
-                            <input class="form-control"/>
-                        </div >
-                        <div class="form-group">
-                            <label > Description </label >
-                            <textarea class ="form-control" ></textarea >
-                        </div >
-                        <button type="submit" class="btn btn-primary" id="createButton"> Create Flow </button >
-                    </form >
-                </div >
-            </div >
         </div>
     </div >
 </div >
