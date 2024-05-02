@@ -62,6 +62,17 @@ body {
   }
 }
 
+.create-btn {
+  border-color: $light-blue;
+  border-radius: 5em;
+  box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 10px 0 $yellow inset, 0 0 10px 10px $yellow;
+  }
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -157,6 +168,7 @@ button.accept-policy {
 img{
   pointer-events: none;
 }
+
 
 .footer {
   position: absolute;

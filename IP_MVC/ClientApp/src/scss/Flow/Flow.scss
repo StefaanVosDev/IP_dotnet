@@ -2,11 +2,6 @@
 
 .flow-page {
   height: 100%;
-  
-  .big-card{
-    border: 1px solid #000000;
-    height: 45em;
-  }
 
   .big-card-content{
     overflow-y: scroll;
@@ -14,7 +9,6 @@
   }
 
   .little-card{
-    border: 1px solid #000000;
     height: 12.5em;
     background-color: $light-blue;
 
