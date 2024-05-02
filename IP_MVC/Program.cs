@@ -1,3 +1,4 @@
+using System.Text.Json;
 using BL;
 using BL.Domain;
 using BL.Domain.Questions;
@@ -24,7 +25,7 @@ builder.Services.AddDbContext<PhygitalDbContext>(options =>
     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     try
     {
-        var connectionString = builder.Configuration.GetConnectionString("Connection") + AccessSecret("db_password") + ";";
+        var connectionString = $"Host={AccessSecret("DB_IP")}" + builder.Configuration.GetConnectionString("Connection") + AccessSecret("db_password") + ";";
         var testConnection = new NpgsqlConnection(connectionString);
         testConnection.Open();
         testConnection.Close();
@@ -178,11 +179,20 @@ async Task SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<Ident
 
 string AccessSecret(string secretId)
 {
+    // Read the JSON file
+    string json = File.ReadAllText("service-acc-key.json");
+
+    // Parse the JSON file
+    JsonDocument doc = JsonDocument.Parse(json);
+
+    // Extract the project_id value
+    string projectId = doc.RootElement.GetProperty("project_id").GetString();
+    
     // Create the Secret Manager client.
     SecretManagerServiceClient client = SecretManagerServiceClient.Create();
-
-    // Build the resource name of the secret version.
-    SecretVersionName secretVersionName = new SecretVersionName("269636205630", secretId, "latest");
+    
+    // Use the project_id value
+    SecretVersionName secretVersionName = new SecretVersionName(projectId, secretId, "latest");
 
     // Access the secret version.
     AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);

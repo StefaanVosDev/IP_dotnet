@@ -8,12 +8,21 @@ ADD DAL ./DAL
 ADD Domain ./Domain
 RUN apt-get update
 RUN apt-get install npm nodejs -y
+RUN npm install -D ts-loader     
 RUN dotnet restore IP_MVC/IP_MVC.csproj
 
-RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive
+RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader
+RUN npm install 
 
 COPY . .
 RUN dotnet publish -c Release -o out
+
+RUN dotnet tool install --global dotnet-ef
+
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+RUN dotnet ef migrations add InitalCreate --project /app/DAL/DAL.csproj
+RUN dotnet ef database update --project /app/DAL/DAL.csproj
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
