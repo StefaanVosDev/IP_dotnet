@@ -76,6 +76,18 @@ public class ProjectController : Controller
         await _projectManager.AddAsync(project);
         return RedirectToAction("Project");
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> Inzoom(int parentFlowId)
+    {
+        var project = await _projectManager.FindByIdAsync(parentFlowId);
+        if (project == null)
+        {
+            return NotFound();
+        }
+
+        return View(project);
+    }
 
     public IActionResult Index()
     {

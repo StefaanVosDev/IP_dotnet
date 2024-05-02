@@ -29,7 +29,6 @@ namespace IP_MVC.Controllers
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
-
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
             queues[parentFlowId] = flowManager.GetQuestionQueueByFlowId(parentFlowId);
