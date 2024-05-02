@@ -427,3 +427,4 @@ IP_MVC/wwwroot/dist/
 # Transcripted typescript files
 wwwroot/dist/Views/**/*.js
 
+IP_MVC/service-acc-key.json

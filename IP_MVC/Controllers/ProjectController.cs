@@ -49,14 +49,14 @@ public class ProjectController : Controller
         newProject.AdminId = existingProject.AdminId;
 
         await _projectManager.UpdateAsync(existingProject, newProject);
-        return RedirectToAction("Index");
+        return RedirectToAction("Project");
     }
 
     public async Task<IActionResult> Delete(int parentFlowId)
     {
         var project = await _projectManager.FindByIdAsync(parentFlowId);
         await _projectManager.DeleteAsync(project);
-        return RedirectToAction("Index");
+        return RedirectToAction("Project");
     }
 
     [HttpGet]

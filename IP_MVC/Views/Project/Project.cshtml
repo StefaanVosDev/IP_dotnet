@@ -1,12 +1,11 @@
 @using IP_MVC
 @model IEnumerable<BL.Domain.Project>
 
-<script src="~/dist/inzoom.entry.js"></script>
-
 <body class="flow-page">
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <a class="btn create-project-btn" href="@Url.Action("Create", "Project")">Create New project</a>
+    <button class="btn create-project-btn" id="popupCreateButton">Create Project</button>
+    @await Html.PartialAsync("_Create", new BL.Domain.Project())
 }
 <div class="container-fluid flow-page">
     <div class="row">
@@ -49,3 +48,9 @@
     </div>
 </div>
 </body>
+
+@section Scripts
+{
+    <script src="~/dist/createProject.entry.js"></script>
+    <script src="~/dist/inzoom.entry.js"></script>
+}
