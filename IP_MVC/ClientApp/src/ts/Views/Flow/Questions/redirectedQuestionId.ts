@@ -1,4 +1,4 @@
-const buttons = Array.from(document.querySelectorAll('input')).filter(input => {
+const buttons = Array.from(document.querySelectorAll('button')).filter(input => {
     const name = input.getAttribute('name');
     return name && /^redirectedQuestionId\d+$/.test(name);
 });

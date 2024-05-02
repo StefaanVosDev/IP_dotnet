@@ -20,7 +20,7 @@ body {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-#youth-speak {
+.youth-speak {
   h1 {
     font-family: $signalcompressed-font, serif;
     margin: 0;
@@ -32,7 +32,7 @@ body {
   }
 }
 
-#arrow-submit-right {
+.arrow-submit-right {
   font-family: $signalcompressed-font, serif;
   position: relative;
   width: 3.5em;
@@ -47,7 +47,7 @@ body {
   }
 }
 
-#arrow-submit-left {
+.arrow-submit-left {
   font-family: $signalcompressed-font, serif;
   position: relative;
   width: 3.5em;
@@ -60,6 +60,11 @@ body {
     transform: translate(-50%, -50%);
     font-size: 3.5em;
   }
+}
+
+.overlay-image {
+  left: 0;
+  z-index: 1;
 }
 
 .create-btn {
@@ -106,6 +111,8 @@ a.navbar-brand {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+
+
 
 button.accept-policy {
   font-size: 1rem;
@@ -168,7 +175,6 @@ button.accept-policy {
 img{
   pointer-events: none;
 }
-
 
 .footer {
   position: absolute;

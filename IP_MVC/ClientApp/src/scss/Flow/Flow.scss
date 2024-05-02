@@ -4,7 +4,6 @@
   height: 100%;
 
   .big-card-content{
-    overflow-y: scroll;
     height: 40em;
   }
 
@@ -18,10 +17,5 @@
       z-index: 2; 
     }
     
-  }
-
-  .overlay-image {
-    left: 0;
-    z-index: 1;
   }
 }
