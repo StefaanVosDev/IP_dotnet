@@ -1,44 +1,56 @@
 @using IP_MVC
 @model IEnumerable<BL.Domain.Project>
 
-<h2 class="mb-3">Dashboard</h2>
-
-<h3 class="mb-3">Managed projects</h3>
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var project in Model)
-    {
-        <tr>
-            <td>@project.Name</td>
-            <td>@project.Description</td>
-            <td>
-                <a class="btn btn-primary btn-sm" href="@Url.Action("Flow", "Flow", new { projectId = project.Id })">Open</a>
-                @if (User.IsInRole(CustomIdentityConstants.AdminRole))
-                {
-                    <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "Project", new { parentFlowId = project.Id })">Edit</a>
-                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", "Project", new { parentFlowId = project.Id })" onclick="return confirm('Are you sure you want to delete this project?')">Delete</a>
-                }
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
-
+<body class="flow-page">
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <button class="btn btn-success" id="popupCreateButton">Create Project</button>
+    <button class="btn create-project-btn" id="popupCreateButton">Create Project</button>
     @await Html.PartialAsync("_Create", new BL.Domain.Project())
-    
 }
+<div class="container-fluid flow-page">
+    <div class="row">
+        @foreach (var project in Model)
+        {
+            <div class="col col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div class="position-relative">
+                    @{
+                        var randomIndex = new Random().Next(1, 5);
+                        var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
+                    }
+
+                    <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                        <div class="card h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
+                            <div class="card-body">
+                                <h5 class="card-title ">@project.Name</h5>
+                                <p class="card-text">@project.Description</p>
+                            </div>
+                            <div class="d-flex align-items-center text-center position-sticky">
+                                <div class="flex-grow-1">
+                                    @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                                    {
+                                        <a class="btn bi bi-trash" href="@Url.Action("Delete", "Project", new { parentFlowId = project.Id })" onclick="return confirm('Are you sure you want to delete this project?')"></a>
+                                    }
+                                </div>
+                                <div class="flex-grow-1">
+                                    @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                                    {
+                                        <a class="btn" href="@Url.Action("Edit", "Project", new { parentFlowId = project.Id })">Edit</a>
+                                    }
+                                </div>
+                                <div class="flex-grow-1">
+                                    <a id="arrow-submit-right" class="btn" href="@Url.Action("Flow", "Flow", new { parentFlowId = project.Id })"></a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+</body>
 
 @section Scripts
 {
     <script src="~/dist/createProject.entry.js"></script>
+    <script src="~/dist/inzoom.entry.js"></script>
 }
