@@ -13,7 +13,7 @@
     <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
 
     <div class="card border-1 border-black pt-3 position-relative">
-        <div class="big-card-content">
+        <div class="big-card-content overflow-scroll">
             <div class="row m-0">
                 @foreach (var flow in Model)
                 {
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="py-3 d-flex justify-content-center align-items-center">
-        
+
             @if (User.IsInRole(CustomIdentityConstants.AdminRole))
             {
                 <button class="btn create-btn" id="popupButton">Create New Flow</button>
