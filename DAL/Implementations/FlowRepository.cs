@@ -19,9 +19,9 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     {
         return _context.Set<Flow>().Find(id);
     }
-    public IEnumerable<Question> GetQuestionsByFlowId(int id)
+    public async Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int id)
     {
-        return _context.Set<Question>().Where(q => q.FlowId == id);
+        return await _context.Set<Question>().Where(q => q.FlowId == id).ToListAsync();
     }
 
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)

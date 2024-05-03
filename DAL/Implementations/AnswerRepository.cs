@@ -1,5 +1,3 @@
-// AnswerRepository.cs
-
 using System.Collections;
 using BL.Domain;
 using BL.Domain.Answers;
