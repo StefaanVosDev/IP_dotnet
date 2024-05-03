@@ -26,9 +26,17 @@
                                 <p class="card-text">@flow.Description</p>
                             </div>
                         </div>
+
+                        <div class="justify-content-between align-items-center position-sticky bottom-0">
+                            <div>
+                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR })" class="btn ">Start linear Flow</a>
+                            </div>
+                            <div>
+                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR })" class="btn ">Start circular Flow</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
         }
     </div >
