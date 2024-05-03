@@ -31,7 +31,7 @@ namespace IP_MVC.Controllers
 
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
-            queues[parentFlowId] = flowManager.GetQuestionQueueByFlowId(parentFlowId);
+            queues[parentFlowId] = await flowManager.GetQuestionQueueByFlowIdAsync(parentFlowId);
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);
@@ -133,13 +133,15 @@ namespace IP_MVC.Controllers
             var answerText = string.Join(";", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
+            var flow = flowManager.GetFlowById(flowId);
             
             // If no answers are given yet, save the answer
             var newAnswer = new Answer
             {
                 QuestionId = model.QuestionId,
                 AnswerText = answerText,
-                Session = sessionManager.GetSessionById(sessionId)
+                Session = sessionManager.GetSessionById(sessionId),
+                Flow = flow
             };
             
             // If there is no answer given to this question yet, add the answer to the session

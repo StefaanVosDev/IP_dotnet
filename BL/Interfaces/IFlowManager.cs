@@ -9,8 +9,8 @@ public interface IFlowManager : IManager<Flow>
     public IEnumerable<Flow> GetFlowsByParentId(int flowId);
     public Flow GetFlowById(int id);
     public Flow GetFirstSubFlowByParentId(int id);
-    public IEnumerable<Question> GetQuestionsByFlowId(int id);
-    public Queue<int> GetQuestionQueueByFlowId(int flowId);
+    Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int flowId);
+    public Task<Queue<int>> GetQuestionQueueByFlowIdAsync(int flowId);
     public int? GetParentFlowIdBySessionId(int sessionId);
     public bool IsParentFlow(int flowId);
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition);

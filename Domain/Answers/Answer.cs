@@ -10,6 +10,7 @@ public class Answer
     public int QuestionId { get; set; }
     public String AnswerText { get; set; }
     public Session Session { get; set; }
+    public Flow Flow { get; set; }
     
     public Answer()
     {

@@ -23,6 +23,7 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
 
         if (flowType == FlowType.LINEAR)
         {
+            //TODO change needed for multiplayer
             //efficient way to see if there already is an answer coupled to a question with this sessionId
             if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))
             {
