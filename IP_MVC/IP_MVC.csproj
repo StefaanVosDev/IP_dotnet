@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="BarCode" Version="2024.3.2" />
+        <PackageReference Include="CherubNLP" Version="0.5.0" />
         <PackageReference Include="IronQR" Version="2024.3.2" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.3" />
@@ -66,7 +67,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ClientApp\src\ts\Analytics\" />
+      <Folder Include="Pages\" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">

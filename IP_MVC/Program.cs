@@ -76,6 +76,9 @@ builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddScoped<IFlowManager, FlowManager>();
 builder.Services.AddScoped<ICloudManager, CloudManager>();
 builder.Services.AddScoped<ICloudStorageRepository, CloudStorageRepository>();
+builder.Services.AddScoped<IAnswerManager, AnswerManager>();
+builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+
 
 
 // Add authorization

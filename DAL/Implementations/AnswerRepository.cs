@@ -1,5 +1,6 @@
 // AnswerRepository.cs
 
+using System.Collections;
 using BL.Domain;
 using BL.Domain.Answers;
 using DAL.EF;
@@ -12,12 +13,11 @@ namespace DAL.Implementations
     {
         private readonly PhygitalDbContext _context = context;
 
-        public IEnumerable<Answer> GetAnswersByProjectId(int projectId)
+        public async Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(int questionId)
         {
-            return _context.Set<Answer>()
-                .Include<Answer, Flow>(a => a.Flow)
-                .Where(a => a.Flow != null && a.Flow.ProjectId == projectId)
-                .ToList<Answer>();
+            return await _context.Set<Answer>()
+                .Where(a => a.QuestionId == questionId)
+                .ToListAsync();
         }
     }
 }

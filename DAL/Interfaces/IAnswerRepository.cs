@@ -1,8 +1,9 @@
+using System.Collections;
 using BL.Domain.Answers;
 
 namespace DAL.Interfaces;
 
 public interface IAnswerRepository : IRepository
 {
-    public IEnumerable<Answer> GetAnswersByProjectId(int projectId);
+    public Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(int questionId);
 }

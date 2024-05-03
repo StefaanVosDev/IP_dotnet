@@ -5,9 +5,5 @@ namespace BL.Interfaces;
 
 public interface IAnswerManager : IManager<Answer>
 {
-    public IEnumerable<Answer> GetAnswersByProjectId(int projectId);
-    IEnumerable GetOpenQuestionAnswersByProjectId(int projectId);
-    IEnumerable GetMultipleChoiceQuestionAnswersByProjectId(int projectId);
-    IEnumerable GetSingleChoiceQuestionAnswersByProjectId(int projectId);
-    IEnumerable GetRangeQuestionAnswersByProjectId(int projectId);
+    public Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(int questionId);
 }

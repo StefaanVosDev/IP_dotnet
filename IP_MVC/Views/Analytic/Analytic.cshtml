@@ -1,0 +1,50 @@
+@using BL.Domain
+@model IEnumerable<Flow>
+
+@{
+    ViewBag.Title = "Analytic";
+    Layout = "_Layout";
+}
+
+<h1>Analytic</h1>
+
+<div>
+    @Html.DropDownList("Flows",
+        new SelectList(Model, "Id", "Name"),
+        "Select a Flow",
+        new { @class = "form-control" })
+</div>
+
+<div id="chartsContainer"></div>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelector('#Flows').addEventListener('change', async function(e) {
+                const flowId = e.target.value;
+                const response = await fetch(`/api/Analytics/GetFlowAnalytics/${flowId}`);
+                const data = await response.json();
+
+                const chartsContainer = document.querySelector('#chartsContainer');
+                chartsContainer.innerHTML = ''; // Clear the container
+
+                data.forEach(function(item, index) {
+                    // Create a new canvas element for each chart
+                    const canvas = document.createElement('canvas');
+                    canvas.id = `flowAnalytics${index}`;
+                    chartsContainer.appendChild(canvas);
+
+                    const ctx = canvas.getContext('2d');
+
+                    new Chart(ctx, {
+                        type: item.type,
+                        data: item.data,
+                        options: item.options
+                    });
+                });
+            });
+        });
+    </script>
+}

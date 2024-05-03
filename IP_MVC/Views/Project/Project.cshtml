@@ -1,4 +1,5 @@
 @using IP_MVC
+@using Microsoft.CodeAnalysis
 @model IEnumerable<BL.Domain.Project>
 
 <script src="~/dist/inzoom.entry.js"></script>
@@ -8,6 +9,7 @@
 {
     <a class="btn create-project-btn" href="@Url.Action("Create", "Project")">Create New project</a>
 }
+
 <div class="container-fluid flow-page">
     <div class="row">
         @foreach (var project in Model)
