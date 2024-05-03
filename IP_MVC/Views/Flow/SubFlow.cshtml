@@ -6,34 +6,34 @@
     Layout = "_Layout";
 }
 <body class="subFlow-page">
-<div class="container-fluid">
-    <div class="row ">
-        @foreach (var flow in Model)
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">     
+    <div class="carousel-inner">
+    @foreach (var flow in Model)
         {
-            <div class="col">
-                <div class="position-relative">
-                    @{
-                        var randomIndex = new Random().Next(1, 5);
-                        var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
-                    }
+            <div class="carousel-inner">
+                  <div class="carousel-inner">
+                @{
+                    var randomIndex = new Random().Next(1, 5);
+                    var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
+                }
 
-                    <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
-                    <div class="card border-1 border-black h-50 position-absolute card-clickable">
-                        @*<img class="card-img" src="https://storage.googleapis.com/phygital-public/Subflows/@(Uri.EscapeDataString(flow.Name)).png" alt="Card image cap">*@
-                        <div class="card-body">
-                            <h5 class="card-title ">@flow.Name</h5>
-                            <p class="card-text">@flow.Description</p>
-                        </div>
-                        <div class="d-flex align-items-center text-center position-sticky">
-                            <div class="flex-grow-1">
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR })" class="btn t">Start linear Flow</a>
-                            </div> @* @if (User.IsInRole("UpperRole"))  a user can't start up a circular flow*@
-                            <div class="flex-grow-1">
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR })" class="btn ">Start circular Flow</a>
-                            </div>
+                <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                <div class="card border-1 border-black h-50 position-absolute card-clickable">
+                    @*<img class="card-img" src="https://storage.googleapis.com/phygital-public/Subflows/@(Uri.EscapeDataString(flow.Name)).png" alt="Card image cap">*@
+                    <div class="card-body">
+                        <h5 class="card-title ">@flow.Name</h5>
+                        <p class="card-text">@flow.Description</p>
+                    </div>
+                    <div class="d-flex align-items-center text-center position-sticky">
+                        <div class="flex-grow-1">
+                            <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR })" class="btn t">Start linear Flow</a>
+                        </div> @* @if (User.IsInRole("UpperRole"))  a user can't start up a circular flow*@
+                        <div class="flex-grow-1">
+                            <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR })" class="btn ">Start circular Flow</a>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         }
     </div>
