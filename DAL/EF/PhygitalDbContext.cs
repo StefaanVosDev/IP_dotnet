@@ -57,7 +57,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         {
             try
             {
-                optionsBuilder.UseNpgsql(localConnection);
+                //optionsBuilder.UseNpgsql(localConnection);
             }
             catch (NpgsqlException)
             {

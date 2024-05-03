@@ -11,7 +11,7 @@ RUN apt-get install npm nodejs -y
 RUN npm install -D ts-loader     
 RUN dotnet restore IP_MVC/IP_MVC.csproj
 
-RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader
+RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader swiper
 RUN npm install 
 
 COPY . .
