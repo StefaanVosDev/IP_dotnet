@@ -5,8 +5,7 @@
 <body class="project-page">
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <button class="btn create-btn" id="popupCreateButton">Create Project</button>
-    @await Html.PartialAsync("_Create", new BL.Domain.Project())
+    <a class="btn create-btn" href="@Url.Action("Create", "Project")">Create New project</a>
 }
 <div class="container-fluid">
     <div class="row">
