@@ -18,16 +18,15 @@ namespace IP_MVC.Controllers.api
             _flowManager = flowManager;
             _answerManager = answerManager;
         }
-        
+
         [HttpGet("GetFlowAnalytics/{flowId}")]
         public async Task<IActionResult> GetFlowAnalytics(int flowId)
         {
-            var questions = _flowManager.GetQuestionsByFlowId(flowId);
+            var questions = await _flowManager.GetQuestionsByFlowIdAsync(flowId);
             var chartData = new List<object>();
             foreach (var question in questions)
             {
-                
-                var answers = _answerManager.GetAnswersByQuestionIdAsync(question.Id).Result;
+                var answers = await _answerManager.GetAnswersByQuestionIdAsync(question.Id);
                 switch (question.Type)
                 {
                     case QuestionType.SingleChoice:
@@ -141,7 +140,7 @@ namespace IP_MVC.Controllers.api
                                 averageSimilarity
                             });
                         }
-                        
+
                         break;
                     case QuestionType.Range:
                         if (question is RangeQuestion rangeQuestion)
@@ -157,7 +156,9 @@ namespace IP_MVC.Controllers.api
                                 ranges.Add($"{i}-{i + 1}");
                             }
 
-                            var data = ranges.Select(range => range.Split('-').Select(int.Parse).ToList()).Select(bounds => answerValues.Count(value => value >= bounds[0] && value < bounds[1])).ToList();
+                            var data = ranges.Select(range => range.Split('-').Select(int.Parse).ToList())
+                                .Select(bounds => answerValues.Count(value => value >= bounds[0] && value < bounds[1]))
+                                .ToList();
 
                             chartData.Add(new
                             {
@@ -213,13 +214,12 @@ namespace IP_MVC.Controllers.api
                         throw new ArgumentOutOfRangeException();
                 }
             }
-
+            
             var jsonResult = new JsonResult(chartData)
             {
                 ContentType = "application/json"
             };
             return jsonResult;
-            
         }
     }
 }

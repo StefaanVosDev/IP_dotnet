@@ -24,14 +24,14 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
         return repository.GetFlowsByParentId(id).FirstOrDefault();
     }
 
-    public IEnumerable<Question> GetQuestionsByFlowId(int id)
+    public async Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int flowId)
     {
-        return repository.GetQuestionsByFlowId(id);
+        return repository.GetQuestionsByFlowId(flowId);
     }
     
-    public Queue<int> GetQuestionQueueByFlowId(int flowId)
+    public async Task<Queue<int>> GetQuestionQueueByFlowIdAsync(int flowId)
     {
-        var questionIds = GetQuestionsByFlowId(flowId).Select(q => q.Id).ToList();
+        var questionIds = (await GetQuestionsByFlowIdAsync(flowId)).Select(q => q.Id).ToList();
         return new Queue<int>(questionIds);
     }
     

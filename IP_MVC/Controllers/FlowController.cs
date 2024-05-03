@@ -30,7 +30,7 @@ namespace IP_MVC.Controllers
 
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
-            queues[parentFlowId] = flowManager.GetQuestionQueueByFlowId(parentFlowId);
+            queues[parentFlowId] = await flowManager.GetQuestionQueueByFlowIdAsync(parentFlowId);
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);

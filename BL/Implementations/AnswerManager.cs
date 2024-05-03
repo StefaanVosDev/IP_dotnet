@@ -7,8 +7,8 @@ namespace BL.Implementations;
 
 public class AnswerManager(IAnswerRepository repository) : Manager<Answer>(repository), IAnswerManager
 {
-    public Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(int questionId)
+    public async Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(int questionId)
     {
-        return repository.GetAnswersByQuestionIdAsync(questionId);
+        return await repository.GetAnswersByQuestionIdAsync(questionId);
     }
 }
