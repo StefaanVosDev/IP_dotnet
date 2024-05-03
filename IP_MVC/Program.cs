@@ -162,9 +162,9 @@ app.UseMvc(routes =>
     
 });
 
-// app.MapControllerRoute(
-//     name: "default",
-//     pattern: "{controller=Home}/{action=Index}/{parentFlowId?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{parentFlowId?}");
 
 app.MapRazorPages();
 
