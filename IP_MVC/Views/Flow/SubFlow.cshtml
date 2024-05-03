@@ -6,34 +6,36 @@
     Layout = "_Layout";
 }
 <body class="subFlow-page">
-<div class="container-fluid overflow-auto">
-    <div class="d-flex">
+<div class="swiper">
+    <div class="swiper-wrapper">
         @foreach (var flow in Model)
         {
-            <div class="position-relative mx-2 flow-card">
-                @{
-                    var randomIndex = new Random().Next(1, 5);
-                    var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
-                }
+            <div class="swiper-slide">
+                <div class="slide-card">
 
-                <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
-                <div class="card border-1 border-black h-50 position-absolute card-clickable">
-                    <div class="d-flex align-items-center justify-content-center flex-column h-100">
-                        <div class="card-body mb-auto">
-                            <h5 class="card-title">@flow.Name</h5>
-                            <p class="card-text">@flow.Description</p>
-                        </div>
-                        <div class="mt-auto">
-                            <button class="w3-button w3-display-left position-absolute start-0 translate-middle-y arrow-submit-right" onclick="plusDivs(-1)"></button>
-                            <button class="w3-button w3-display-right position-absolute end-0 translate-middle-y arrow-submit-left" onclick="plusDivs(1)"></button>
+                    @{
+                        var randomIndex = new Random().Next(1, 5);
+                        var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
+                    }
+
+                    <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                    <div class="card border-1 border-black h-50 position-absolute card-clickable">
+                        <div class="d-flex align-items-center h-100">
+                            <div class="card-body mb-auto">
+                                <h5 class="card-title">@flow.Name</h5>
+                                <p class="card-text">@flow.Description</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         }
-    </div>
-</div>
-</body>
+    </div >
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div >
+</body >
 
 @section Scripts
 {
