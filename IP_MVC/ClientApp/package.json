@@ -16,6 +16,7 @@
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.5",
     "@types/bootstrap": "^5.2.10",
+    "@types/jquery": "^3.5.29",
     "css-loader": "^6.10.0",
     "mini-css-extract-plugin": "^2.8.1",
     "sass": "^1.72.0",
