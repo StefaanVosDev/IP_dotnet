@@ -1,46 +1,21 @@
 @import '../_variables.scss';
 
 .flow-page {
-  .card {
-    width: 59%;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid #000000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+  height: 100%;
 
+  .big-card-content{
+    height: 40em;
+  }
+
+  .little-card{
+    height: 12.5em;
+    background-color: $light-blue;
+
+    transition: z-index 0.3s;
+    
     &:hover {
-      transform: translate(-50%, -50%) translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      z-index: 2; 
     }
-
-    .btn {
-      padding: 0;
-    }
-
-    .card-body {
-      flex: 3;
-      overflow: scroll;
-    }
-
-    .d-flex {
-      flex: 1;
-    }
+    
   }
-}
-
-.create-project-btn {
-  border-color: $light-blue;
-  border-radius: 5em;
-  box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
-  transition: all 150ms ease-in-out;
-
-  &:hover {
-    box-shadow: 0 0 10px 0 $yellow inset, 0 0 10px 10px $yellow;
-  }
-}
-
-img{
-  pointer-events: none;
 }

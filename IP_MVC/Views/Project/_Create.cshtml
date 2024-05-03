@@ -1,0 +1,21 @@
+@model BL.Domain.Project
+
+<div class="popup-overlay" id="popupCreateOverlay">
+    <div class="popup" id="popupCreate">
+        <span class="close" id="closeCreatePopup">&times;</span>
+        <div class="popup-content">
+            <form asp-action="Create" asp-controller="Project" method="post">
+                <h5>Create Project</h5>
+                <div class="form-group">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description">Description</label>
+                    <textarea asp-for="Description" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="createButton">Create</button>
+            </form>
+        </div>
+    </div>
+</div>

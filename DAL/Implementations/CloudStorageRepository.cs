@@ -14,7 +14,7 @@ public class CloudStorageRepository : ICloudStorageRepository
     {
         _bucketName = "phygital-public";
         //set the environment variable to the path of the service account key
-        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", AccessSecret("service-account-key"));
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
     }
     public void UploadFile(IFormFile file, string fileName, string folderName)
     {

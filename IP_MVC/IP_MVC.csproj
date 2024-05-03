@@ -55,6 +55,10 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\range.entry.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\redirectedQuestionId.entry.js" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\redirectedQuestionId.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\createFlow.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\createFlow.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\inzoom.entry.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\inzoom.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
