@@ -18,7 +18,16 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
+
+builder.Services.AddMvc().AddRazorPagesOptions(options=> {
+    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login",""); 
+});
+
+builder.Services.AddMvc().AddMvcOptions(options =>
+{
+    options.EnableEndpointRouting = false;
+});
 
 builder.Services.AddDbContext<PhygitalDbContext>(options =>
 {
@@ -139,9 +148,23 @@ app.UseSession();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{parentFlowId?}");
+app.UseMvc(routes =>
+{
+    routes.MapRoute(
+        name: "default",
+        template: "{controller}/{action=Index}/{id?}");
+    
+    routes.MapGet("/", (context) =>
+    {
+        context.Response.Redirect("/Identity/Account/Login", permanent: false);
+        return System.Threading.Tasks.Task.CompletedTask;
+    });
+    
+});
+
+// app.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller=Home}/{action=Index}/{parentFlowId?}");
 
 app.MapRazorPages();
 
