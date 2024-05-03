@@ -11,5 +11,8 @@ import '../scss/Flow/Inzoom.scss'
 import '../scss/Flow/Project.scss'
 import '../scss/Flow/questions/Questions.scss'
 import '../scss/site.scss';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 console.log('The \'site\' bundle has been loaded!');
