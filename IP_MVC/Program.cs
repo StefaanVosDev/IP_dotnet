@@ -108,7 +108,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<PhygitalDbContext>();
-    if (context.CreateDatabase(false))
+    if (context.CreateDatabase())
     {
         var userManager = scope.ServiceProvider
             .GetRequiredService<UserManager<IdentityUser>>();
@@ -116,7 +116,7 @@ using (var scope = app.Services.CreateScope())
             .GetRequiredService<RoleManager<IdentityRole>>();
         await SeedIdentity(userManager, roleManager);
         
-        DataSeeder.Seed(context);
+        //DataSeeder.Seed(context);
     }
 }
 
