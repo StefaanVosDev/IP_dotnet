@@ -6,43 +6,43 @@
     Layout = "_Layout";
 }
 <body class="subFlow-page">
-<div class="swiper">
-    <div class="swiper-wrapper">
-        @foreach (var flow in Model)
-        {
-            <div class="swiper-slide">
-                <div class="slide-card">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                @foreach (var flow in Model)
+                {
+                    <div class=" swiper-slide">
+                        <div class="slide-card">
 
-                    @{
-                        var randomIndex = new Random().Next(1, 5);
-                        var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
-                    }
+                            @{
+                                var randomIndex = new Random().Next(1, 5);
+                                var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
+                            }
 
-                    <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
-                    <div class="card border-1 border-black h-50 position-absolute card-clickable">
-                        <div class="d-flex align-items-center h-100">
-                            <div class="card-body mb-auto">
-                                <h5 class="card-title">@flow.Name</h5>
-                                <p class="card-text">@flow.Description</p>
-                            </div>
-                        </div>
+                            <img src="@imageUrl" class=" card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                            <div class="card border-1 border-black h-50 position-absolute card-clickable">
+                                <div class="align-items-center h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@flow.Name</h5>
+                                        <p class="card-text">@flow.Description</p>
+                                    </div>
+                                </div>
 
-                        <div class="justify-content-between align-items-center position-sticky bottom-0">
-                            <div>
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR })" class="btn ">Start linear Flow</a>
-                            </div>
-                            <div>
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR })" class="btn ">Start circular Flow</a>
+                                <div class="d-flex text-center position-sticky py-1">
+                                    <div class="flex-grow-1">
+                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR })" class="btn ">Start linear Flow</a>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR })" class="btn ">Start circular Flow</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        }
-    </div >
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-</div >
+                }
+            </div >
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div >
 </body >
 
 @section Scripts

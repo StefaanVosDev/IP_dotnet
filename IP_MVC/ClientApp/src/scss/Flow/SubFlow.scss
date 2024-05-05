@@ -1,7 +1,8 @@
 @import '../_variables.scss';
 
 .subFlow-page {
-
+  max-height: 100vw;
+  
   .card {
     width: 59%;
     top: 30%;
@@ -19,15 +20,6 @@
       padding: 0.5em;
       border-radius: 1em;
       background-color: $light-blue;
-    }
-
-    .card-body {
-      flex: 3;
-      overflow: scroll;
-    }
-
-    .d-flex {
-      flex: 1;
     }
   }
 
