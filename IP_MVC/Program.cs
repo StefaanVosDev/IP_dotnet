@@ -79,6 +79,7 @@ builder.Services.AddScoped<ICloudManager, CloudManager>();
 builder.Services.AddScoped<ICloudStorageRepository, CloudStorageRepository>();
 builder.Services.AddScoped<IAnswerManager, AnswerManager>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+builder.Services.AddScoped<IAnalyticsManager, AnalyticsManager>();
 
 
 
