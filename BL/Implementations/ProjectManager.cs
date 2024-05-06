@@ -7,9 +7,9 @@ namespace BL.Implementations;
 
 public class ProjectManager(IProjectRepository repository) : Manager<Project>(repository), IProjectManager
 {
-    public IEnumerable<Flow> GetFlowsByProjectId(int projectId)
+    public async Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
     {
-        return repository.GetFlowsByProjectIdAsync(projectId);
+        return await repository.GetFlowsByProjectIdAsync(projectId);
     }
 
     public ValueTask<Project> FindByIdAsync(int id)
