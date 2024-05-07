@@ -18,7 +18,7 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddMvc().AddRazorPagesOptions(options=> {
     options.Conventions.AddAreaPageRoute("Identity", "/Account/Login",""); 
@@ -150,9 +150,9 @@ app.UseAuthorization();
 
 app.UseMvc(routes =>
 {
-    routes.MapRoute(
-        name: "default",
-        template: "{controller}/{action=Index}/{id?}");
+    // routes.MapRoute(
+    //     name: "default",
+    //     template: "{controller}/{action=Index}/{id?}");
     
     routes.MapGet("/", (context) =>
     {
