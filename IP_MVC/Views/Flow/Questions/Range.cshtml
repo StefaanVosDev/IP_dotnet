@@ -79,12 +79,12 @@
                                 {
                                     @if (currentIndex != 0)
                                     {
-                                        <button type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-action="SaveAnswerAndRedirect"></button>
+                                        <button id="prevQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-action="SaveAnswerAndRedirect"></button>
                                     }
 
                                     @* <button id="exitButton" class="btn btn-danger">Exit</button> *@
 
-                                    <button type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-action="SaveAnswerAndRedirect"></button>
+                                    <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-action="SaveAnswerAndRedirect"></button>
                                 }
                                 else
                                 {
@@ -129,3 +129,7 @@
     </div>
 </div>
 </body>
+@section Scripts
+{
+    <script src="~/dist/controlQuestions.entry.js"></script>
+}
