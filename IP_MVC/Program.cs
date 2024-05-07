@@ -150,10 +150,6 @@ app.UseAuthorization();
 
 app.UseMvc(routes =>
 {
-    // routes.MapRoute(
-    //     name: "default",
-    //     template: "{controller}/{action=Index}/{id?}");
-    
     routes.MapGet("/", (context) =>
     {
         context.Response.Redirect("/Identity/Account/Login", permanent: false);
