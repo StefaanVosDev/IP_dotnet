@@ -20,6 +20,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddMvc().AddRazorPagesOptions(options=> {
+    options.Conventions.AddAreaPageRoute("Identity", "/Account/Login",""); 
+});
+
+builder.Services.AddMvc().AddMvcOptions(options =>
+{
+    options.EnableEndpointRouting = false;
+});
+
 builder.Services.AddDbContext<PhygitalDbContext>(options =>
 {
     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
@@ -140,9 +149,19 @@ app.UseSession();
 
 app.UseAuthorization();
 
+app.UseMvc(routes =>
+{
+    routes.MapGet("/", (context) =>
+    {
+        context.Response.Redirect("/Identity/Account/Login", permanent: false);
+        return System.Threading.Tasks.Task.CompletedTask;
+    });
+    
+});
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{parentFlowId?}");
+    pattern: "{controller}/{action=Index}/{parentFlowId?}");
 
 app.MapRazorPages();
 
