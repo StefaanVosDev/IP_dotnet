@@ -10,9 +10,9 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
 {
     private readonly DbContext _context = context;
 
-    public IEnumerable<Flow> GetFlowsByProjectIdAsync(int projectId)
+    public async Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
     {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId);
+        return await _context.Set<Flow>().Where(f => f.ProjectId == projectId).ToListAsync();
     }
 
     public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)

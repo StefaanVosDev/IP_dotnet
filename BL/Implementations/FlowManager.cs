@@ -26,7 +26,7 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
 
     public async Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int flowId)
     {
-        return repository.GetQuestionsByFlowId(flowId);
+        return await repository.GetQuestionsByFlowIdAsync(flowId);
     }
     
     public async Task<Queue<int>> GetQuestionQueueByFlowIdAsync(int flowId)
