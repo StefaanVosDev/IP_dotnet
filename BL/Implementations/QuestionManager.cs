@@ -33,4 +33,29 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
     {
         return repository.GetQuestionsBetweenPositions(newPosition, oldPosition);
     }
+    
+    public List<string> GetOptionsSingleOrMultipleChoiceQuestion(int id)
+    {
+        return repository.GetOptionsSingleOrMultipleChoiceQuestion(id);
+    }
+    
+    public (int, int) GetRangeQuestionValues(int id)
+    {
+        return repository.GetRangeQuestionValues(id);
+    }
+    
+    public void AddOptionToQuestion(int id, string option)
+    {
+        repository.AddOptionToQuestion(id, option);
+    }
+
+    public void SetRangeQuestionValues(int id, int min, int max)
+    {
+        repository.SetRangeQuestionValues(id, min, max);
+    }
+
+    public void DeleteOptionFromQuestion(int id, string option)
+    {
+        repository.DeleteOptionFromQuestion(id, option);
+    }
 }
