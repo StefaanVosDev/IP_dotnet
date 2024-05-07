@@ -1,0 +1,190 @@
+POST https://localhost:7292/api/Questions/UpdateRangeQuestion?id=28&min=2&max=7
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateRangeQuestion?id=28&min=2&max=7
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=2&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=52&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-05-07T110048.404.json
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=52&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-05-07T105932.404.json
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=52&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-05-07T105923.404.json
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=52&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-05-07T105855.404.json
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=52&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=52&option=some option
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion/52/some%20option
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion/52/some%20option
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion
+Content-Type: application/json
+Content-Length: 34
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{"id": 52, "option":"some option"}
+
+###
+
+POST https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=27&option=an extra option
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+

@@ -1,3 +1,4 @@
+@using BL.Domain.Questions
 @model BL.Domain.Questions.Question
 
 @{
@@ -5,4 +6,53 @@
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Overzicht vraag</h2>
+<h3>Titel vraag</h3>
+<p>@Model?.Text</p>
+<h3>Vraagtype</h3>
+<p>@Model?.Type</p>
+
+<input type="hidden" id="questionId" value="@Model?.Id">
+
+<div id="titleContainer">
+    <h3 id="titleText">@Model?.Text</h3>
+    <input type="text" id="titleInput" value="@Model?.Text" style="display: none;">
+    <button class="btn btn-primary" id="editButton">Change</button>
+    <button class="btn btn-primary" id="updateButton" style="display: none;">Update</button>
+</div>
+
+@switch (Model?.Type)
+{
+    case QuestionType.Open:
+        // Open question doesn't need options, so redirect directly
+        break;
+    case QuestionType.MultipleChoice:
+    case QuestionType.SingleChoice:
+        // Add options to the question
+        @* <form asp-action="UpdateMultipleChoiceQuestion" asp-controller="Question"> *@
+        <form>
+            <h2>Add possible answers to the question</h2>
+
+            <div id="listAnswers">
+                <!-- Options will be loaded here by the loadOptions function -->
+            </div>
+
+            <div>
+                <input id="newOption" type="text" placeholder="Add an option"/>
+            </div>
+            <button id="buttonToAdd" class="btn btn-primary">Add option</button>
+        </form>
+        break;
+    case QuestionType.Range:
+        <form>
+            <p>Update range question</p>
+            <label for="min">Min value</label>
+            <input type="number" id="min" placeholder="1" />
+            <label for="max">Max value</label>
+            <input type="number" id="max" placeholder="5" />
+            <button id="updateRangeValues" class="btn btn-primary">Update</button>
+        </form>
+        break;
+}
+<a href="@Url.Action("Edit", "Flow", new { parentFlowId = Model?.FlowId })" class="btn btn-primary">Go back to subflow overview</a>
+<script src="~/dist/edit.entry.js" defer="defer"></script>
