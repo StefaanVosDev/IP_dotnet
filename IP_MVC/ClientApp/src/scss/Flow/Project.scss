@@ -14,17 +14,17 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .btn {
-      padding: 0;
-    }
-
     .card-body {
       flex: 3;
-      overflow: scroll;
     }
 
     .d-flex {
       flex: 1;
+    }
+    
+    .button-container {
+      padding-left: 2vh;
+      padding-right: 3vh;
     }
   }
 }
