@@ -1,0 +1,24 @@
+@import '../_variables.scss';
+
+.inzoom{
+  min-height: 100vh;
+  max-height: 100vh;
+  
+  .card{
+    width: 59%;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      z-index: 2;
+    }
+
+    .button-container {
+      padding-left: 2vh;
+      padding-right: 3vh;
+    }
+  }
+}
