@@ -15,15 +15,18 @@
     &:hover {
       transform: translate(-50%, -50%) translateY(-5px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      z-index: 2;
+
     }
 
     .button-container {
       padding-left: 3vh;
       padding-right: 3vh;
-      
-      .flex-grow-1{
-        padding-left: 0.5vh ;
+
+      .flex-grow-1 {
+        padding-left: 0.5vh;
       }
+
       .btn {
         background-color: $light-blue;
         font-size: smaller;
