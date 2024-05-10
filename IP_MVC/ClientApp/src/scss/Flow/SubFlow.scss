@@ -1,8 +1,9 @@
 @import '../_variables.scss';
 
 .subFlow-page {
-  max-height: 100vw;
-  
+  min-height: 100vh;
+  max-height: 100vh;
+
   .card {
     width: 59%;
     top: 30%;
@@ -16,18 +17,18 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .btn {
-      padding: 0.5em;
-      border-radius: 1em;
-      background-color: $light-blue;
+    .button-container {
+      padding-left: 3vh;
+      padding-right: 3vh;
+      
+      .flex-grow-1{
+        padding-left: 0.5vh ;
+      }
+      .btn {
+        background-color: $light-blue;
+        font-size: smaller;
+      }
     }
-  }
 
-  .button-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2; 
   }
 }

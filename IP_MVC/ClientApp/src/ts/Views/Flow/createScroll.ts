@@ -7,6 +7,11 @@ document.addEventListener("DOMContentLoaded", function() {
         centeredSlides: true,
         spaceBetween: 10,
 
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+        },
+        
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",
@@ -30,14 +35,14 @@ document.addEventListener("DOMContentLoaded", function() {
     const nextButton = document.querySelector(".swiper-button-next");
     if (nextButton) {
         nextButton.addEventListener("click", function() {
-            swiper.slideNext(); // Ga naar de volgende dia
+            swiper.slideNext();
         });
     }
 
     const prevButton = document.querySelector(".swiper-button-prev");
     if (prevButton) {
         prevButton.addEventListener("click", function() {
-            swiper.slidePrev(); // Ga naar de vorige dia
+            swiper.slidePrev();
         });
     }
 });
