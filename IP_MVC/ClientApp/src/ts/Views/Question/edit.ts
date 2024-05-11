@@ -1,39 +1,3 @@
-document.querySelectorAll<HTMLButtonElement>('.delete-option').forEach(button => {
-    button.addEventListener('click', function(this: HTMLButtonElement) {
-        // Remove the option div
-        if (this.parentNode) {
-            this.parentNode.removeChild(this);
-        }
-    });
-});
-
-document.getElementById('buttonToAdd')?.addEventListener('click', function(event) {
-    event.preventDefault();
-
-    const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
-    const newOption = (document.getElementById('newOption') as HTMLInputElement)?.value;
-
-    fetch(`https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=${questionId}&option=${newOption}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            // Add the new option to the DOM
-            const listAnswers = document.getElementById('listAnswers');
-            const optionDiv = document.createElement('div');
-            optionDiv.innerText = newOption;
-            optionDiv.setAttribute('data-multiplechoice-option', '');
-            listAnswers?.appendChild(optionDiv);
-        })
-        .then(loadAllOptions)
-        .catch(error => console.error('Error adding option:', error));
-});
-
 document.getElementById('updateRangeValues')?.addEventListener('click', function(event) {
     event.preventDefault();
 
@@ -92,12 +56,16 @@ document.getElementById('updateButton')?.addEventListener('click', function(even
         const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
 
         // Send new title to server
-        fetch(`https://localhost:7292/api/Questions/UpdateTitle?id=${questionId}&text=${newTitle}`, {
+        fetch(`https://localhost:7292/Question/UpdateTitle?id=${questionId}&text=${newTitle}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
-        });
+        }).then(r => {
+            if (!r.ok) {
+                throw new Error('Network response was not ok');
+            }}
+        );
     }
 });
 
@@ -105,45 +73,25 @@ document.getElementById('updateButton')?.addEventListener('click', function(even
 function loadAllOptions() {
     const lijst = document.getElementById('listAnswers');
     if (lijst) {
-        lijst.innerHTML = 'de lijst kan worden geladen';
-        
         const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
-
-        fetch(`https://localhost:7292/api/Questions/GetOptions?id=${questionId}`)
+        
+        fetch(`https://localhost:7292/Question/GetOptions?id=${questionId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
+                // first make the list empty
+                while (lijst.firstChild) {
+                    lijst.removeChild(lijst.firstChild);
+                }
+                
                 return response.json();
             })
             .then(data => {
                 // Check if data is not empty before processing
                 if (data && data.length > 0) {
                     data.forEach((option:string) => {
-                        const newOption = document.createElement('div');
-                        newOption.innerText = option;
-                        newOption.setAttribute('data-multiplechoice-option', '');
-                        lijst.appendChild(newOption);
-
-                        //also add an option to delete this option from the list
-                        const deleteButton = document.createElement('button');
-                        deleteButton.innerText = 'Delete option';
-                        deleteButton.className = 'btn btn-primary delete-option';
-                        deleteButton.addEventListener('click', function(this: HTMLButtonElement) {
-                            // Remove the option div
-                            if (this.parentNode) {
-                                this.parentNode.removeChild(this);
-                            }
-                            //also delete the option from the database
-                            const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
-
-                            fetch(`https://localhost:7292/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                }
-                            });
-                        });                        
+                        addOptionToUI(option);
                     });
                 } else {
                     console.log('No options found');
@@ -153,33 +101,115 @@ function loadAllOptions() {
     }
 }
 
-// Loading the min and max value for a range question
-function loadMinMax() {
-    fetch(`https://localhost:7292/api/Questions/GetMinMax?id=${(document.getElementById('questionId') as HTMLInputElement)?.value}`)
-        .then(response => response.json())
-        .then(data => {
-            (document.getElementById('min') as HTMLInputElement).value = data.min;
-            (document.getElementById('max') as HTMLInputElement).value = data.max;
-        });
-}
+loadAllOptions()
 
-// Switch to use the correct funtion
-function loadCorrectData() {
-    switch ((document.getElementById('questionType') as HTMLInputElement)?.value) {
-        case 'Range':
-            loadMinMax();
-            break;
-        case 'MultipleChoice':
-            loadAllOptions();
-            break;
-        case 'Open':
-            break;
-        case 'SingleChoice':
-            loadAllOptions();
-            break;
-        default:
-            break;
+document.getElementById('buttonToAdd')?.addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
+    const newOption = (document.getElementById('newOption') as HTMLInputElement)?.value;
+
+    // Optimistically add the new option to the UI
+    addOptionToUI(newOption);
+
+    fetch(`https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=${questionId}&option=${newOption}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(
+            //make the input field empty again
+            () => (document.getElementById('newOption') as HTMLInputElement).value = ''
+        )
+        .catch(error => {
+            console.error('Error adding option:', error);
+            // If the fetch request fails, revert the UI back to its original state
+            removeOptionFromUI(newOption);
+        });
+});
+
+function addOptionToUI(option: string) {
+    const lijst = document.getElementById('listAnswers');
+    if (lijst) {
+        const newOption = document.createElement('div');
+        newOption.innerText = option;
+        newOption.setAttribute('data-multiplechoice-option', '');
+
+        // const optionText = document.createElement('span');
+        // optionText.innerText = option;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = 'Delete option';
+        deleteButton.className = 'btn btn-primary delete-option';
+
+        const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
+        deleteButton.addEventListener('click', function (event: Event) {
+            event.preventDefault();
+            fetch(`https://localhost:7292/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // If the deletion was successful, remove the option from the UI
+                    if (newOption.parentNode) {
+                        newOption.parentNode.removeChild(newOption);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting option:', error);
+                    // If the fetch request fails, revert the UI back to its original state
+                    addOptionToUI(option);
+                });
+        });
+
+        // newOption.appendChild(optionText);
+        newOption.appendChild(deleteButton);
+        lijst.appendChild(newOption);
     }
 }
 
-loadCorrectData();
+function removeOptionFromUI(option: string) {
+    const lijst = document.getElementById('listAnswers');
+    if (lijst) {
+        const options = lijst.querySelectorAll('[data-multiplechoice-option]') as NodeListOf<HTMLDivElement>;
+        options.forEach((optionElement) => {
+            if (optionElement.innerText === option) {
+                lijst.removeChild(optionElement);
+            }
+        });
+    }
+}
+
+
+//Adding media
+document.getElementById('uploadButton')?.addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const mediaUpload = document.getElementById('mediaUpload') as HTMLInputElement;
+    const file = mediaUpload.files?.[0];
+    const questionId = (document.getElementById('questionId') as HTMLInputElement)?.value;
+
+    if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('questionId', questionId)
+
+        fetch('https://localhost:7292/api/Questions/UploadMedia', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log('File uploaded successfully');
+            })
+            .catch(error => console.error('Error uploading file:', error));
+    }
+});

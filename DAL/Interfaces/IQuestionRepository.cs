@@ -1,3 +1,4 @@
+using BL.Domain;
 using BL.Domain.Questions;
 
 namespace DAL.Interfaces;
@@ -14,6 +15,8 @@ public interface IQuestionRepository : IRepository
     public void AddOptionToQuestion(int id, string option);
     public void SetRangeQuestionValues(int id, int min, int max);
     public void DeleteOptionFromQuestion(int id, string option);
+    
+    public void AddMediaToQuestion(int questionId, string path, string description, MediaType type);
 
 
 }

@@ -126,29 +126,6 @@
                 }
             </div>
         </div>
-          @if (Model.Media != null)
-        {
-            switch (Model.Media.type)
-            {
-                case MediaType.VIDEO:
-                    <div class="col py-2 d-flex justify-content-center align-items-center">
-                        <iframe src="@Model.Media.url" class="img-fluid w-100" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
-                    </div>
-                    break;
-                case MediaType.IMAGE:
-                    <div class="col py-2 d-flex justify-content-center align-items-center">
-                        <img src="@Model.Media.url" class="img-fluid w-100" alt="Dit is een mooie afbeelding">
-                    </div>
-                    break;
-                case MediaType.AUDIO:
-                    <div class="col py-2 d-flex justify-content-center align-items-center">
-                        <audio controls>
-                            <source src="@Model.Media.url" type="audio/mpeg">
-                        </audio>
-                    </div>
-                    break; 
-            }
-        }
     </div>
 </div>
 </body>

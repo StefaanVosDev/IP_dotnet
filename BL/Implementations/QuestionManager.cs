@@ -1,3 +1,4 @@
+using BL.Domain;
 using BL.Domain.Questions;
 using BL.Interfaces;
 using DAL.Interfaces;
@@ -57,5 +58,10 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
     public void DeleteOptionFromQuestion(int id, string option)
     {
         repository.DeleteOptionFromQuestion(id, option);
+    }
+    
+    public void AddMediaToQuestion(int id, string filePath, string description, MediaType mediaType)
+    {
+        repository.AddMediaToQuestion(id, filePath, description, mediaType);
     }
 }

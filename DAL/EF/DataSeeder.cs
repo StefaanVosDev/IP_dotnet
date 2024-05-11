@@ -58,7 +58,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Dit is een video over hoe de bevolking naar de politiek kijkt",
-                                    url = "https://www.youtube.com/watch?v=JGfXiIz5nqQ",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/informatie_stemming.mp4",
                                     type = MediaType.VIDEO
                                 }
                             ),
@@ -75,7 +75,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Afbeelding van alle partijen",
-                                    url = "https://images.vrt.be/width960/2019/04/26/10341807-6837-11e9-abcc-02b7b76bf47f.png",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/afbeelding_partijen.jpg",
                                     type = MediaType.IMAGE
                                 }
                             ),
@@ -87,7 +87,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Dit is een afbeelding over de betrokkenheid van de bevolking bij de politiek",
-                                    url="https://assets.antwerpen.be/srv/assets/api/image/1a6473b3-e416-4112-90e6-5fd7b26a9c60/Illustratie_00_ALL_02_website.jpg/contentimage_full",
+                                    url="https://storage.googleapis.com/phygital-public/Questions/bevolking_antwerpen.jpg",
                                     type = MediaType.IMAGE
                                 })
                         ],
@@ -95,7 +95,7 @@ public class DataSeeder
                         new Media()
                         {
                             description = "Dit is een afbeelding over de betrokkenheid van jongeren",
-                            url="https://www.onderwijsvanmorgen.nl/wp-content/uploads/2022/12/OVM-Jongeren-betrekken-bij-de-politiek-hoe-doe-je-dat.jpg",
+                            url="https://storage.googleapis.com/phygital-public/Questions/OVM-Jongeren-betrekken-bij-de-politiek-hoe-doe-je-dat.jpg",
                             type = MediaType.IMAGE
                         }
                     ),
@@ -119,7 +119,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Video over het nieuwe stadspark in Mechelen",
-                                    url = "https://www.google.com/search?q=nieuw+stadspark+video&sca_esv=114751fe4ad266cf&sca_upv=1&rlz=1C1QPHC_nlBE1075BE1075&ei=K-IuZoPCLeWYkdUP_7GCyA0&ved=0ahUKEwjDg-CUjuaFAxVlTKQEHf-YANkQ4dUDCBA&uact=5&oq=nieuw+stadspark+video&gs_lp=Egxnd3Mtd2l6LXNlcnAiFW5pZXV3IHN0YWRzcGFyayB2aWRlbzIFECEYoAEyBRAhGKABMgUQIRigAUjmDFCSAljRC3ABeACQAQCYAWCgAe0EqgEBObgBA8gBAPgBAZgCCaAC1ATCAgsQABiABBiwAxiiBMICCxAAGLADGKIEGIkFwgIFEAAYgATCAggQABiABBiiBMICCBAAGKIEGIkFwgIGEAAYFhgewgIFECEYnwWYAwCIBgGQBgOSBwM4LjGgB78c&sclient=gws-wiz-serp#fpstate=ive&vld=cid:b5ff1d6c,vid:4kfe77stM-s,st:0",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/video_park.mp4",
                                     type = MediaType.VIDEO
                                 }
                             ),
@@ -136,7 +136,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Video over hoe het stemmen werkt",
-                                    url = "/audio/hoeWerkthetStemmen.mp3",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/hoeWerkthetStemmen.mp3",
                                     type = MediaType.AUDIO
                                 }
                             ),
@@ -148,7 +148,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Fietser op een fietspad",
-                                    url = "/images/fietser.jpg",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/fietser.jpg",
                                     type = MediaType.IMAGE
                                 }
                             ),
@@ -158,7 +158,7 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Afbeelding van de schepen van onderwijs",
-                                    url = "/images/schepenOnderwijs.jpg",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/schepenVanOnderwijs.jpeg",
                                     type = MediaType.IMAGE
                                 }
                             )
@@ -167,7 +167,7 @@ public class DataSeeder
                         new Media()
                         {
                             description = "Afbeelding over de kiesintenties en participatie aan verkiezingen",
-                            url = "https://www.vlaamsparlement.be/sites/default/files/styles/social_media_image/public/2023-06/shutterstock_1937926147_1.jpg?h=55c51ed5&itok=jGJL2iNw",
+                            url = "https://storage.googleapis.com/phygital-public/Questions/shutterstock_1937926147_1.jpg",
                             type = MediaType.IMAGE
                         }
                     )
@@ -175,7 +175,7 @@ public class DataSeeder
                 new Media()
                 {
                     description = "Afbeelding over de betrokkenheid bij het lokale beleid",
-                    url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS36v1EQLdgUmzyTsY8tDOJCKA2ZH3_-seFCZYmWEGq8w&s",
+                    url = "https://storage.googleapis.com/phygital-public/Questions/betrekkingBevolking.jpg",
                     type = MediaType.IMAGE
                 }
             )

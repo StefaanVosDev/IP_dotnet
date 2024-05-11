@@ -18,6 +18,13 @@ namespace IP_MVC.Controllers
         public IActionResult Edit(int parentFlowId)
         {
             var question = _questionManager.GetQuestionById(parentFlowId);
+            //als het een range vraag is, ineens de min en max waarden opvragen en meegeven
+            if (question.Type == QuestionType.Range)
+            {
+                var rangeQuestion = (RangeQuestion) question;
+                ViewBag.Min = rangeQuestion.Min;
+                ViewBag.Max = rangeQuestion.Max;
+            }
             return View(question);
         }
 
@@ -109,6 +116,21 @@ namespace IP_MVC.Controllers
         {
             var values = _questionManager.GetRangeQuestionValues(id);
             return Json(values);
+        }
+        
+        [HttpPost]
+        public IActionResult UpdateTitle(int id, string text)
+        {
+            var question = _questionManager.GetQuestionById(id);
+            var newQuestion = question;
+            newQuestion.Text = text;
+            newQuestion.Position = question.Position;
+            newQuestion.Type = question.Type;
+            newQuestion.Media = question.Media;
+            newQuestion.FlowId = question.FlowId;
+
+            _questionManager.UpdateAsync(question, newQuestion);
+            return Ok();
         }
     }
 }
