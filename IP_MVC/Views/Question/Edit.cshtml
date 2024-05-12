@@ -4,15 +4,17 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    //
+    int min = ViewBag.Min ?? 0;
+    int max = ViewBag.Max ?? 10;
 }
 
 <h2>Overzicht vraag</h2>
-<h3>Titel vraag</h3>
-<p>@Model?.Text</p>
 <h3>Vraagtype</h3>
 <p>@Model?.Type</p>
 
 <input type="hidden" id="questionId" value="@Model?.Id">
+<input type="hidden" id="questionType" value="@Model?.Type">
 
 <div id="titleContainer">
     <h3 id="titleText">@Model?.Text</h3>
@@ -20,6 +22,15 @@
     <button class="btn btn-primary" id="editButton">Change</button>
     <button class="btn btn-primary" id="updateButton" style="display: none;">Update</button>
 </div>
+
+<form>
+    <h2>Add media to the question</h2>
+
+    <div>
+        <input id="mediaUpload" type="file" accept="image/*,video/*,audio/*" />
+    </div>
+    <button id="uploadButton" class="btn btn-primary">Upload</button>
+</form>
 
 @switch (Model?.Type)
 {
@@ -47,12 +58,13 @@
         <form>
             <p>Update range question</p>
             <label for="min">Min value</label>
-            <input type="number" id="min" placeholder="1" />
+            <input type="number" id="min" value="@min" />
             <label for="max">Max value</label>
-            <input type="number" id="max" placeholder="5" />
+            <input type="number" id="max" value="@max" />
             <button id="updateRangeValues" class="btn btn-primary">Update</button>
         </form>
         break;
 }
 <a href="@Url.Action("Edit", "Flow", new { parentFlowId = Model?.FlowId })" class="btn btn-primary">Go back to subflow overview</a>
-<script src="~/dist/edit.entry.js" defer="defer"></script>
+
+<script src="~/dist/editQuestion.entry.js" defer="defer"></script>

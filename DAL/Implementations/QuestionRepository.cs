@@ -1,3 +1,4 @@
+using BL.Domain;
 using BL.Domain.Questions;
 using DAL.EF;
 using DAL.Interfaces;
@@ -97,4 +98,24 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
             }
         }
     }
+
+    public void AddMediaToQuestion(int questionId, string path, string description, MediaType type)
+    {
+        var media = new Media()
+        {
+            url = path,
+            description = description,
+            type = type
+        };
+        _context.Set<Question>().FirstOrDefault(q => q.Id == questionId)!.Media = media;
+        _context.SaveChanges();
+    }
+    /*{
+        var question = _context.Set<Question>().Include(question => question.Media).FirstOrDefault(q => q.Id == questionId);
+        if (question != null)
+        {
+            question.Media.url = path;
+            _context.SaveChanges();
+        }
+    }*/
 }

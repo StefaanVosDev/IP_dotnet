@@ -60,6 +60,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\dist\createFlow.entry.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\inzoom.entry.js" />
       <_ContentIncludedByDefault Remove="wwwroot\dist\inzoom.entry.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\audio\hoeWerkthetStemmen.mp3" />
     </ItemGroup>
 
     <ItemGroup>

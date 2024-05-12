@@ -1,5 +1,7 @@
+using BL.Domain;
 using BL.Domain.Questions;
 using BL.Interfaces;
+using Google.Cloud.Storage.V1;
 using IP_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,21 +43,6 @@ namespace IP_MVC.Controllers.api
             _questionManager.SetRangeQuestionValues(id, min, max);
             return Ok();
         }
-
-        [HttpPost]
-        public IActionResult UpdateTitle(int id, string text)
-        {
-            var question = _questionManager.GetQuestionById(id);
-            var newQuestion = question;
-            newQuestion.Text = text;
-            newQuestion.Position = question.Position;
-            newQuestion.Type = question.Type;
-            newQuestion.Media = question.Media;
-            newQuestion.FlowId = question.FlowId;
-
-            _questionManager.UpdateAsync(question, newQuestion);
-            return Ok();
-        }
         
         //implement the deleteOption
         [HttpPost("DeleteOption")]
@@ -69,6 +56,58 @@ namespace IP_MVC.Controllers.api
             
             _questionManager.DeleteOptionFromQuestion(id, option);
             return Ok();
+        }
+        
+        [HttpPost("UploadMedia")]
+        public async Task<IActionResult> UploadMedia([FromForm]IFormFile file, [FromForm]int questionId)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("No file was uploaded.");
+                }
+
+                var filePath = Path.GetTempFileName();
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Upload the file to Google Cloud Storage
+                var storage = StorageClient.Create();
+                using var fileStream = System.IO.File.OpenRead(filePath);
+                var objectName = $"Questions/{file.FileName}";
+                storage.UploadObject("phygital-public", objectName, null, fileStream);
+                Console.WriteLine($"Uploaded {objectName}.");
+
+                // Save the URL of the uploaded file in your database
+                var fileUrl = $"https://storage.googleapis.com/phygital-public/{objectName}";
+                
+                var description = "Uploaded media";
+                // get the media type from the file extension
+                var mediaType = file.ContentType switch
+                {
+                    "video/mp4" => MediaType.VIDEO,
+                    "image/jpeg" => MediaType.IMAGE,
+                    "image/png" => MediaType.IMAGE,
+                    "audio/mpeg" => MediaType.AUDIO,
+                    _ => throw new Exception("Unsupported media type")
+                };
+                _questionManager.AddMediaToQuestion(questionId, fileUrl, description, mediaType);
+
+                return Ok(new { filePath = fileUrl });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception message and stack trace
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+
+                // Return a 500 status code with a detailed error message
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
