@@ -1,0 +1,12 @@
+@model BL.Domain.Questions.SingleChoiceQuestion
+
+@foreach (var option in Model.Options)
+{
+    bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
+    <div class="form-check m-3">
+        <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option" @(isSelected ? "checked" : "")>
+        <label class="form-check-label" for="radio@i">
+            @option
+        </label>
+    </div>
+}

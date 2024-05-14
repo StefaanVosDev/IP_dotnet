@@ -1,0 +1,10 @@
+@model BL.Domain.Questions.RangeQuestion
+
+<div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
+    @for (int i = Model.Min; i <= Model.Max; i++)
+    {
+        <span>@i</span>
+    }
+</div>
+<input type="range" min="@Model.Min" max="@Model.Max" value="@initialValue" style="width: 100%"/>
+<input type="hidden" id="selectedValue" name="Answer" data-min="@Model.Min" data-earlier-answer="@initialValue" value="@initialValue"/>

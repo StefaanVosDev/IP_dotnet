@@ -1,8 +1,10 @@
 @using BL.Domain
 @using BL.Domain.Answers
-@model BL.Domain.Questions.MultipleChoiceQuestion
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IP_MVC.Models.QuestionViewModel
 
 @{
+    
     ViewBag.Title = "Multiple Choice";
     Layout = "_Layout";
     var currentIndex = ViewData["currentIndex"] as int? ?? 0;
@@ -27,24 +29,24 @@
         <div class="card-content vh-100 align-content-center">
             <div class="row m-1">
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 align-content-center">
-                    @if (Model.Media != null)
+                    @if (Model.Question.Media != null)
                     {
-                        switch (Model.Media.type)
+                        switch (Model.Question.Media.type)
                         {
                             case MediaType.VIDEO:
                                 <div class="col py-2 d-flex justify-content-center align-items-center">
-                                    <iframe src=@Model.Media.url class="img-fluid w-100 h-100" alt="@Model.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+                                    <iframe src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
                                 </div>
                                 break;
                             case MediaType.IMAGE:
                                 <div class="col py-2 d-flex justify-content-center align-items-center">
-                                    <img src=@Model.Media.url class="img-fluid w-100 h-100" alt="@Model.Media.description">
+                                    <img src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description">
                                 </div>
                                 break;
                             case MediaType.AUDIO:
                                 <div class="col py-2 d-flex justify-content-center align-items-center">
                                     <audio controls>
-                                        <source src=@Model.Media.url alt="@Model.Media.description" type="audio/mpeg">
+                                        <source src=@Model.Question.Media.url alt="@Model.Question.Media.description" type="audio/mpeg">
                                     </audio>
                                 </div>
                                 break;
@@ -53,30 +55,14 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 align-content-center">
                     <p class="text-start fw-bold">Question</p>
-                    <p>@Model.Text</p>
+                    <p>@Model.Question.Text</p>
 
                     <form id="myForm" asp-controller="Flow" asp-action="SaveAnswerAndRedirect" method="post">
+                        @*_partial logica*@
 
-                        @if (Model.Options != null)
-                        {
-                            var selectedOptions = earlierAnswer != null ? earlierAnswer.AnswerText.Split(';') : Array.Empty<string>();
-
-                            foreach (var option in Model.Options)
-                            {
-                                bool isSelected = selectedOptions.Contains(option);
-
-                                <div class="form-check m-3">
-                                    <input class="form-check-input" type="checkbox" id="check@i" name="Answer" value="@option" @(isSelected ? "checked" : "")>
-                                    <label class="form-check-label" for="check@i">
-                                        @option
-                                    </label>
-                                </div>
-                            }
-                        }
-
-                        <input type="hidden" name="flowId" value="@Model.FlowId"/>
-                        <input type="hidden" name="id" value="@Model.Id"/>
-                        <input type="hidden" name="QuestionId" value="@Model.Id"/>
+                        <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+                        <input type="hidden" name="id" value="@Model.Question.Id"/>
+                        <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
 
                         <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
 

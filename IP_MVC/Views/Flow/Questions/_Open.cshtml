@@ -1,0 +1,8 @@
+@model BL.Domain.Questions.OpenQuestion
+
+<textarea class="form-control" name="Answer">
+                @if (earlierAnswer != null)
+                {
+                    @earlierAnswer.AnswerText
+                }
+          </textarea>
