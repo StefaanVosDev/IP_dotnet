@@ -11,10 +11,11 @@ RUN apt-get install npm nodejs -y
 RUN npm install -D ts-loader     
 RUN dotnet restore IP_MVC/IP_MVC.csproj
 
-RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader swiper
-RUN npm install 
+
 
 COPY . .
+RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader swiper
+RUN npm install 
 RUN dotnet publish -c Release -o out
 
 RUN dotnet tool install --global dotnet-ef
@@ -34,3 +35,4 @@ EXPOSE 8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 ENTRYPOINT ["dotnet", "IP_MVC.dll"]
+ 
