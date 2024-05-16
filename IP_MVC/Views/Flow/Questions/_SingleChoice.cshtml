@@ -1,6 +1,12 @@
+@using BL.Domain.Questions
 @model BL.Domain.Questions.SingleChoiceQuestion
 
-@foreach (var option in Model.Options)
+@{
+    var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+    var question = ViewData["questionType"]  as SingleChoiceQuestion ;
+}
+
+@foreach (var option in question!.Options)
 {
     bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
     <div class="form-check m-3">

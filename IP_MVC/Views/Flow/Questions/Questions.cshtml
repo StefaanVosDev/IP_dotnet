@@ -1,16 +1,20 @@
 @using BL.Domain
 @using BL.Domain.Answers
+@using BL.Domain.Questions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.EntityFrameworkCore
 @model IP_MVC.Models.QuestionViewModel
 
 @{
-    
     ViewBag.Title = "Multiple Choice";
     Layout = "_Layout";
+
     var currentIndex = ViewData["currentIndex"] as int? ?? 0;
     var questionCount = ViewData["questionCount"] as int? ?? 0;
     var earlierAnswer = ViewData["earlierAnswer"] as Answer;
     var flowType = ViewBag.FlowType as FlowType? ?? FlowType.LINEAR;
+    ViewData["earlierAnswer"] = earlierAnswer;
+    ViewData["questionType"] = Model.Question;
 
     var subFlowId = ViewBag.subFlowId;
 }
@@ -56,10 +60,23 @@
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 align-content-center">
                     <p class="text-start fw-bold">Question</p>
                     <p>@Model.Question.Text</p>
-
+                    
                     <form id="myForm" asp-controller="Flow" asp-action="SaveAnswerAndRedirect" method="post">
-                        @*_partial logica*@
-
+                        @switch (@Model.QuestionType)
+                        {
+                            case QuestionType.Open:
+                                @await Html.PartialAsync("Questions/_Open", new OpenQuestion())
+                                break;
+                            case QuestionType.Range:
+                                @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
+                                break;
+                            case QuestionType.MultipleChoice:
+                                @await Html.PartialAsync("Questions/_MultipleChoice", new MultipleChoiceQuestion())
+                                break;
+                            case QuestionType.SingleChoice:
+                                @await Html.PartialAsync("Questions/_SingleChoice", new BL.Domain.Questions.SingleChoiceQuestion())
+                                break;
+                        }
                         <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
                         <input type="hidden" name="id" value="@Model.Question.Id"/>
                         <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
@@ -122,6 +139,8 @@
 
 @section Scripts
 {
-    <script src="~/dist/redirectedQuestionId.entry.js" defer="defer"></script>
     <script src="~/dist/controlQuestions.entry.js"></script>
+    <script src="~/dist/range.entry.js" defer="defer"></script>
+    <script src="~/dist/redirectedQuestionId.entry.js" defer="defer"></script>
+    <script src="~/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
 }

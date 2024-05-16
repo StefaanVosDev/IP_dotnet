@@ -1,10 +1,16 @@
+@using BL.Domain.Questions
 @model BL.Domain.Questions.MultipleChoiceQuestion
 
-@if (Model.Options != null)
+@{
+    var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+    var question = ViewData["questionType"]  as MultipleChoiceQuestion ;
+}
+
+@if ( question?.Options != null)
 {
     var selectedOptions = earlierAnswer != null ? earlierAnswer.AnswerText.Split(';') : Array.Empty<string>();
 
-    foreach (var option in Model.Options)
+    foreach (var option in question.Options)
     {
         bool isSelected = selectedOptions.Contains(option);
 
@@ -16,3 +22,4 @@
         </div>
     }
 }
+
