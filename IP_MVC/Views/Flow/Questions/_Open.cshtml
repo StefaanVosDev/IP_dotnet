@@ -1,0 +1,12 @@
+@model BL.Domain.Questions.OpenQuestion
+
+@{
+    var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+}
+
+<textarea class="form-control" name="Answer">
+                @if (earlierAnswer != null)
+                {
+                    @earlierAnswer.AnswerText
+                }
+</textarea>

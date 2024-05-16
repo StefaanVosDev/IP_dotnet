@@ -18,7 +18,7 @@ namespace IP_MVC.Controllers
         public IActionResult Edit(int parentFlowId)
         {
             var question = _questionManager.GetQuestionById(parentFlowId);
-            //als het een range vraag is, ineens de min en max waarden opvragen en meegeven
+
             if (question.Type == QuestionType.Range)
             {
                 var rangeQuestion = (RangeQuestion) question;

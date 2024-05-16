@@ -1,0 +1,18 @@
+@using BL.Domain.Answers
+@using BL.Domain.Questions
+@model BL.Domain.Questions.RangeQuestion
+
+@{
+    var initialValue = ViewData["earlierAnswer"] is Answer earlierAnswer ? int.Parse(earlierAnswer.AnswerText) : Model.Min;
+    var question = ViewData["questionType"]  as RangeQuestion ;
+}
+
+<div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
+    @for (int i = question!.Min; i <= question.Max; i++)
+    {
+        <span>@i</span>
+    }
+</div>
+
+<input type="range" min="@question!.Min" max="@question.Max" value="@initialValue" style="width: 100%"/>
+<input type="hidden" id="selectedValue" name="Answer" data-min="@question.Min" data-earlier-answer="@initialValue" value="@initialValue"/>

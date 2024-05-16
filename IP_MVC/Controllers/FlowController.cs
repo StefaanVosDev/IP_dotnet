@@ -78,8 +78,15 @@ namespace IP_MVC.Controllers
             // Retrieve the current question ID from the queue.
             var questionId = questionQueue.ElementAt(currentIndex);
 
-            // Retrieve the question based on the ID and type.
+            // Haal de huidige vraag op
             var question = questionManager.GetQuestionByIdAndType(questionId);
+
+            // Maak een QuestionViewModel aan en vul het met de vraag en het type
+            var viewModel = new QuestionViewModel
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
 
             // Get the earlier answer given
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
@@ -91,10 +98,9 @@ namespace IP_MVC.Controllers
             ViewBag.FlowType = flowType;
             ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
 
-            // Display the question view based on the question type.
-            return View($"Questions/{question.Type}", question);
+            return View($"Questions/Questions", viewModel);
         }
-
+ 
         public IActionResult EndSubFlow()
         {
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;

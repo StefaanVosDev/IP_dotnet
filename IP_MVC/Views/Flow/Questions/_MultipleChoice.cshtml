@@ -1,0 +1,25 @@
+@using BL.Domain.Questions
+@model BL.Domain.Questions.MultipleChoiceQuestion
+
+@{
+    var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+    var question = ViewData["questionType"]  as MultipleChoiceQuestion ;
+}
+
+@if ( question?.Options != null)
+{
+    var selectedOptions = earlierAnswer != null ? earlierAnswer.AnswerText.Split(';') : Array.Empty<string>();
+
+    foreach (var option in question.Options)
+    {
+        bool isSelected = selectedOptions.Contains(option);
+
+        <div class="form-check m-3">
+            <input class="form-check-input" type="checkbox" id="check@i" name="Answer" value="@option" @(isSelected ? "checked" : "")>
+            <label class="form-check-label" for="check@i">
+                @option
+            </label>
+        </div>
+    }
+}
+
