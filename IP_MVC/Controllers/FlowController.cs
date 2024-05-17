@@ -19,11 +19,23 @@ namespace IP_MVC.Controllers
         {
             ViewBag.ProjectId = projectId;
             ViewBag.ParentFlowId = parentFlowId;
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             return View(projectManager.GetParentFlowsByProjectId(projectId));
         }
 
         public IActionResult SubFlow(int parentFlowId) => View(flowManager.GetFlowsByParentId(parentFlowId));
 
+        public IActionResult ActivateProject(int projectId, bool active)
+        {
+            HttpContext.Session.Set("projectActive", active);
+            if (active)
+            {
+                return RedirectToAction("Flow", new { projectId });
+            }
+
+            return RedirectToAction("Project", "Project");
+
+        }
         public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType)
         {
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
