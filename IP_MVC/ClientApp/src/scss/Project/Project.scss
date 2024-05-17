@@ -1,7 +1,10 @@
 @import '../_variables.scss';
 
 .project-page {
+  background-color: $yellow;
+  
   .card {
+    background-color: $light-blue;
     width: 59%;
     top: 30%;
     left: 50%;
