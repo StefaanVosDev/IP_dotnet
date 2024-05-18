@@ -1,22 +1,34 @@
+@using IP_MVC
 @model BL.Domain.Project
 
-<div class="popup-overlay" id="popupEditOverlay">
-    <div class="popup" id="popupEdit">
-        <span class="close" id="closeEditPopup">&times;</span>
-        <div class="popup-content">
+@{
+    ViewBag.Title = "Edit Project";
+    var randomIndex = new Random().Next(1, 3);
+    var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
+}
+
+<div class="flip-card-front position-relative">
+    <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+    <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@Model.Id">
+        <div class="card-body overflow-y-scroll overflow-x-hidden">
             <form asp-action="Edit" asp-controller="Project" method="post">
                 <input type="hidden" asp-for="Id"/>
-                <input type="hidden" asp-for="AdminId"/> <!-- Add this line -->
+                <input type="hidden" asp-for="AdminId"/>
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" asp-for="Name" required>
+                    <label for="Name">Name</label>
+                    <input type="text" class="form-control" id="Name" asp-for="Name" required>
                 </div>
                 <div class="form-group">
-                    <label>Description</label>
-                    <textarea class="form-control" asp-for="Description" required></textarea>
+                    <label for="Description">Description</label>
+                    <textarea class="form-control" id="Description" asp-for="Description" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" id="updateButton">Update</button>
+                <button type="submit" class="btn btn-primary">Update</button>
             </form>
+        </div>
+        <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden">
+            <div>
+                <a class="btn btn-primary" href="@Url.Action("Flow", "Flow", new { projectId = Model.Id })">Edit flows</a>
+            </div>
         </div>
     </div>
 </div>

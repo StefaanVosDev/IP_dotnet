@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using BL.Domain;
-using BL.Implementations;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,13 +30,13 @@ public class ProjectController : Controller
             return NotFound();
         }
 
-        return View(project);
+        return View("Project");
     }
 
     [HttpPost]
     public async Task<IActionResult> Edit(int parentFlowId, Project newProject)
     {
-        if (!ModelState.IsValid) return View(newProject);
+        if (!ModelState.IsValid)         return View("Project");
 
         var existingProject = await _projectManager.FindByIdAsync(parentFlowId);
         if (existingProject == null)
@@ -75,18 +74,6 @@ public class ProjectController : Controller
 
         await _projectManager.AddAsync(project);
         return RedirectToAction("Project");
-    }
-    
-    [HttpGet]
-    public async Task<IActionResult> Inzoom(int parentFlowId)
-    {
-        var project = await _projectManager.FindByIdAsync(parentFlowId);
-        if (project == null)
-        {
-            return NotFound();
-        }
-
-        return View(project);
     }
 
     public IActionResult Index()
