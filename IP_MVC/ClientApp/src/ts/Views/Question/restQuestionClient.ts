@@ -1,26 +1,11 @@
-// Get all options from question
-export async function getOptions(questionId: string) {
-    try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/options`);
-        if (!response.ok) {
-            throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
-        }
-        return response.json();
-    } catch (e) {
-        console.error(e);
-        throw e;
-    }
-}
-
 // Update question title 
 export async function updateQuestionTitle(questionId: string, title: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/title`, {
-            method: 'PUT',
+        const response = await fetch(`https://localhost:7292/Question/UpdateTitle?id=${questionId}&text=${title}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(title)
+            }
         });
         if (!response.ok) {
             throw new Error('Unable to update title of question');
@@ -49,41 +34,21 @@ export async function updateQuestionRange(questionId: string, min: string, max: 
     }
 }
 
-// Add option from to question
-export async function postOption(questionId: string, newOption: string) {
+// Get all options from a question
+export async function getOptions(questionId: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=${questionId}&option=${newOption}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await fetch("https://localhost:7292/Question/GetOptions?id=" + questionId);
         if (!response.ok) {
-            throw new Error('Unable to add option to question');
+            throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
         }
-    } catch (e) {
-        console.error(e);
-        throw e;
-    }
-} 
-
-// Add Media to question
-export async function postMedia(formData: FormData) {
-    try {
-        const response = await fetch('https://localhost:7292/api/Questions/UploadMedia', {
-            method: 'POST',
-            body: formData
-        });
-        if (!response.ok) {
-            throw new Error('Unable to post media');
-        }
+        return response.json();
     } catch (e) {
         console.error(e);
         throw e;
     }
 }
 
-// Delete an option from question
+// Delete an option from a question
 export async function deleteOption(questionId: string, option: string) {
     try {
         const response = await fetch(`https://localhost:7292/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
@@ -94,6 +59,22 @@ export async function deleteOption(questionId: string, option: string) {
         });
         if (!response.ok) {
             throw new Error('Unable to delete option from question');
+        }
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+}
+
+// Add Media to a question
+export async function postMedia(formData: FormData) {
+    try {
+        const response = await fetch('https://localhost:7292/api/Questions/UploadMedia', {
+            method: 'POST',
+            body: formData
+        });
+        if (!response.ok) {
+            throw new Error('Unable to post media');
         }
     } catch (e) {
         console.error(e);
