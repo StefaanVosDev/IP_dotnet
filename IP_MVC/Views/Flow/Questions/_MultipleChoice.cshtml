@@ -8,7 +8,7 @@
 
 @if ( question?.Options != null)
 {
-    var selectedOptions = earlierAnswer != null ? earlierAnswer.AnswerText.Split(';') : Array.Empty<string>();
+    var selectedOptions = earlierAnswer != null ? earlierAnswer.AnswerText.Split('\n') : Array.Empty<string>();
 
     foreach (var option in question.Options)
     {

@@ -1,29 +1,15 @@
 @import '_variables.scss';
 
 html {
-  font-size: 14px;
+  font-size: $base-font-size; 
   position: relative;
   min-height: 100%;
 }
 
-@media (max-width: 576px) {
-  body {
-    font-size: 12px;
-  }
+body {
+    font-size: calc(15px + 0.390625vw);
+    line-height: 1.5;
 }
-
-@media (min-width: 576px) {
-  body {
-    font-size: 14px;
-  }
-}
-
-@media (min-width: 768px) {
-  body {
-    font-size: 16px;
-  }
-}
-
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -78,7 +64,7 @@ html {
   transition: all 150ms ease-in-out;
 
   &:hover {
-    box-shadow: 0 0 10px 0 $yellow inset, 0 0 10px 10px $yellow;
+    box-shadow: 0 0 10px 0 $blue inset, 0 0 10px 10px $yellow;
   }
 }
 
