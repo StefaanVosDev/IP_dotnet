@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using BL.Domain.Answers;
 using IP_MVC.Models;
-using Microsoft.CodeAnalysis;
 
 namespace IP_MVC.Controllers
 {
@@ -25,6 +24,7 @@ namespace IP_MVC.Controllers
 
         public IActionResult SubFlow(int parentFlowId, bool active)
         {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ActiveProject = active;
             return View(flowManager.GetFlowsByParentId(parentFlowId));
         }
@@ -64,6 +64,8 @@ namespace IP_MVC.Controllers
 
         public IActionResult Question(int id, int redirectedQuestionId)
         {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
 
@@ -123,6 +125,8 @@ namespace IP_MVC.Controllers
  
         public IActionResult EndSubFlow()
         {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var session = sessionManager.GetSessionById(sessionId);
             if (session == null)

@@ -2,11 +2,11 @@
 
 .questions-page {
   .card {
-    height: 40em;
+    height: 70vh;
   }
   
   .card-content{
-    width: 80%;
+   max-width: 80%;
   }
   .active-dropdown {
     background-color: $light-blue;
