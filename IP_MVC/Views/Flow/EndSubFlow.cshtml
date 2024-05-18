@@ -4,7 +4,7 @@
     Layout = "_Layout";
 }
 
-<body class="endFlow">
+<body class="endFlow overflow-y-hidden">
 @{
     var randomIndex = new Random().Next(1, 5);
     var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
@@ -12,15 +12,12 @@
 
 <img src="@imageUrl" class=" card-img-top w-100 vh-100 z-1 position-relative" alt="Afbeelding_van_flow">
 
-<div class="card border-1 border-black h-50 position-absolute card-clickable">
+<div class="card border-1 border-black position-absolute card-clickable">
     <div class="align-items-center h-100 overflow-y-scroll">
-        <div class="card-body ">
-
-            <div class="card-header">
-                <h2>Thank You!</h2>
-            </div>
-            <h5 class="card-title">Session Summary</h5>
-            <ul style="list-style-type: none;">
+        <div class="card-body">
+            <h2>Thank You!</h2>
+            <h5 class="card-title">Summary of your answers:</h5>
+            <ul>
                 @foreach (var question in Model.Questions)
                 {
                     <li>
@@ -31,9 +28,11 @@
                     <br/>
                 }
             </ul>
-            <div class="card-footer text-muted">
-                <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = Model.FlowId })" class="btn btn-primary">Return to SubFlow</a>
-            </div>
+        </div>
+    </div>
+    <div class="d-flex text-center position-sticky py-2 button-container">
+        <div class="flex-grow-1">
+            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = Model.FlowId })" class="btn">Return to SubFlow</a>
         </div>
     </div>
 </div>
