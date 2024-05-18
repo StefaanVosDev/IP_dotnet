@@ -14,9 +14,10 @@
 <header>
     @{
         var isLoginPage = ViewContext.RouteData.Values["Page"]?.ToString() == "/Account/Login";
+        var activeProject = ViewBag.ActiveProject as bool? ?? false;
     }
 
-    @if (!isLoginPage)
+    @if (!isLoginPage && !activeProject)
     {
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -41,7 +42,7 @@
                 </div>
             </div>
         </nav>
-    }
+    } 
 </header>
 <div class="container-fluid">
     <main role="main">

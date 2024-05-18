@@ -23,7 +23,11 @@ namespace IP_MVC.Controllers
             return View(projectManager.GetParentFlowsByProjectId(projectId));
         }
 
-        public IActionResult SubFlow(int parentFlowId) => View(flowManager.GetFlowsByParentId(parentFlowId));
+        public IActionResult SubFlow(int parentFlowId, bool active)
+        {
+            ViewBag.ActiveProject = active;
+            return View(flowManager.GetFlowsByParentId(parentFlowId));
+        }
 
         public IActionResult ActivateProject(int projectId, bool active)
         {
@@ -36,8 +40,12 @@ namespace IP_MVC.Controllers
             return RedirectToAction("Project", "Project");
 
         }
-        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType)
+
+        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active)
         {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+            ViewBag.ActiveProject = active;
+            
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
@@ -47,7 +55,7 @@ namespace IP_MVC.Controllers
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);
-
+            
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
 
@@ -149,7 +157,7 @@ namespace IP_MVC.Controllers
             }
 
             // Join the answer, in case of multiple answers
-            var answerText = string.Join(";", model.Answer);
+            var answerText = string.Join("\n", model.Answer);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
