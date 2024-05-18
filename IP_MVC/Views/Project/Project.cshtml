@@ -43,7 +43,7 @@
                                     <div>
                                         @if (User.IsInRole(CustomIdentityConstants.AdminRole))
                                         {
-                                            <button class="btn py-0 edit-btn">Edit</button>
+                                            <button data-edit-project data-project-id="@project.Id" class="btn py-0 edit-btn">Edit</button>
                                         }
                                     </div>
                                     <div>

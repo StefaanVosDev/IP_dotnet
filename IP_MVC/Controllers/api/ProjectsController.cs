@@ -17,7 +17,19 @@ public class ProjectsController : ControllerBase
     {
         _projectManager = projectManager;
     }
-    
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetProject(int id)
+    {
+        var project = await _projectManager.FindByIdAsync(id);
+
+        if (project == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(project);
+    }
     
     [HttpPut]
     public async Task<IActionResult> Change([FromBody] ProjectEditDto updateDto)

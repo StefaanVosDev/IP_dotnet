@@ -2,6 +2,8 @@ using BL.Domain;
 using BL.Domain.Questions;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces;
+using IP_MVC.Models;
+using WebApplication1.Models;
 
 namespace IP_MVC.Controllers
 {
@@ -15,10 +17,10 @@ namespace IP_MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int parentFlowId)
+        public IActionResult Edit(int questionId)
         {
-            var question = _questionManager.GetQuestionById(parentFlowId);
-
+            var question = _questionManager.GetQuestionById(questionId);
+    
             if (question.Type == QuestionType.Range)
             {
                 var rangeQuestion = (RangeQuestion) question;
@@ -101,14 +103,7 @@ namespace IP_MVC.Controllers
         {
             var question = CreateQuestion(type, text, media, flowId);
             await _questionManager.AddAsync(question);
-            return RedirectToAction("Edit", new { parentFlowId = question.Id });
-        }
-        
-        [HttpGet]
-        public IActionResult GetOptions(int id)
-        {
-            var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-            return Json(options);
+            return RedirectToAction("Edit", new { questionId = question.Id });
         }
         
         [HttpGet]
@@ -117,20 +112,61 @@ namespace IP_MVC.Controllers
             var values = _questionManager.GetRangeQuestionValues(id);
             return Json(values);
         }
-        
-        [HttpPost]
-        public IActionResult UpdateTitle(int id, string text)
+
+        [HttpGet]
+        public IActionResult StartPreview(int id)
         {
             var question = _questionManager.GetQuestionById(id);
-            var newQuestion = question;
-            newQuestion.Text = text;
-            newQuestion.Position = question.Position;
-            newQuestion.Type = question.Type;
-            newQuestion.Media = question.Media;
-            newQuestion.FlowId = question.FlowId;
+            if (question == null)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
+            var viewModel = new QuestionViewModel()
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            
+            var questions = _questionManager.GetQuestionsByFlowId(question.FlowId).ToList();
+            //get the position of this question in the list
+            var currentIndex = questions.IndexOf(question) + 1;
+            ViewData["currentIndex"] = currentIndex;
+            ViewData["questionCount"] = questions.Count;
+            ViewBag.FlowType = question.Type;
+            
+            return View($"Questions", viewModel);
+        }
+        
+        [HttpGet]
+        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
+        {
+            var questionsByFlowId = _questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
 
-            _questionManager.UpdateAsync(question, newQuestion);
-            return Ok();
+            if (redirectedQuestionId - 1 < 0 || redirectedQuestionId - 1 >= questionsByFlowId.Count)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
+
+            var question = questionsByFlowId[redirectedQuestionId - 1];
+
+            var viewModel = new QuestionViewModel()
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            ViewData["currentIndex"] = redirectedQuestionId;
+            ViewData["questionCount"] = _questionManager.GetQuestionsByFlowId(question.FlowId).Count();
+            ViewBag.FlowType = question.Type;
+
+            return View($"Questions", viewModel);
         }
     }
 }
