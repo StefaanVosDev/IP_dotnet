@@ -25,6 +25,17 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
         throw new NotImplementedException();
     }
 
+    public void UpdateProject(Project project)
+    {
+        _context.Update(project);
+        _context.SaveChanges();  
+    }
+
+    public Project ReadProjectByProjectId(int projectId)
+    {
+        return _context.Set<Project>().Find(projectId);
+    }
+
     public IEnumerable<Project> GetProjectsByAdminId(string adminId)
     {
         return _context.Set<Project>().Where(p => p.AdminId == adminId);

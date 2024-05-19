@@ -10,25 +10,30 @@
 <div class="flip-card-front position-relative">
     <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
     <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@Model.Id">
-        <div class="card-body overflow-y-scroll overflow-x-hidden">
-            <form asp-action="Edit" asp-controller="Project" method="post">
-                <input type="hidden" asp-for="Id"/>
-                <input type="hidden" asp-for="AdminId"/>
-                <div class="form-group">
-                    <label for="Name">Name</label>
-                    <input type="text" class="form-control" id="Name" asp-for="Name" required>
-                </div>
-                <div class="form-group">
-                    <label for="Description">Description</label>
-                    <textarea class="form-control" id="Description" asp-for="Description" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Update</button>
-            </form>
-        </div>
-        <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden">
-            <div>
-                <a class="btn btn-primary" href="@Url.Action("Flow", "Flow", new { projectId = Model.Id })">Edit flows</a>
+        <form>
+            <input type="hidden" id="id" asp-for="Id"/>
+            <input type="hidden" id="adminId" asp-for="AdminId"/>
+            <div class="form-group">
+                <label for="nameInput">Name</label>
+                <input type="text" class="form-control" id="nameInput" asp-for="Name" required>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="descriptionInput">Description</label>
+                <textarea class="form-control" id="descriptionInput" asp-for="Description" required></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden">
+                <div>
+                    <button type="submit" class="btn py-0 updateProjectButton">Update</button>
+                </div>
+                <div>
+                    <a class="btn py-0" href="@Url.Action("Flow", "Flow", new { projectId = Model.Id })">Edit flows</a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+@section Scripts
+{
+    <script src="~/dist/updateProject.entry.js"></script>
+}

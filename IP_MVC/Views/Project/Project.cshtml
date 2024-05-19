@@ -12,69 +12,58 @@
     <div class="row">
         @foreach (var project in Model)
         {
-              <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                    <div class="card-flip">
-                        <div class="flip-card-inner">
-                            @{
-                                var randomIndex = new Random().Next(1, 3);
-                                var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
-                            }
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        @{
+                            var randomIndex = new Random().Next(1, 3);
+                            var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
+                        }
 
-                            <div class="flip-card-front position-relative">
-                                <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
-                                <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
-                                    <div class="card-body overflow-y-scroll overflow-x-hidden">
-                                        <h5 class="card-title">@project.Name</h5>
-                                        <p class="card-text">@project.Description</p>
+                        <div class="flip-card-front">
+                            <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                            <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
+                                <div class="card-body overflow-y-scroll overflow-x-hidden">
+                                    <h5 class="card-title">@project.Name</h5>
+                                    <p class="card-text">@project.Description</p>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden">
+                                    <div>
+                                        @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                                        {
+                                            <a class="btn py-0 bi bi-trash" href="@Url.Action("Delete", "Project", new { parentFlowId = project.Id })" onclick="return confirm('Are you sure you want to delete this project?')"></a>
+                                        }
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden">
-                                        <div>
-                                            @if (User.IsInRole(CustomIdentityConstants.AdminRole))
-                                            {
-                                                <a class="btn py-0 bi bi-trash" href="@Url.Action("Delete", "Project", new { parentFlowId = project.Id })" onclick="return confirm('Are you sure you want to delete this project?')"></a>
-                                            }
-                                        </div>
-                                        <div>
-                                            @if (User.IsInRole(CustomIdentityConstants.AdminRole))
-                                            {
-                                                <a class="btn py-0 bi bi-graph-up" href="@Url.Action("Analytic", "Analytic", new { projectId = project.Id })"></a>
-                                            }
-                                        </div>
-                                        <div>
-                                            @if (User.IsInRole(CustomIdentityConstants.AdminRole))
-                                            {
-                                                <button class="btn py-0 edit-btn">Edit</button>
-                                            }
-                                        </div>
-                                        <div>
-                                            <a class="btn py-0 arrow-submit-right" href="@Url.Action("ActivateProject", "Flow", new { projectId = project.Id, active = true })"></a>
-                                        </div>
+                                    <div>
+                                        @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                                        {
+                                            <a class="btn py-0 bi bi-graph-up" href="@Url.Action("Analytic", "Analytic", new { projectId = project.Id })"></a>
+                                        }
+                                    </div>
+                                    <div>
+                                        @if (User.IsInRole(CustomIdentityConstants.AdminRole))
+                                        {
+                                            <button class="btn py-0 edit-btn">Edit</button>
+                                        }
+                                    </div>
+                                    <div>
+                                        <a class="btn py-0 arrow-submit-right" href="@Url.Action("ActivateProject", "Flow", new { projectId = project.Id, active = true })"></a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flip-card-back position-relative">
-                                @await Html.PartialAsync("_Edit", project)
-                            </div>
+                        </div>
+                        <div class="flip-card-back position-relative">
+                            @await Html.PartialAsync("_Edit", project)
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+        }
     </div>
 </div>
 </body >
 
 @section Scripts
 {
-    <script src="~/dist/createProject.entry.js"></script >
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const editButtons = document.querySelectorAll('.edit-btn');
-                editButtons.forEach(button => {
-                    button.addEventListener('click', function () {
-                        const cardInner = this.closest('.card-flip').querySelector('.flip-card-inner');
-                        cardInner.classList.toggle('flipped');
-                    });
-                });
-            });
-        </script>
+    <script src="~/dist/flip.entry.js"></script>
 }

@@ -20,50 +20,13 @@ public class ProjectController : Controller
         var projects = _projectManager.GetProjectsByAdminId(adminId);
         return View(projects);
     }
-
-    [HttpGet]
-    public async Task<IActionResult> Edit(int parentFlowId)
-    {
-        var project = await _projectManager.FindByIdAsync(parentFlowId);
-        if (project == null)
-        {
-            return NotFound();
-        }
-
-        return View("Project");
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(int parentFlowId, Project newProject)
-    {
-        if (!ModelState.IsValid)         return View("Project");
-
-        var existingProject = await _projectManager.FindByIdAsync(parentFlowId);
-        if (existingProject == null)
-        {
-            return NotFound();
-        }
-
-        // Ensure the AdminId remains the same
-        newProject.AdminId = existingProject.AdminId;
-
-        await _projectManager.UpdateAsync(existingProject, newProject);
-        return RedirectToAction("Project");
-    }
-
     public async Task<IActionResult> Delete(int parentFlowId)
     {
         var project = await _projectManager.FindByIdAsync(parentFlowId);
         await _projectManager.DeleteAsync(project);
         return RedirectToAction("Project");
     }
-
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
+    
     [HttpPost]
     public async Task<IActionResult> Create(Project project)
     {
@@ -75,7 +38,12 @@ public class ProjectController : Controller
         await _projectManager.AddAsync(project);
         return RedirectToAction("Project");
     }
-
+    
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
     public IActionResult Index()
     {
         throw new NotImplementedException();
