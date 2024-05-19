@@ -43,10 +43,7 @@
                                     <div class="flex-grow-1">
                                         @if (FlowManager.IsParentFlow(flow.Id))
                                         {
-                                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn arrow-submit-right"></a>
-                                        }else if (ViewBag.ActiveProject)
-                                        {
-                                            <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.LINEAR })" class="btn btn-primary">Start Flow</a>
+                                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = @ViewBag.ActiveProject })" class="btn arrow-submit-right"></a>
                                         }
                                         else
                                         {

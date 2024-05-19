@@ -20,14 +20,12 @@
 }
 
 <body class="questions-page">
-<div class="container-fluid">
+<div class="container-fluid pt-3">
     <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
-    <div class="card border-1 border-black pt-3 position-relative align-items-center overflow-y-scroll">
+    <div class="card border-1 border-black pt-2 position-relative align-items-center overflow-y-scroll">
         <div class="row w-100 align-content-center">
-            <div class="col-6">
-                <p class="m-0">Return to SubFlow</p>
-                <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = subFlowId })" class="btn arrow-submit-left return-subflow"></a>
-
+            <div class="col-6 h-100">
+                <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = subFlowId, active = ViewBag.ActiveProject})" class="btn bi bi-box-arrow-left py-0 h-100"></a>
             </div>
         </div>
         <div class="card-content vh-100 align-content-center">
@@ -107,7 +105,7 @@
                                 @* <button id="exitButton" class="btn btn-danger">Exit</button> *@
                             }
                         </div>
-                        <div class="position-absolute py-3 top-0 end-0 dropdown">
+                        <div class="position-absolute py-1 top-0 end-0 dropdown">
                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Quick navigation
                             </button>
