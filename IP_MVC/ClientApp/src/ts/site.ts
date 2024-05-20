@@ -8,7 +8,6 @@ import '../scss/Login.scss'
 import '../scss/Flow/SubFlow.scss'
 import '../scss/Flow/Flow.scss'
 import '../scss/Flow/EndFlow.scss'
-import '../scss/Project/Inzoom.scss'
 import '../scss/Project/Project.scss'
 import '../scss/Flow/questions/Questions.scss'
 import '../scss/site.scss';

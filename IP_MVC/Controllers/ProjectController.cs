@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using BL.Domain;
-using BL.Implementations;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,49 +21,13 @@ public class ProjectController : Controller
         return View(projects);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Edit(int parentFlowId)
-    {
-        var project = await _projectManager.FindByIdAsync(parentFlowId);
-        if (project == null)
-        {
-            return NotFound();
-        }
-
-        return View(project);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(int parentFlowId, Project newProject)
-    {
-        if (!ModelState.IsValid) return View(newProject);
-
-        var existingProject = await _projectManager.FindByIdAsync(parentFlowId);
-        if (existingProject == null)
-        {
-            return NotFound();
-        }
-
-        // Ensure the AdminId remains the same
-        newProject.AdminId = existingProject.AdminId;
-
-        await _projectManager.UpdateAsync(existingProject, newProject);
-        return RedirectToAction("Project");
-    }
-
     public async Task<IActionResult> Delete(int parentFlowId)
     {
         var project = await _projectManager.FindByIdAsync(parentFlowId);
         await _projectManager.DeleteAsync(project);
         return RedirectToAction("Project");
     }
-
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
+    
     [HttpPost]
     public async Task<IActionResult> Create(Project project)
     {
@@ -78,17 +41,10 @@ public class ProjectController : Controller
     }
     
     [HttpGet]
-    public async Task<IActionResult> Inzoom(int parentFlowId)
+    public IActionResult Create()
     {
-        var project = await _projectManager.FindByIdAsync(parentFlowId);
-        if (project == null)
-        {
-            return NotFound();
-        }
-
-        return View(project);
+        return View();
     }
-
     public IActionResult Index()
     {
         throw new NotImplementedException();
