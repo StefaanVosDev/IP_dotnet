@@ -7,25 +7,22 @@ namespace DAL.EF;
 
 public class DataSeeder
 {
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public DataSeeder()
+    public DataSeeder(UserManager<IdentityUser> userManager)
     {
+        _userManager = userManager;
     }
 
-    public static void Seed(PhygitalDbContext context)
+    public async Task Seed(PhygitalDbContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
         
-        /*var adminUser = _userManager.FindByNameAsync("admin@kdg.be").Result;
-        if (adminUser == null)
-        {
-            throw new Exception("Admin user not found");
-        }*/
-
         var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
         context.Add(project);
-        context.SaveChanges();
 
+        await context.SaveChangesAsync();
+        
         var flows = new List<Flow>
         {
             new(
@@ -181,9 +178,9 @@ public class DataSeeder
             )
         };
         
-        project.Flows = flows;
-        project.AdminId = "1";
-        context.Update(project);
-        context.SaveChanges();
+        project.Flows = flows; 
+        var adminUser = await _userManager.FindByNameAsync("admin@kdg.be");
+        project.AdminId = adminUser?.Id;
+        await context.SaveChangesAsync();
     }
 }
