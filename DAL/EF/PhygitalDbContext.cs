@@ -35,6 +35,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Flow> Flows { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Session> Sessions { get; set; }
+    public DbSet<Note> Notes { get; set; }
 
     #endregion
 

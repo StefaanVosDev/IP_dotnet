@@ -17,6 +17,9 @@
     ViewData["questionType"] = Model.Question;
 
     var subFlowId = ViewBag.subFlowId;
+    
+    //todo: give this in the viewbag controller, add a checkbox?
+    var facilitatorWatching = ViewBag.facilitatorWatching ?? true;
 }
 
 <body class="questions-page">
@@ -128,6 +131,12 @@
                             </ul>
                         </div>
                     </form>
+                    @if (facilitatorWatching)
+                    {
+                    <button class="btn create-btn" id="pauseButton">Pause </button>
+                    @await Html.PartialAsync("_CreateNote", new BL.Domain.Note())
+                    }
+
                 </div>
             </div>
         </div>
