@@ -11,7 +11,6 @@ module.exports = {
         redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
         goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
         flip: './src/ts/Views/Project/flip.ts',
-        updateProject: './src/ts/Views/Project/updateProject.ts',
         createFlow: './src/ts/Views/Flow/createFlow.ts',
         createScroll: './src/ts/Views/Flow/createScroll.ts',
         controlQuestions: './src/ts/Views/Flow/Questions/controlQuestions.ts',

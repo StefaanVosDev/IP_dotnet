@@ -7,33 +7,28 @@
     var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
 }
 
-<div class="flip-card-front position-relative">
-    <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
-    <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@Model.Id">
-        <form>
-            <input type="hidden" id="id" asp-for="Id"/>
-            <input type="hidden" id="adminId" asp-for="AdminId"/>
-            <div class="form-group">
-                <label for="nameInput">Name</label>
-                <input type="text" class="form-control" id="nameInput" asp-for="Name" required>
-            </div>
-            <div class="form-group">
-                <label for="descriptionInput">Description</label>
-                <textarea class="form-control" id="descriptionInput" asp-for="Description" required></textarea>
-            </div>
+<img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+<div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@Model.Id">
+    <div class="card-body overflow-y-scroll overflow-x-hidden">
+        <input type="hidden" id="id" value="@Model.Id"/>
+        <input type="hidden" id="adminId" value="@Model.AdminId"/>
 
-            <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden">
-                <div>
-                    <button type="submit" class="btn py-0 updateProjectButton">Update</button>
-                </div>
-                <div>
-                    <a class="btn py-0" href="@Url.Action("Flow", "Flow", new { projectId = Model.Id })">Edit flows</a>
-                </div>
-            </div>
-        </form>
+        <div class="form-group">
+            <label for="nameInput">Name</label>
+            <input type="text" class="form-control" id="nameInput" value="@Model.Name" required>
+        </div>
+        <div class="form-group">
+            <label for="descriptionInput">Description</label>
+            <input type="text" class="form-control" id="descriptionInput" value="@Model.Description" required>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
+        <div>
+            <button type="submit" class="btn py-0" id="updateProjectButton">Update</button>
+        </div>
+        <div>
+            <a class="btn py-0 arrow-submit-right" href="@Url.Action("Flow", "Flow", new { projectId = Model.Id })"></a>
+        </div>
     </div>
 </div>
-@section Scripts
-{
-    <script src="~/dist/updateProject.entry.js"></script>
-}

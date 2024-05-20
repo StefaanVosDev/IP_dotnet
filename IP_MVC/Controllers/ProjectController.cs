@@ -20,6 +20,7 @@ public class ProjectController : Controller
         var projects = _projectManager.GetProjectsByAdminId(adminId);
         return View(projects);
     }
+
     public async Task<IActionResult> Delete(int parentFlowId)
     {
         var project = await _projectManager.FindByIdAsync(parentFlowId);

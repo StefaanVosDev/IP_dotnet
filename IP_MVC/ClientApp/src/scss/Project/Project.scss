@@ -1,8 +1,6 @@
 @import '../_variables.scss';
 
 .project-page {
-  background-color: $yellow;
-
   .card {
     background-color: $light-blue;
     width: 59%;
@@ -20,6 +18,10 @@
     .card-body {
       flex: 3;
     }
+    
+    .card-body::-webkit-scrollbar{
+      display: none;
+    }
 
     .d-flex {
       flex: 1;
@@ -28,6 +30,10 @@
     .button-container {
       padding-left: 2vh;
       padding-right: 3vh;
+    }
+    
+    .button-container::-webkit-scrollbar{
+      display: none;
     }
   }
 
