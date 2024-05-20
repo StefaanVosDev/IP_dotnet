@@ -9,11 +9,6 @@ namespace BL.Implementations;
 
 public class ProjectManager(IProjectRepository repository) : Manager<Project>(repository), IProjectManager
 {
-    public Project GetProjectByProjectId(int projectId)
-    {
-        return repository.ReadProjectByProjectId(projectId);
-    }
-
     public async Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
     {
         return await repository.GetFlowsByProjectIdAsync(projectId);
@@ -32,14 +27,6 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
     public void StoreAnswers(int id, List<Answer> answers)
     {
         repository.StoreAnswers(id, answers);
-    }
-
-    public void ChangeProject(int projectId, string name, string description)
-    {
-        Project project = repository.ReadProjectByProjectId(projectId);
-        project.Name = name;
-        project.Description = description;
-        repository.UpdateProject(project);
     }
 
     public IEnumerable<Project> GetProjectsByAdminId(string adminId)
