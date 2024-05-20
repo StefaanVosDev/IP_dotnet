@@ -12,27 +12,54 @@ namespace IP_MVC.Controllers.api
     public class QuestionsController : ControllerBase
     {
         private readonly IQuestionManager _questionManager;
-        
+
         public QuestionsController(IQuestionManager questionManager)
         {
             _questionManager = questionManager;
         }
+
+        [HttpGet("{id}/options")]
+        public IActionResult GetAllOptions(int id)
+        {
+            var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
+            if (!options.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(options);
+        }
         
+        [HttpPut("{id}/title")]
+        public IActionResult UpdateTitle(int id,[FromBody] string text)
+        {
+            var question = _questionManager.GetQuestionById(id);
+            
+            var newQuestion = question;
+            newQuestion.Text = text;
+
+            _questionManager.UpdateAsync(question, newQuestion);
+            return Ok();
+        }
+        
+        
+        
+
         [HttpPost("UpdateMultipleChoiceQuestion")]
-        public IActionResult UpdateMultipleChoiceQuestion([FromQuery]int id, [FromQuery]string option)
+        public IActionResult UpdateMultipleChoiceQuestion([FromQuery] int id, [FromQuery] string option)
         {
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
             {
                 return NotFound();
             }
-            
+
             _questionManager.AddOptionToQuestion(id, option);
             return Ok();
         }
-        
+
         [HttpPost("UpdateRangeQuestion")]
-        public IActionResult UpdateRangeQuestion([FromQuery]int id, [FromQuery]int min, [FromQuery]int max)
+        public IActionResult UpdateRangeQuestion([FromQuery] int id, [FromQuery] int min, [FromQuery] int max)
         {
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
@@ -43,23 +70,23 @@ namespace IP_MVC.Controllers.api
             _questionManager.SetRangeQuestionValues(id, min, max);
             return Ok();
         }
-        
+
         //implement the deleteOption
         [HttpPost("DeleteOption")]
-        public IActionResult DeleteOption([FromQuery]int id, [FromQuery]string option)
+        public IActionResult DeleteOption([FromQuery] int id, [FromQuery] string option)
         {
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
             {
                 return NotFound();
             }
-            
+
             _questionManager.DeleteOptionFromQuestion(id, option);
             return Ok();
         }
-        
+
         [HttpPost("UploadMedia")]
-        public async Task<IActionResult> UploadMedia([FromForm]IFormFile file, [FromForm]int questionId)
+        public async Task<IActionResult> UploadMedia([FromForm] IFormFile file, [FromForm] int questionId)
         {
             try
             {
@@ -84,7 +111,7 @@ namespace IP_MVC.Controllers.api
 
                 // Save the URL of the uploaded file in your database
                 var fileUrl = $"https://storage.googleapis.com/phygital-public/{objectName}";
-                
+
                 var description = "Uploaded media";
                 // get the media type from the file extension
                 var mediaType = file.ContentType switch

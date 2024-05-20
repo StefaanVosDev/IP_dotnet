@@ -1,3 +1,73 @@
+GET https://localhost:7292/api/Questions/1/options
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T150701.200.json
+
+###
+
+GET https://localhost:7292/Question/GetOptions?id=1
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T150656.200.json
+
+###
+
+GET https://localhost:7292/api/Questions/1/options
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T150647.200.json
+
+###
+
+GET https://localhost:7292/Question/GetOptions?id=1
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T145213.200.json
+
+###
+
+GET https://localhost:7292/Question/GetOptions?id=2
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T144632.200.json
+
+###
+
+GET https://localhost:7292/Question/GetOptions?id=2
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T144540.200.json
+
+###
+
+GET https://localhost:7292/Question/GetOptions?id=1
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-20T144527.200.json
+
+###
+
 POST https://localhost:7292/api/Questions/UpdateRangeQuestion?id=28&min=2&max=7
 Content-Type: application/json
 Content-Length: 0
