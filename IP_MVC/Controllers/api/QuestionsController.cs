@@ -18,11 +18,10 @@ namespace IP_MVC.Controllers.api
             _questionManager = questionManager;
         }
 
-        [HttpGet("{id}/Options")]
+        [HttpGet("{id}/options")]
         public IActionResult GetAllOptions(int id)
         {
             var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-            
             if (!options.Any())
             {
                 return NoContent();
@@ -31,35 +30,32 @@ namespace IP_MVC.Controllers.api
             return Ok(options);
         }
         
-        [HttpPut("{id}/Title")]
-        public IActionResult UpdateTitle(int id, [FromBody] string text)
+        [HttpPut("{id}/title")]
+        public IActionResult UpdateTitle(int id,[FromBody] string text)
         {
             var question = _questionManager.GetQuestionById(id);
-
-            if (question == null)
-            {
-                return NotFound();
-            }
             
             var newQuestion = question;
             newQuestion.Text = text;
 
             _questionManager.UpdateAsync(question, newQuestion);
-            return NoContent();
+            return Ok();
         }
         
-        [HttpPut("{id}/Option")]
-        public IActionResult AddOption(int id, [FromBody] string option)
+        
+        
+
+        [HttpPost("UpdateMultipleChoiceQuestion")]
+        public IActionResult UpdateMultipleChoiceQuestion([FromQuery] int id, [FromQuery] string option)
         {
             var question = _questionManager.GetQuestionById(id);
-            
             if (question == null)
             {
                 return NotFound();
             }
 
             _questionManager.AddOptionToQuestion(id, option);
-            return NoContent();
+            return Ok();
         }
 
         [HttpPost("UpdateRangeQuestion")]

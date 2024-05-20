@@ -1,7 +1,7 @@
 // Get all options from question
 export async function getOptions(questionId: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Options`);
+        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/options`);
         if (!response.ok) {
             throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
         }
@@ -15,7 +15,7 @@ export async function getOptions(questionId: string) {
 // Update question title 
 export async function updateQuestionTitle(questionId: string, title: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Title`, {
+        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/title`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -52,12 +52,11 @@ export async function updateQuestionRange(questionId: string, min: string, max: 
 // Add option from to question
 export async function postOption(questionId: string, newOption: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Option`, {
-            method: 'PUT',
+        const response = await fetch(`https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=${questionId}&option=${newOption}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newOption)
+            }
         });
         if (!response.ok) {
             throw new Error('Unable to add option to question');
@@ -78,9 +77,26 @@ export async function postMedia(formData: FormData) {
         if (!response.ok) {
             throw new Error('Unable to post media');
         }
-        return response.json()
     } catch (e) {
-        console.error(e)
-        throw e
+        console.error(e);
+        throw e;
+    }
+}
+
+// Delete an option from question
+export async function deleteOption(questionId: string, option: string) {
+    try {
+        const response = await fetch(`https://localhost:7292/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Unable to delete option from question');
+        }
+    } catch (e) {
+        console.error(e);
+        throw e;
     }
 }
