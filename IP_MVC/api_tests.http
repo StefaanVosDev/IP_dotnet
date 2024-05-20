@@ -1,0 +1,18 @@
+GET https://localhost:7292/Question/GetOptions?id=1
+Accept: application/json
+
+###
+GET https://localhost:7292/api/Questions/1/Options
+Accept: application/json
+
+###
+PUT https://localhost:7292/api/Questions/8/Title
+Content-Type: application/json
+
+"random title"
+
+###
+PUT https://localhost:7292/api/Questions/8/Option
+Content-Type: application/json
+
+"option 4"

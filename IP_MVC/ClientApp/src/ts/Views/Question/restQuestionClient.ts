@@ -1,7 +1,7 @@
 // Get all options from question
 export async function getOptions(questionId: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/options`);
+        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Options`);
         if (!response.ok) {
             throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
         }
@@ -15,7 +15,7 @@ export async function getOptions(questionId: string) {
 // Update question title 
 export async function updateQuestionTitle(questionId: string, title: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/title`, {
+        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Title`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -52,11 +52,12 @@ export async function updateQuestionRange(questionId: string, min: string, max: 
 // Add option from to question
 export async function postOption(questionId: string, newOption: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/UpdateMultipleChoiceQuestion?id=${questionId}&option=${newOption}`, {
-            method: 'POST',
+        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Option`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(newOption)
         });
         if (!response.ok) {
             throw new Error('Unable to add option to question');
