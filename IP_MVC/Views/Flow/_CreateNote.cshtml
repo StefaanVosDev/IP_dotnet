@@ -1,0 +1,19 @@
+@model BL.Domain.Note
+
+<div class="popup-overlay" id="pauseScreen">
+    <div class="popup" id="popup">
+        <span class="close" id="closeNote">&times;</span>
+        <div class="popup-content">
+            <form asp-controller="Note" asp-action="CreateNote" method="post">
+                <h5>Add note</h5>
+                <div class="form-group">
+                    <label asp-for="Content"></label>
+                    <textarea asp-for="Content" class="form-control"></textarea>
+                </div>
+
+                <input type="hidden" asp-for="QuestionId" id="questionId" value="@ViewBag.QuestionId" />
+                <button type="submit" class="btn btn-primary" id="submitNote">Add note</button>
+            </form>
+        </div>
+    </div>
+</div>

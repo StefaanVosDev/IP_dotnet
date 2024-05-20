@@ -119,6 +119,7 @@ namespace IP_MVC.Controllers
             ViewData["earlierAnswer"] = earlierAnswer;
             ViewBag.FlowType = flowType;
             ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
+            ViewBag.QuestionId = questionId;
 
             return View($"Questions/Questions", viewModel);
         }

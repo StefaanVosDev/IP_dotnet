@@ -89,6 +89,8 @@ builder.Services.AddScoped<ICloudStorageRepository, CloudStorageRepository>();
 builder.Services.AddScoped<IAnswerManager, AnswerManager>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IAnalyticsManager, AnalyticsManager>();
+builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<INoteManager, NoteManager>();
 
 
 
@@ -128,8 +130,9 @@ using (var scope = app.Services.CreateScope())
         var roleManager = scope.ServiceProvider
             .GetRequiredService<RoleManager<IdentityRole>>();
         await SeedIdentity(userManager, roleManager);
-        
-        //DataSeeder.Seed(context);
+       
+        // var dataSeeder = new DataSeeder(userManager);
+        // await dataSeeder.Seed(context);
     }
 }
 
