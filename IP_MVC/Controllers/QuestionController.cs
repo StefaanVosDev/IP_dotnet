@@ -105,32 +105,10 @@ namespace IP_MVC.Controllers
         }
         
         [HttpGet]
-        public IActionResult GetOptions(int id)
-        {
-            var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-            return Json(options);
-        }
-        
-        [HttpGet]
         public IActionResult GetRangeValues(int id)
         {
             var values = _questionManager.GetRangeQuestionValues(id);
             return Json(values);
-        }
-        
-        [HttpPost]
-        public IActionResult UpdateTitle(int id, string text)
-        {
-            var question = _questionManager.GetQuestionById(id);
-            var newQuestion = question;
-            newQuestion.Text = text;
-            newQuestion.Position = question.Position;
-            newQuestion.Type = question.Type;
-            newQuestion.Media = question.Media;
-            newQuestion.FlowId = question.FlowId;
-
-            _questionManager.UpdateAsync(question, newQuestion);
-            return Ok();
         }
     }
 }

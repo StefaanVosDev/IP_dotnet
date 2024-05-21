@@ -14,7 +14,7 @@ module.exports = {
         createFlow: './src/ts/Views/Flow/createFlow.ts',
         createScroll: './src/ts/Views/Flow/createScroll.ts',
         controlQuestions: './src/ts/Views/Flow/Questions/controlQuestions.ts',
-        editQuestion: './src/ts/Views/Question/edit.ts',
+        EditQuestion: './src/ts/Views/Question/editQuestionPresenter.ts'
     },
     output: {
         filename: '[name].entry.js',
