@@ -2,8 +2,6 @@ using BL.Domain;
 using BL.Domain.Questions;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces;
-using IP_MVC.Models;
-using WebApplication1.Models;
 
 namespace IP_MVC.Controllers
 {
@@ -17,10 +15,10 @@ namespace IP_MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int questionId)
+        public IActionResult Edit(int parentFlowId)
         {
-            var question = _questionManager.GetQuestionById(questionId);
-    
+            var question = _questionManager.GetQuestionById(parentFlowId);
+
             if (question.Type == QuestionType.Range)
             {
                 var rangeQuestion = (RangeQuestion) question;
@@ -30,12 +28,12 @@ namespace IP_MVC.Controllers
             return View(question);
         }
 
-        public async Task<IActionResult> Delete(int questionId)
+        public async Task<IActionResult> Delete(int parentFlowId)
         {
-            var question = _questionManager.GetQuestionById(questionId);
+            var question = _questionManager.GetQuestionById(parentFlowId);
             
             await _questionManager.DeleteAsync(question);
-            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
+            return RedirectToAction("Edit", "Flow");
         }
 
 
@@ -103,7 +101,14 @@ namespace IP_MVC.Controllers
         {
             var question = CreateQuestion(type, text, media, flowId);
             await _questionManager.AddAsync(question);
-            return RedirectToAction("Edit", new { questionId = question.Id });
+            return RedirectToAction("Edit", new { parentFlowId = question.Id });
+        }
+        
+        [HttpGet]
+        public IActionResult GetOptions(int id)
+        {
+            var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
+            return Json(options);
         }
         
         [HttpGet]
@@ -112,61 +117,20 @@ namespace IP_MVC.Controllers
             var values = _questionManager.GetRangeQuestionValues(id);
             return Json(values);
         }
-
-        [HttpGet]
-        public IActionResult StartPreview(int id)
+        
+        [HttpPost]
+        public IActionResult UpdateTitle(int id, string text)
         {
             var question = _questionManager.GetQuestionById(id);
-            if (question == null)
-            {
-                var errorViewModel = new ErrorViewModel()
-                {
-                    RequestId = "Question not found"
-                };
-                return View("Error", errorViewModel);
-            }
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            
-            var questions = _questionManager.GetQuestionsByFlowId(question.FlowId).ToList();
-            //get the position of this question in the list
-            var currentIndex = questions.IndexOf(question) + 1;
-            ViewData["currentIndex"] = currentIndex;
-            ViewData["questionCount"] = questions.Count;
-            ViewBag.FlowType = question.Type;
-            
-            return View($"Questions", viewModel);
-        }
-        
-        [HttpGet]
-        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
-        {
-            var questionsByFlowId = _questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
+            var newQuestion = question;
+            newQuestion.Text = text;
+            newQuestion.Position = question.Position;
+            newQuestion.Type = question.Type;
+            newQuestion.Media = question.Media;
+            newQuestion.FlowId = question.FlowId;
 
-            if (redirectedQuestionId - 1 < 0 || redirectedQuestionId - 1 >= questionsByFlowId.Count)
-            {
-                var errorViewModel = new ErrorViewModel()
-                {
-                    RequestId = "Question not found"
-                };
-                return View("Error", errorViewModel);
-            }
-
-            var question = questionsByFlowId[redirectedQuestionId - 1];
-
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            ViewData["currentIndex"] = redirectedQuestionId;
-            ViewData["questionCount"] = _questionManager.GetQuestionsByFlowId(question.FlowId).Count();
-            ViewBag.FlowType = question.Type;
-
-            return View($"Questions", viewModel);
+            _questionManager.UpdateAsync(question, newQuestion);
+            return Ok();
         }
     }
 }
