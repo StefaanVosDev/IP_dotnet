@@ -61,34 +61,6 @@ namespace IP_MVC.Controllers.api
             _questionManager.AddOptionToQuestion(id, option);
             return NoContent();
         }
-        
-        [HttpPut("{id}/Range")]
-        public IActionResult UpdateRange(int id, [FromQuery] int min, [FromQuery] int max)
-        {
-            var question = _questionManager.GetQuestionById(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            _questionManager.SetRangeQuestionValues(id, min, max);
-            return NoContent();
-        }
-        
-        
-
-        [HttpPost("UpdateMultipleChoiceQuestion")]
-        public IActionResult UpdateMultipleChoiceQuestion([FromQuery] int id, [FromQuery] string option)
-        {
-            var question = _questionManager.GetQuestionById(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            _questionManager.AddOptionToQuestion(id, option);
-            return Ok();
-        }
 
         [HttpPost("UpdateRangeQuestion")]
         public IActionResult UpdateRangeQuestion([FromQuery] int id, [FromQuery] int min, [FromQuery] int max)
