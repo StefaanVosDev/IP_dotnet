@@ -1,4 +1,3 @@
-import * as presenter from "./editQuestionPresenter"
 document.getElementById('updateRangeValues')?.addEventListener('click', function(event) {
     event.preventDefault();
 
@@ -214,10 +213,3 @@ document.getElementById('uploadButton')?.addEventListener('click', function(even
             .catch(error => console.error('Error uploading file:', error));
     }
 });
-
-async function init() {
-    // start here
-    await presenter.showOptions();
-}
-
-init();
