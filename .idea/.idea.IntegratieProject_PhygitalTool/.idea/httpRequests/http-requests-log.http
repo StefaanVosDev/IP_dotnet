@@ -1,3 +1,23 @@
+GET https://localhost:7292/Question/GetOptions?id=1
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-21T101313.500.txt
+
+###
+
+GET https://localhost:7292/api/Questions/1/Options
+Accept: application/json
+User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
+Accept-Encoding: br, deflate, gzip, x-gzip
+content-length: 0
+
+<> 2024-05-21T101301.500.txt
+
+###
+
 PUT https://localhost:7292/api/Questions/8/Option
 Content-Type: application/json
 Content-Length: 10

@@ -1,53 +1,90 @@
 import * as client from "./restQuestionClient"
 
 const titleText = document.getElementById('titleText')!;
-const optionTable = document.getElementById('optionTable');
 
 // Input elements
 const questionId = document.getElementById('questionId') as HTMLInputElement;
+const questionType = document.getElementById('questionType') as HTMLInputElement;
 const titleInput = document.getElementById('titleInput') as HTMLInputElement;
 const mediaInput = document.getElementById('mediaUpload') as HTMLInputElement;
-const newOption = document.getElementById('newOption') as HTMLInputElement;
-const minInput = document.getElementById('min') as HTMLInputElement;
-const maxInput = document.getElementById('max') as HTMLInputElement;
 
 // Buttons
 const changeNameButton = document.getElementById('editButton')!;
 const updateNameButton = document.getElementById('updateButton')!;
 const uploadMediaButton = document.getElementById('uploadButton')!;
-const addOptionButton = document.getElementById('buttonToAdd')!;
-const updateRangeButton = document.getElementById('updateRangeValues')!;
 
+if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoice"){
+    const newOption = document.getElementById('newOption') as HTMLInputElement;
+    const addOptionButton = document.getElementById('buttonToAdd')!;
+    const optionTable = document.getElementById('optionTable')!;
 
-// Loads all options from question and shows them in table
-export async function showOptions() {
-
-    const options = await client.getOptions(questionId.value);
-    options.forEach((option: string) => console.log(option));
-    if (optionTable) {
-        optionTable.innerHTML = '';
-
+    // Loads all options from question and shows them in table
+    async function showOptions() {
+        try {
+            optionTable.innerHTML = (await client.getOptions(questionId.value)).reduce(
+                (acc: string, option: string) => `${acc}
+        <tr>
+        <td>${option}</td>
+        <td><button delete-option option-id="${option}" type="button" class="btn btn-danger">Delete option</button></td>
+        </tr>`, "<table>"
+            ) + "</table>"
+        } catch (e) {
+            console.error("Error showing options in table: ", e);
+        }
     }
 
-    // optionTable.innerHTML = (await client.getOptions(questionId)).reduce(
-    //     (acc: string, option: string) => `${acc}
-    //     <tr>
-    //     <td>${option}</td>
-    //     </tr>`, "<table>"
-    // ) + "</table>"
+    async function removeOption(element: HTMLElement) {
+        if (element.hasAttribute('delete-option')) {
+            let option = element.getAttribute("option-id");
+            if (option != null) {
+                try {
+                    await client.deleteOption(questionId.value, option);
+                } catch (e) {
+                    console.log(`ERROR DELETING OPTION ${option}`, e);
+                }
+            }
+            await showOptions();
+        }
+    }
+
+    async function addOption(option: string) {
+        try {
+            await client.postOption(questionId.value, option)
+        }catch (e) {
+            console.error("Error adding option: ", e);
+        }
+        await showOptions();
+    }
+    
+    showOptions();
+
+    document.addEventListener('click', event => removeOption(event.target as HTMLElement));
+    addOptionButton.addEventListener('click', event => addOption(newOption.value));
+
+
+} else if (questionType.value == "Range") {
+    const minInput = document.getElementById('min') as HTMLInputElement;
+    const maxInput = document.getElementById('max') as HTMLInputElement;
+    const updateRangeButton = document.getElementById('updateRangeValues')!;
+    
+    updateRangeButton.addEventListener('click', event =>
+        client.updateQuestionRange(questionId.value, minInput.value, maxInput.value)
+    );
 }
 
-async function updateMedia(){
-    
+
+
+async function updateMedia() {
+
     //TODO: Error handling als geen file wordt geupload
-    
+
     const file = mediaInput.files?.[0];
-    
-    if (file){
+
+    if (file) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('questionId', questionId.value);
-        
+
         await client.postMedia(formData);
     }
 }
@@ -67,17 +104,8 @@ function displayNameChange(display: boolean) {
     }
 }
 
-
-export default function addListeners() {
-    changeNameButton.addEventListener('click', event => displayNameChange(true));
-    updateNameButton.addEventListener('click', event => 
-        client.updateQuestionTitle(questionId.value, titleInput.value)
-    );
-    uploadMediaButton.addEventListener('click', event => updateMedia());
-    addOptionButton.addEventListener('click', event => 
-        client.postOption(questionId.value, newOption.value).then(showOptions)
-    );
-    updateRangeButton.addEventListener('click', event => 
-        client.updateQuestionRange(questionId.value, minInput.value, maxInput.value)
-    );
-}
+changeNameButton.addEventListener('click', event => displayNameChange(true));
+updateNameButton.addEventListener('click', event =>
+    client.updateQuestionTitle(questionId.value, titleInput.value)
+);
+uploadMediaButton.addEventListener('click', event => updateMedia());

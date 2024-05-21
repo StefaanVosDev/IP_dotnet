@@ -41,11 +41,9 @@
     case QuestionType.SingleChoice:
         // Add options to the question
         @* <form asp-action="UpdateMultipleChoiceQuestion" asp-controller="Question"> *@
-        <div id="optionTable"></div>
         <form>
             <h2>Add possible answers to the question</h2>
-
-            <div id="listAnswers">
+            <div id="optionTable">
                 <!-- Options will be loaded here by the loadOptions function -->
             </div>
 
@@ -68,4 +66,4 @@
 }
 <a href="@Url.Action("Edit", "Flow", new { parentFlowId = Model?.FlowId })" class="btn btn-primary">Go back to subflow overview</a>
 
-<script src="~/dist/editQuestion.entry.js" defer="defer"></script>
+<script src="~/dist/testEditQuestion.entry.js" defer="defer"></script>
