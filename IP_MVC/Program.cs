@@ -173,16 +173,26 @@ return;
 
 async Task SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 {
-    var userRole = new IdentityRole
+    var defaultRole = new IdentityRole
+    {
+        Name = CustomIdentityConstants.DefaultRole
+    };
+    await roleManager.CreateAsync(defaultRole);
+    var facilitatorRole = new IdentityRole
     {
         Name = CustomIdentityConstants.FacilitatorRole
     };
-    await roleManager.CreateAsync(userRole);
+    await roleManager.CreateAsync(facilitatorRole);
     var adminRole = new IdentityRole
     {
         Name = CustomIdentityConstants.AdminRole
     };
     await roleManager.CreateAsync(adminRole);
+    var platformAdminRole = new IdentityRole
+    {
+        Name = CustomIdentityConstants.PlatformAdminRole
+    };
+    await roleManager.CreateAsync(platformAdminRole);
 
     var adminUser = new IdentityUser
     {
@@ -201,6 +211,15 @@ async Task SeedIdentity(UserManager<IdentityUser> userManager, RoleManager<Ident
     };
     await userManager.CreateAsync(facilitatorUser, "Password1!");
     await userManager.AddToRoleAsync(facilitatorUser, CustomIdentityConstants.FacilitatorRole);
+    
+    var platformAdminUser = new IdentityUser
+    {
+        Email = "pAdmin@kdg.be",
+        UserName = "pAdmin@kdg.be",
+        EmailConfirmed = true
+    };
+    await userManager.CreateAsync(platformAdminUser, "Password1!");
+    await userManager.AddToRoleAsync(platformAdminUser, CustomIdentityConstants.PlatformAdminRole);
 }
 
 string AccessSecret(string secretId)
