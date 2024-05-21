@@ -18,3 +18,4 @@ Content-Type: application/json
 "option 4"
 
 ###
+POST https://localhost:7292/api/Questions/UpdateRangeQuestion?id=${questionId}&min=${min}&max=${max}
