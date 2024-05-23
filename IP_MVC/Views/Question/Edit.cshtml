@@ -13,6 +13,8 @@
 <h3>Vraagtype</h3>
 <p>@Model?.Type</p>
 
+<a class="btn btn-primary" href="@Url.Action("StartPreview", "Question", new {id = Model?.Id})">Show preview</a>
+
 <input type="hidden" id="questionId" value="@Model?.Id">
 <input type="hidden" id="questionType" value="@Model?.Type">
 
@@ -24,8 +26,32 @@
 </div>
 
 <form>
-    <h2>Add media to the question</h2>
-
+    @if(Model.Media != null)
+    {
+        var mediaUrl = Model.Media.url;
+        var mediaType = Model.Media.type;
+      
+        switch (mediaType)
+        {
+            case MediaType.VIDEO:
+                <div class="col py-2 d-flex justify-content-center align-items-center">
+                    <iframe src="@mediaUrl" class="img-fluid" style="max-width: 50vw; max-height: 50vh;" alt="@Model.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+                </div>
+                break;
+            case MediaType.IMAGE:
+                <div class="col py-2 d-flex justify-content-center align-items-center">
+                    <img src="@mediaUrl" class="img-fluid" style="max-width: 50vw; max-height: 50vh;" alt="@Model.Media.description">
+                </div>
+                break;
+            case MediaType.AUDIO:
+                <div class="col py-2 d-flex justify-content-center align-items-center">
+                    <audio controls style="max-width: 50vw; max-height: 50vh;">
+                        <source src="@mediaUrl" alt="@Model.Media.description" type="audio/mpeg">
+                    </audio>
+                </div>
+                break;
+        }
+    }
     <div>
         <input id="mediaUpload" type="file" accept="image/*,video/*,audio/*" />
     </div>
@@ -67,4 +93,4 @@
 }
 <a href="@Url.Action("Edit", "Flow", new { parentFlowId = Model?.FlowId })" class="btn btn-primary">Go back to subflow overview</a>
 
-<script src="~/dist/testEditQuestion.entry.js" defer="defer"></script>
+<script src="~/dist/EditQuestion.entry.js" defer="defer"></script>

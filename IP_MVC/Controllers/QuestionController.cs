@@ -30,12 +30,12 @@ namespace IP_MVC.Controllers
             return View(question);
         }
 
-        public async Task<IActionResult> Delete(int parentFlowId)
+        public async Task<IActionResult> Delete(int questionId)
         {
-            var question = _questionManager.GetQuestionById(parentFlowId);
+            var question = _questionManager.GetQuestionById(questionId);
             
             await _questionManager.DeleteAsync(question);
-            return RedirectToAction("Edit", "Flow");
+            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
         }
 
 
