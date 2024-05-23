@@ -29,6 +29,10 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
     {
         return repository.GetQuestionsByFlowId(flowId);
     }
+    public IEnumerable<Question> GetQuestionsByFlowIdWithMedia(int flowId)
+    {
+        return repository.GetQuestionsByFlowId(flowId);
+    }
 
     public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition)
     {
