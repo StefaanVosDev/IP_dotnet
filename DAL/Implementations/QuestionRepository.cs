@@ -18,7 +18,12 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
 
     public IEnumerable<Question> GetQuestionsByFlowId(int flowId)
     {
-        return _context.Set<Question>().Where(q => q.FlowId == flowId).ToList();
+        return _context.Set<Question>().Where(q => q.FlowId == flowId).Include(q => q.Media).ToList();
+    }
+    
+    public IEnumerable<Question> GetQuestionsByFlowIdWithMedia(int id)
+    {
+        return _context.Set<Question>().Where(q => q.FlowId == id).Include(q => q.Media).ToList();
     }
 
     public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition)

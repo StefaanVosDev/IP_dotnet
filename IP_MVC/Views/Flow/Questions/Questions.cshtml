@@ -66,16 +66,16 @@
                         @switch (@Model.QuestionType)
                         {
                             case QuestionType.Open:
-                                @await Html.PartialAsync("Questions/_Open", new OpenQuestion())
+                                @await Html.PartialAsync("QuestionPartials/_Open", new OpenQuestion())
                                 break;
                             case QuestionType.Range:
-                                @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
+                                @await Html.PartialAsync("QuestionPartials/_Range", new RangeQuestion())
                                 break;
                             case QuestionType.MultipleChoice:
-                                @await Html.PartialAsync("Questions/_MultipleChoice", new MultipleChoiceQuestion())
+                                @await Html.PartialAsync("QuestionPartials/_MultipleChoice", new MultipleChoiceQuestion())
                                 break;
                             case QuestionType.SingleChoice:
-                                @await Html.PartialAsync("Questions/_SingleChoice", new BL.Domain.Questions.SingleChoiceQuestion())
+                                @await Html.PartialAsync("QuestionPartials/_SingleChoice", new BL.Domain.Questions.SingleChoiceQuestion())
                                 break;
                         }
                         <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
@@ -108,28 +108,31 @@
                                 @* <button id="exitButton" class="btn btn-danger">Exit</button> *@
                             }
                         </div>
-                        <div class="position-absolute py-1 top-0 end-0 dropdown">
-                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Quick navigation
-                            </button>
-                            <ul class="dropdown-menu">
-                                @for (var i = 0; i < questionCount; i++)
-                                {
-                                    if (i == currentIndex)
+                        @if (flowType == FlowType.LINEAR)
+                        {
+                            <div class="position-absolute py-1 top-0 end-0 dropdown">
+                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Quick navigation
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @for (var i = 0; i < questionCount; i++)
                                     {
-                                        <li>
-                                            <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(i)" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
-                                        </li>
+                                        if (i == currentIndex)
+                                        {
+                                            <li>
+                                                <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(i)" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <button class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
+                                            </li>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <li>
-                                            <button class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
-                                        </li>
-                                    }
-                                }
-                            </ul>
-                        </div>
+                                </ul>
+                            </div>
+                        }
                     </form>
                     @if (facilitatorWatching)
                     {

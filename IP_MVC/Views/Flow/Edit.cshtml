@@ -66,8 +66,8 @@
                 <td>@question.Text</td>
                 <td></td>
                 <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { parentFlowId = question.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { parentFlowId = question.Id })">Delete</a>
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { questionId = question.Id })">Edit</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { questionId = question.Id })">Delete</a>
                 </td>
             </tr>
         }
