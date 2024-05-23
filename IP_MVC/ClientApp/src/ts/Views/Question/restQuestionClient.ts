@@ -1,21 +1,16 @@
 // Get all options from question
 export async function getOptions(questionId: string) {
-    try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Options`);
-        if (!response.ok) {
-            throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
-        }
-        return response.json();
-    } catch (e) {
-        console.error(e);
-        throw e;
+    const response = await fetch(`/api/Questions/${questionId}/Options`);
+    if (!response.ok) {
+        throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
     }
+    return response.json();
 }
 
 // Update question title 
 export async function updateQuestionTitle(questionId: string, title: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Title`, {
+        const response = await fetch(`/api/Questions/${questionId}/Title`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -34,7 +29,7 @@ export async function updateQuestionTitle(questionId: string, title: string) {
 // Update range from question
 export async function updateQuestionRange(questionId: string, min: string, max: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/UpdateRangeQuestion?id=${questionId}&min=${min}&max=${max}`, {
+        const response = await fetch(`/api/Questions/UpdateRangeQuestion?id=${questionId}&min=${min}&max=${max}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -52,7 +47,7 @@ export async function updateQuestionRange(questionId: string, min: string, max: 
 // Add option from to question
 export async function postOption(questionId: string, newOption: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/${questionId}/Option`, {
+        const response = await fetch(`/api/Questions/${questionId}/Option`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,12 +61,12 @@ export async function postOption(questionId: string, newOption: string) {
         console.error(e);
         throw e;
     }
-} 
+}
 
 // Add Media to question
 export async function postMedia(formData: FormData) {
     try {
-        const response = await fetch('https://localhost:7292/api/Questions/UploadMedia', {
+        const response = await fetch('/api/Questions/UploadMedia', {
             method: 'POST',
             body: formData
         });
@@ -87,7 +82,7 @@ export async function postMedia(formData: FormData) {
 // Delete an option from question
 export async function deleteOption(questionId: string, option: string) {
     try {
-        const response = await fetch(`https://localhost:7292/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
+        const response = await fetch(`/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

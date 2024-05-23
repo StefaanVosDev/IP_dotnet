@@ -23,12 +23,14 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
         try {
             optionTable.innerHTML = (await client.getOptions(questionId.value)).reduce(
                 (acc: string, option: string) => `${acc}
-        <tr>
-        <td>${option}</td>
-        <td><button delete-option option-id="${option}" type="button" class="btn btn-danger">Delete option</button></td>
-        </tr>`, "<table>"
+                <tr>
+                <td>${option}</td>
+                <td><button delete-option option-id="${option}" type="button" class="btn btn-danger">Delete option</button></td>
+                </tr>`, "<table>"
             ) + "</table>"
+            console.clear();
         } catch (e) {
+            optionTable.innerHTML = '<p>This question does not have any options yet</p>'
             console.error("Error showing options in table: ", e);
         }
     }
