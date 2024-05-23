@@ -91,11 +91,11 @@
                                 <div>
                                     @if (currentIndex != 0)
                                     {
-                                        <button id="prevQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-action="SaveAnswerAndRedirect"></button>
+                                        <button id="prevQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-controller="Flow" asp-action="SaveAnswerAndRedirect"></button>
                                     }
                                 </div>
 
-                                <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-action="SaveAnswerAndRedirect"></button>
+                                <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-controller="Flow" asp-action="SaveAnswerAndRedirect"></button>
                             }
                             else
                             {
@@ -120,13 +120,13 @@
                                         if (i == currentIndex)
                                         {
                                             <li>
-                                                <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(i)" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
+                                                <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(i)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
                                             </li>
                                         }
                                         else
                                         {
                                             <li>
-                                                <button class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
+                                                <button class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(i + 1)</button>
                                             </li>
                                         }
                                     }

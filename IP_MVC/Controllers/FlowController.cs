@@ -121,7 +121,7 @@ namespace IP_MVC.Controllers
             ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
             ViewBag.QuestionId = questionId;
 
-            return View($"Questions/Questions", viewModel);
+            return View("Questions/Questions", viewModel);
         }
  
         public IActionResult EndSubFlow()
@@ -204,42 +204,7 @@ namespace IP_MVC.Controllers
                 return RedirectToAction("Flow", new { projectId = projectId1 });
             }
 
-            return RedirectToAction("Edit", new { parentFlowId = parentFlowId1 });
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int parentFlowId)
-        {
-            var flow = flowManager.GetFlowById(parentFlowId);
-            var subflows = flowManager.GetFlowsByParentId(parentFlowId);
-            var questions = questionManager.GetQuestionsByFlowId(parentFlowId);
-
-            var model = new FlowEditViewModel
-            {
-                Flow = flow,
-                SubFlows = subflows,
-                Questions = questions
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(int parentFlowId, FlowEditViewModel newFlowModel)
-        {
-            var existingFlow = flowManager.GetFlowById(parentFlowId);
-            if (existingFlow == null)
-            {
-                return NotFound();
-            }
-
-            var newFlow = existingFlow;
-            newFlow.Name = newFlowModel.Flow.Name;
-            newFlow.Description = newFlowModel.Flow.Description;
-
-            flowManager.UpdateAsync(existingFlow, newFlow);
-
-            return RedirectToAction("Flow", new { projectId = newFlow.ProjectId });
+            return RedirectToAction("Flow", new { projectId = projectId1 });
         }
 
         [HttpGet]
@@ -249,7 +214,7 @@ namespace IP_MVC.Controllers
             ViewBag.ProjectId = projectId;
             return View();
         }
-
+        
         [HttpPost]
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
@@ -264,7 +229,7 @@ namespace IP_MVC.Controllers
                 return RedirectToAction("Flow", new { ProjectId = projectId });
             }
 
-            return RedirectToAction("Edit", new { parentFlowId = flow.ParentFlowId });
+            return RedirectToAction("Flow", new { parentFlowId = flow.ParentFlowId });
         }
 
         [HttpPost]
@@ -300,7 +265,7 @@ namespace IP_MVC.Controllers
             // Update all affected flows at once
             flowManager.UpdateAllAsync(affectedFlows);
 
-            return RedirectToAction("Edit");
+            return RedirectToAction("Flow");
         }
     }
 }

@@ -15,7 +15,8 @@ module.exports = {
         analytics: './src/ts/Analytics/analytics.ts',
         controlQuestions: './src/ts/Views/Flow/Questions/controlQuestions.ts',
         EditQuestion: './src/ts/Views/Question/editQuestionPresenter.ts',
-        editProject: './src/ts/Views/Project/projectPresenter.ts'
+        editProject: './src/ts/Views/Project/projectPresenter.ts',
+        editFlow: './src/ts/Views/Flow/flowPresenter.ts'
     },
     output: {
         filename: '[name].entry.js',

@@ -3,19 +3,44 @@
 .flow-page {
   height: 100%;
 
-  .big-card-content{
+  .big-card-content {
     height: 55vh;
+
+    .flip-card {
+      background-color: transparent;
+      perspective: 1000px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      width: 100%;
+      backface-visibility: hidden;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+  
   }
 
-  .little-card{
+  .little-card {
     height: 26vh;
     background-color: $light-blue;
-
     transition: z-index 0.3s;
-    
+
     &:hover {
-      z-index: 2; 
+      z-index: 2;
     }
-    
   }
 }
