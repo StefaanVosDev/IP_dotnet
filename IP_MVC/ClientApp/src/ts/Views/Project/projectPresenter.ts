@@ -2,20 +2,34 @@ import * as client from "./restProjectClient"
 
 const editButtons = document.querySelectorAll('.edit-btn');
 
-async function changeProject(projectCard: Element) {
+async function showProject(id: string, projectCard: HTMLElement) {
+    try {
+        const project = await client.getProject(id);
+        const cardBody = projectCard.querySelector('.front')!;
+
+        cardBody.innerHTML = `
+                            <h5 class="card-title">${project.name}</h5>
+                            <p class="card-text">${project.description}</p>`;
+    } catch (e) {
+        console.error('Error showing project: ', e);
+    }
+
+}
+
+async function changeProject(projectCard: HTMLElement) {
     const nameInput = projectCard.querySelector('#nameInput') as HTMLInputElement;
     const descriptionInput = projectCard.querySelector('#descriptionInput') as HTMLInputElement;
     const projectIdInput = projectCard.querySelector('#id') as HTMLInputElement;
     const adminIdInput = projectCard.querySelector('#adminId') as HTMLInputElement;
 
-    const updatedProject = await client.updateProject(nameInput.value, descriptionInput.value, projectIdInput.value, adminIdInput.value);
+    try {
+        await client.updateProject(nameInput.value, descriptionInput.value, projectIdInput.value, adminIdInput.value);
+    } catch (error) {
+        console.error('Error updating project:', error);
+        alert('There was an issue updating the project. Please try again.');
+    }
 
-    const cardBody = projectCard.querySelector('.front')!;
-
-    cardBody.innerHTML = `
-    <h5 class="card-title">${updatedProject.name}</h5>
-    <p class="card-text">${updatedProject.descriptionn}</p>`;
-
+    await showProject(projectIdInput.value, projectCard);
 
     const cardInner = projectCard.querySelector('.flip-card-inner');
     if (cardInner) {
@@ -29,29 +43,20 @@ function editProject(editButton: Element) {
         const cardInner = cardContainer.querySelector('.flip-card-inner');
         if (cardInner) {
             cardInner.classList.toggle('flipped');
-
-            const updateProjectButton = cardContainer.querySelector("#updateProjectButton")!;
+            
+            const updateProjectButton = cardContainer.querySelector("#updateProjectButton");
             if (updateProjectButton) {
-                addUpdateButtonListener(cardContainer, updateProjectButton);
+                updateProjectButton.addEventListener('click', async () => changeProject(cardContainer), {once: true});
             } else {
                 console.error("updateProjectButton not found");
             }
-
-            // setTimeout(() => {
-            //    const updateProjectButton = cardContainer.querySelector("#updateProjectButton");
-            //    if (updateProjectButton) {
-            //       addUpdateButtonListener(cardContainer, updateProjectButton);
-            //    } else {
-            //       console.error("updateProjectButton not found");
-            //    }
-            // }, 100);
         }
     }
 }
 
 editButtons.forEach(button => {
-    button.addEventListener('click', event => {
+    button.addEventListener('click', () => 
         editProject(button)
-    })
+    )
 });
 
