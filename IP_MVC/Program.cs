@@ -74,6 +74,7 @@ builder.Services.AddSession(options =>
 });
 
 // Add scoped
+builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRepository,Repository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IFlowRepository, FlowRepository>();

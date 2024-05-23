@@ -1,5 +1,4 @@
 using BL.Domain;
-using BL.Domain.Answers;
 using BL.Domain.Questions;
 using BL.Interfaces;
 using DAL.Interfaces;
@@ -19,11 +18,6 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
         return repository.getFlowById(id);
     }
 
-    public Flow GetFirstSubFlowByParentId(int id)
-    {
-        return repository.GetFlowsByParentId(id).FirstOrDefault();
-    }
-
     public async Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int flowId)
     {
         return await repository.GetQuestionsByFlowIdAsync(flowId);
@@ -40,8 +34,11 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
         var flow = GetFlowById(sessionManager.GetSessionById(sessionId).FlowId);
         return flow.ParentFlowId;
     }
-    
-    public bool IsParentFlow(int flowId) { return GetFlowById(flowId).ParentFlowId == null; }
+
+    public bool IsParentFlow(int flowId)
+    {
+        return GetFlowById(flowId).ParentFlowId == null;
+    }
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
     {
         return repository.GetFlowsBetweenPositions(newPosition, oldPosition);

@@ -1,5 +1,6 @@
 using BL.Domain;
 using BL.Domain.Questions;
+using BL.Implementations;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces;
 using IP_MVC.Models;
@@ -10,17 +11,19 @@ namespace IP_MVC.Controllers
     public class QuestionController : Controller
     {
         private readonly IQuestionManager _questionManager;
+        private readonly UnitOfWork _unitOfWork;
 
-        public QuestionController(IQuestionManager questionManager)
+        public QuestionController(IQuestionManager questionManager, UnitOfWork unitOfWork)
         {
-            this._questionManager = questionManager;
+            _questionManager = questionManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public IActionResult Edit(int questionId)
         {
             var question = _questionManager.GetQuestionById(questionId);
-    
+
             if (question.Type == QuestionType.Range)
             {
                 var rangeQuestion = (RangeQuestion) question;
@@ -32,9 +35,12 @@ namespace IP_MVC.Controllers
 
         public async Task<IActionResult> Delete(int questionId)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(questionId);
             
             await _questionManager.DeleteAsync(question);
+            
+            _unitOfWork.Commit();
             return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
         }
 
@@ -42,6 +48,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult Reorder(int parentFlowId, int newPosition)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(parentFlowId);
             var oldPosition = question.Position;
             question.Position = newPosition;
@@ -72,6 +79,7 @@ namespace IP_MVC.Controllers
             // Update all affected questions at once
             _questionManager.UpdateAllAsync(affectedQuestions);
 
+            _unitOfWork.Commit();
             return RedirectToAction("Edit");
         }
         
@@ -101,11 +109,14 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string text, QuestionType type, Media media, int flowId)
         {
+            _unitOfWork.BeginTransaction();
             var question = CreateQuestion(type, text, media, flowId);
             await _questionManager.AddAsync(question);
+            
+            _unitOfWork.Commit();
             return RedirectToAction("Edit", new { questionId = question.Id });
-        }
-        
+         }
+
         [HttpGet]
         public IActionResult GetRangeValues(int id)
         {

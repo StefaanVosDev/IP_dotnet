@@ -21,11 +21,6 @@
     <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
     <div class="card border-1 border-black pt-2 position-relative align-items-center overflow-y-scroll">
         <div class="row w-100 align-content-center">
-            @*<div class="col-6 h-100">
-                <a href="@Url.Action("Edit", "Question", new { id = Model.Question.Id })" class="btn arrow-submit-left">
-                    Back to edit mode
-                </a>
-            </div>*@
             <div class="col-6 h-100 d-flex align-items-center">
                 <a href="@Url.Action("Edit", "Question", new { questionId = Model.Question.Id })" class="btn arrow-submit-left"></a>
                 <span>Edit mode</span>

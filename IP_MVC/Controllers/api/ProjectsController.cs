@@ -1,3 +1,4 @@
+using BL.Implementations;
 using BL.Interfaces;
 using IP_MVC.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,12 @@ namespace IP_MVC.Controllers.api;
 public class ProjectsController : ControllerBase
 {
     private readonly IProjectManager _projectManager;
+    private readonly UnitOfWork _unitOfWork;
 
-    public ProjectsController(IProjectManager projectManager)
+    public ProjectsController(IProjectManager projectManager, UnitOfWork unitOfWork)
     {
         _projectManager = projectManager;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet("{id}")]
@@ -34,6 +37,7 @@ public class ProjectsController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Change([FromBody] ProjectEditDto updateDto)
     {
+        _unitOfWork.BeginTransaction();
         if (updateDto == null)
         {
             return BadRequest("Invalid project data.");
@@ -51,6 +55,8 @@ public class ProjectsController : ControllerBase
         
         
         await _projectManager.UpdateAsync( project, updatedProject);
-        return NoContent(); 
+
+        _unitOfWork.Commit();
+        return NoContent();
     }
 } 

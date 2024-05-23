@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
-using DAL;
+using BL.Interfaces;
 using DAL.Interfaces;
 
-namespace BL;
+namespace BL.Implementations;
 
 /// <summary>
 /// The Manager class that implements the IManager interface.
