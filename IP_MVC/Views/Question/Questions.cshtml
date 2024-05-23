@@ -1,0 +1,146 @@
+@using BL.Domain
+@using BL.Domain.Answers
+@using BL.Domain.Questions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IP_MVC.Models.QuestionViewModel
+
+@{
+    ViewBag.Title = "Multiple Choice";
+    Layout = "_Layout";
+
+    var currentIndex = ViewData["currentIndex"] as int? ?? 0;
+    var questionCount = ViewData["questionCount"] as int? ?? 0;
+    var earlierAnswer = ViewData["earlierAnswer"] as Answer;
+    var flowType = ViewBag.FlowType as FlowType? ?? FlowType.LINEAR;
+    ViewData["earlierAnswer"] = earlierAnswer;
+    ViewData["questionType"] = Model.Question;
+}
+
+<body class="questions-page">
+<div class="container-fluid pt-3">
+    <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
+    <div class="card border-1 border-black pt-2 position-relative align-items-center overflow-y-scroll">
+        <div class="row w-100 align-content-center">
+            @*<div class="col-6 h-100">
+                <a href="@Url.Action("Edit", "Question", new { id = Model.Question.Id })" class="btn arrow-submit-left">
+                    Back to edit mode
+                </a>
+            </div>*@
+            <div class="col-6 h-100 d-flex align-items-center">
+                <a href="@Url.Action("Edit", "Question", new { questionId = Model.Question.Id })" class="btn arrow-submit-left"></a>
+                <span>Edit mode</span>
+            </div>
+        </div>
+        <div class="card-content vh-100 align-content-center">
+            <div class="row m-1">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 align-content-center">
+                    @if (Model.Question.Media != null)  
+                    {
+                        switch (Model.Question.Media.type)
+                        {
+                            case MediaType.VIDEO:
+                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                    <iframe src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+                                </div>
+                                break;
+                            case MediaType.IMAGE:
+                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                    <img src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description">
+                                </div>
+                                break;
+                            case MediaType.AUDIO:
+                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                    <audio controls>
+                                        <source src=@Model.Question.Media.url alt="@Model.Question.Media.description" type="audio/mpeg">
+                                    </audio>
+                                </div>
+                                break;
+                        }
+                    }
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 align-content-center">
+                    <p class="text-start fw-bold">Question</p>
+                    <p>@Model.Question.Text</p>
+                    
+                    <form id="myForm" method="get">
+                        @switch (@Model.QuestionType)
+                        {
+                            case QuestionType.Open:
+                                @await Html.PartialAsync("QuestionPartials/_Open", new OpenQuestion())
+                                break;
+                            case QuestionType.Range:
+                                @await Html.PartialAsync("QuestionPartials/_Range", new RangeQuestion())
+                                break;
+                            case QuestionType.MultipleChoice:
+                                @await Html.PartialAsync("QuestionPartials/_MultipleChoice", new MultipleChoiceQuestion())
+                                break;
+                            case QuestionType.SingleChoice:
+                                @await Html.PartialAsync("QuestionPartials/_SingleChoice", new SingleChoiceQuestion())
+                                break;
+                        }
+                        <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+                        <input type="hidden" name="id" value="@Model.Question.Id"/>
+
+                        <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
+
+
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            @if (flowType == FlowType.LINEAR)
+                            {
+                                //todo: only put next and previous when there are more questions
+                                <div>
+                                    @if (currentIndex > 1)
+                                    {
+                                        <button id="prevQuestionButton" name="redirectedQuestionId@(currentIndex - 1)" type="submit" form="myForm" class="btn arrow-submit-left" asp-action="RedirectTroughPreview"></button>
+                                    }
+                                </div>
+                                @if (currentIndex < questionCount)
+                                {
+                                    <button id="nextQuestionButton" name="redirectedQuestionId@(currentIndex + 1)" type="submit" form="myForm" class="btn arrow-submit-right" asp-action="RedirectTroughPreview"></button>
+                                }
+                            }
+                            else
+                            {
+                                <div class="row py-2">
+                                    <span id="countdown"></span>
+                                </div>
+                                <script src="/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
+                            }
+                        </div>
+                        <div class="position-absolute py-1 top-0 end-0 dropdown">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Quick navigation
+                            </button>
+                            <ul class="dropdown-menu">
+                                @for (var i = 1; i <= questionCount; i++)
+                                {
+                                    if (i == currentIndex)
+                                    {
+                                        <li>
+                                            <button class="dropdown-item active-dropdown" name="redirectedQuestionId@(i)" type="submit" asp-action="RedirectTroughPreview">Question @i</button>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <button class="dropdown-item" type="submit" name="redirectedQuestionId@(i)" asp-action="RedirectTroughPreview">Question @i</button>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+@section Scripts
+{
+    <script src="~/dist/controlQuestions.entry.js"></script>
+    <script src="~/dist/range.entry.js" defer="defer"></script>
+    <script src="~/dist/redirectedQuestionId.entry.js" defer="defer"></script>
+    <script src="~/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
+}
