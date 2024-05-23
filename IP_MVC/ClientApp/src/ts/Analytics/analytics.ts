@@ -1,6 +1,32 @@
-import { Chart, registerables, LinearScale } from 'chart.js';
+import {Chart, registerables, LinearScale, ChartTypeRegistry} from 'chart.js';
 
 Chart.register(...registerables, LinearScale);
+
+interface ChartData {
+    title: string;
+    type: string;
+    data: number[] | object;
+}
+interface Dataset {
+    backgroundColor: string[];
+    borderColor: string[];
+    borderWidth: number;
+    data: number[];
+    label: string;
+}
+interface ChartDataObject {
+    datasets: Dataset[];
+    labels: string[];
+}
+interface ChartItem {
+    title: string;
+    type: keyof ChartTypeRegistry;
+    data: ChartDataObject;
+}
+interface OpenQuestion {
+    question: string;
+    answers: (string | null)[];
+}
 
 document.addEventListener('DOMContentLoaded', (event: Event) => {
     const dropdownItems = document.querySelectorAll('.dropdown-item');
@@ -15,34 +41,42 @@ async function handleFlowChange(e: Event) {
 
     if (flowId) {
         const response = await fetch(`/api/Analytics/GetFlowAnalytics/${flowId}`);
-        console.log(response);
         const data = await response.json();
         renderCharts(data.chartData);
         renderOpenQuestions(data.openQuestions);
     }
 }
-
-function renderCharts(chartData: any[]) {
+function renderCharts(chartData: ChartData[]) {
     const chartsContainer = document.querySelector('#chartsContainer');
-    if (chartsContainer) {
+    if (chartsContainer instanceof HTMLElement) {
         chartsContainer.innerHTML = '';
-        chartData.forEach((item: any, index: number) => {
-            const chartElement = createChartElement(item, index);
+        chartData.forEach((item: ChartData, index: number) => {
+            const chartItem: ChartItem = {
+                title: item.title,
+                type: item.type as keyof ChartTypeRegistry,
+                data: item.data as ChartDataObject
+            };
+            const chartElement = createChartElement(chartItem, index);
             chartsContainer.appendChild(chartElement);
         });
     }
 }
-
-function createChartElement(item: any, index: number): HTMLElement {
+function createChartElement(item: ChartItem, index: number): HTMLElement {
     const mainDiv = document.createElement('div');
     mainDiv.classList.add('col-sm-12', 'col-md-12', 'col-lg-12', 'col-xl-12', 'col-xxl-12', 'pb-3', 'px-3');
 
     const cardDiv = document.createElement('div');
     cardDiv.classList.add('card', 'border-1', 'border-black', 'little-card');
 
+    const titelDiv = document.createElement('div');
+    titelDiv.innerHTML = item.data.datasets[0].label;
+    titelDiv.classList.add('text-center', 'py-2');
+
+    cardDiv.appendChild(titelDiv);
+    
     const cardBodyDiv = document.createElement('div');
     cardBodyDiv.classList.add('card-body', 'overflow-scroll', 'd-flex', 'justify-content-center', 'align-items-center');
-
+    
     const rowDiv = document.createElement('div');
     rowDiv.classList.add('row', 'w-100', 'h-100');
 
@@ -100,14 +134,13 @@ function createChartElement(item: any, index: number): HTMLElement {
 
     return mainDiv;
 }
-
-function renderOpenQuestions(openQuestions: any[]) {
+function renderOpenQuestions(openQuestions: OpenQuestion[]) {
     const chartsContainer = document.querySelector('#chartsContainer');
-    if (chartsContainer) {
-        openQuestions.forEach((item: any, index: number) => {
+    if (chartsContainer instanceof HTMLElement) {
+        openQuestions.forEach((item: OpenQuestion, index: number) => {
             if (item.question && item.answers && item.answers.length > 0) {
                 const div = document.createElement('div');
-                div.innerHTML = `<h2>${item.question}</h2><ul>${item.answers.filter((answer: any) => answer != null).map((answer: any) => `<li>${answer}</li>`).join('')}</ul>`;
+                div.innerHTML = `<h2>${item.question}</h2><ul>${item.answers.filter((answer: string | null): answer is string => answer !== null).map((answer: string) => `<li>${answer}</li>`).join('')}</ul>`;
                 chartsContainer.appendChild(div);
             }
         });
