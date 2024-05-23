@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Implementations;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +8,14 @@ namespace IP_MVC.Controllers;
 public class NoteController(
     IQuestionManager questionManager,
     ISessionManager sessionManager,
-    INoteManager noteManager) : Controller
+    INoteManager noteManager,
+    UnitOfWork unitOfWork) : Controller
 {
     
     [HttpPost]
     public IActionResult CreateNote(int questionId, string content)
     {
+        unitOfWork.BeginTransaction();
         int sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
         // Convert the questionId and sessionId from string to int
         if (questionId == 0 || sessionId == 0)
@@ -34,6 +37,7 @@ public class NoteController(
         //Save the changes to the database
         noteManager.AddAsync(newNote);
         
+        unitOfWork.Commit();
         // return Ok(newNote);
         return NoContent();
     }

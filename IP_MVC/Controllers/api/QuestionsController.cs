@@ -1,5 +1,6 @@
 using BL.Domain;
 using BL.Domain.Questions;
+using BL.Implementations;
 using BL.Interfaces;
 using Google.Cloud.Storage.V1;
 using IP_MVC.Models;
@@ -12,10 +13,12 @@ namespace IP_MVC.Controllers.api
     public class QuestionsController : ControllerBase
     {
         private readonly IQuestionManager _questionManager;
+        private readonly UnitOfWork _unitOfWork;
 
-        public QuestionsController(IQuestionManager questionManager)
+        public QuestionsController(IQuestionManager questionManager, UnitOfWork unitOfWork)
         {
             _questionManager = questionManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("{id}/Options")]
@@ -34,6 +37,7 @@ namespace IP_MVC.Controllers.api
         [HttpPut("{id}/Title")]
         public IActionResult UpdateTitle(int id, [FromBody] string text)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
 
             if (question == null)
@@ -45,12 +49,15 @@ namespace IP_MVC.Controllers.api
             newQuestion.Text = text;
 
             _questionManager.UpdateAsync(question, newQuestion);
+            
+            _unitOfWork.Commit();
             return NoContent();
         }
         
         [HttpPut("{id}/Option")]
         public IActionResult AddOption(int id, [FromBody] string option)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
             
             if (question == null)
@@ -59,12 +66,15 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.AddOptionToQuestion(id, option);
+            
+            _unitOfWork.Commit();
             return NoContent();
         }
 
         [HttpPost("UpdateRangeQuestion")]
         public IActionResult UpdateRangeQuestion([FromQuery] int id, [FromQuery] int min, [FromQuery] int max)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
             {
@@ -72,13 +82,15 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.SetRangeQuestionValues(id, min, max);
+            
+            _unitOfWork.Commit();
             return Ok();
         }
 
-        //implement the deleteOption
         [HttpPost("DeleteOption")]
         public IActionResult DeleteOption([FromQuery] int id, [FromQuery] string option)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
             {
@@ -86,6 +98,8 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.DeleteOptionFromQuestion(id, option);
+            
+            _unitOfWork.Commit();
             return Ok();
         }
 
@@ -94,6 +108,7 @@ namespace IP_MVC.Controllers.api
         {
             try
             {
+                _unitOfWork.BeginTransaction();
                 if (file == null || file.Length == 0)
                 {
                     return BadRequest("No file was uploaded.");
@@ -127,7 +142,8 @@ namespace IP_MVC.Controllers.api
                     _ => throw new Exception("Unsupported media type")
                 };
                 _questionManager.AddMediaToQuestion(questionId, fileUrl, description, mediaType);
-
+                
+                _unitOfWork.Commit();
                 return Ok(new { filePath = fileUrl });
             }
             catch (Exception ex)
