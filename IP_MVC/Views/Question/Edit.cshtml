@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    
+    //
     int min = ViewBag.Min ?? 0;
     int max = ViewBag.Max ?? 10;
 }
@@ -26,32 +26,8 @@
 </div>
 
 <form>
-    @if(Model.Media != null)
-    {
-        var mediaUrl = Model.Media.url;
-        var mediaType = Model.Media.type;
-      
-        switch (mediaType)
-        {
-            case MediaType.VIDEO:
-                <div class="col py-2 d-flex justify-content-center align-items-center">
-                    <iframe src="@mediaUrl" class="img-fluid" style="max-width: 50vw; max-height: 50vh;" alt="@Model.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
-                </div>
-                break;
-            case MediaType.IMAGE:
-                <div class="col py-2 d-flex justify-content-center align-items-center">
-                    <img src="@mediaUrl" class="img-fluid" style="max-width: 50vw; max-height: 50vh;" alt="@Model.Media.description">
-                </div>
-                break;
-            case MediaType.AUDIO:
-                <div class="col py-2 d-flex justify-content-center align-items-center">
-                    <audio controls style="max-width: 50vw; max-height: 50vh;">
-                        <source src="@mediaUrl" alt="@Model.Media.description" type="audio/mpeg">
-                    </audio>
-                </div>
-                break;
-        }
-    }
+    <h2>Add media to the question</h2>
+
     <div>
         <input id="mediaUpload" type="file" accept="image/*,video/*,audio/*" />
     </div>
@@ -67,7 +43,6 @@
     case QuestionType.SingleChoice:
         // Add options to the question
         @* <form asp-action="UpdateMultipleChoiceQuestion" asp-controller="Question"> *@
-        <div id="optionTable"></div>
         <form>
             <h2>Add possible answers to the question</h2>
             <div id="optionTable">
