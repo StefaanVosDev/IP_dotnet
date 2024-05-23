@@ -10,11 +10,11 @@ module.exports = {
         range: './src/ts/Views/Flow/Questions/range.ts',
         redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
         goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
-        flip: './src/ts/Views/Project/flip.ts',
         createFlow: './src/ts/Views/Flow/createFlow.ts',
         createScroll: './src/ts/Views/Flow/createScroll.ts',
         controlQuestions: './src/ts/Views/Flow/Questions/controlQuestions.ts',
-        EditQuestion: './src/ts/Views/Question/editQuestionPresenter.ts'
+        EditQuestion: './src/ts/Views/Question/editQuestionPresenter.ts',
+        editProject: './src/ts/Views/Project/projectPresenter.ts'
     },
     output: {
         filename: '[name].entry.js',
