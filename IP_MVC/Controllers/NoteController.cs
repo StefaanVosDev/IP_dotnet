@@ -9,11 +9,6 @@ public class NoteController(
     ISessionManager sessionManager,
     INoteManager noteManager) : Controller
 {
-    [HttpGet]
-    public IActionResult AddNote()
-    {
-        return View();
-    }
     
     [HttpPost]
     public IActionResult CreateNote(int questionId, string content)
