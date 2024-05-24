@@ -1,5 +1,6 @@
 using BL.Domain;
 using BL.Domain.Questions;
+using BL.Implementations;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces;
 using IP_MVC.Models;
@@ -10,17 +11,19 @@ namespace IP_MVC.Controllers
     public class QuestionController : Controller
     {
         private readonly IQuestionManager _questionManager;
+        private readonly UnitOfWork _unitOfWork;
 
-        public QuestionController(IQuestionManager questionManager)
+        public QuestionController(IQuestionManager questionManager, UnitOfWork unitOfWork)
         {
-            this._questionManager = questionManager;
+            _questionManager = questionManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public IActionResult Edit(int questionId)
         {
             var question = _questionManager.GetQuestionById(questionId);
-    
+
             if (question.Type == QuestionType.Range)
             {
                 var rangeQuestion = (RangeQuestion) question;
@@ -32,6 +35,7 @@ namespace IP_MVC.Controllers
 
         public async Task<IActionResult> Delete(int questionId)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(questionId);
             
             await _questionManager.DeleteAsync(question);
@@ -42,6 +46,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult Reorder(int parentFlowId, int newPosition)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(parentFlowId);
             var oldPosition = question.Position;
             question.Position = newPosition;
@@ -72,6 +77,7 @@ namespace IP_MVC.Controllers
             // Update all affected questions at once
             _questionManager.UpdateAllAsync(affectedQuestions);
 
+            _unitOfWork.Commit();
             return RedirectToAction("Edit");
         }
         
@@ -101,11 +107,14 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string text, QuestionType type, Media media, int flowId)
         {
+            _unitOfWork.BeginTransaction();
             var question = CreateQuestion(type, text, media, flowId);
             await _questionManager.AddAsync(question);
+            
+            _unitOfWork.Commit();
             return RedirectToAction("Edit", new { questionId = question.Id });
-        }
-        
+         }
+
         [HttpGet]
         public IActionResult GetRangeValues(int id)
         {
@@ -125,48 +134,12 @@ namespace IP_MVC.Controllers
                 };
                 return View("Error", errorViewModel);
             }
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            
+
             var questions = _questionManager.GetQuestionsByFlowId(question.FlowId).ToList();
             //get the position of this question in the list
-            var currentIndex = questions.IndexOf(question) + 1;
-            ViewData["currentIndex"] = currentIndex;
-            ViewData["questionCount"] = questions.Count;
-            ViewBag.FlowType = question.Type;
+            var currentIndex = questions.IndexOf(question);
             
-            return View($"Questions", viewModel);
-        }
-        
-        [HttpGet]
-        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
-        {
-            var questionsByFlowId = _questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
-
-            if (redirectedQuestionId - 1 < 0 || redirectedQuestionId - 1 >= questionsByFlowId.Count)
-            {
-                var errorViewModel = new ErrorViewModel()
-                {
-                    RequestId = "Question not found"
-                };
-                return View("Error", errorViewModel);
-            }
-
-            var question = questionsByFlowId[redirectedQuestionId - 1];
-
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            ViewData["currentIndex"] = redirectedQuestionId;
-            ViewData["questionCount"] = _questionManager.GetQuestionsByFlowId(question.FlowId).Count();
-            ViewBag.FlowType = question.Type;
-
-            return View($"Questions", viewModel);
+            return RedirectToAction("RedirectTroughPreview", "Flow", new {redirectedQuestionId = currentIndex, flowId = question.FlowId});
         }
     }
 }

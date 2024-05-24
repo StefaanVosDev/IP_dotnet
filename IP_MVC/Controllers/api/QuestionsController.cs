@@ -1,8 +1,9 @@
+using System.Text.Json;
+using System.Web;
 using BL.Domain;
-using BL.Domain.Questions;
+using BL.Implementations;
 using BL.Interfaces;
 using Google.Cloud.Storage.V1;
-using IP_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IP_MVC.Controllers.api
@@ -12,10 +13,12 @@ namespace IP_MVC.Controllers.api
     public class QuestionsController : ControllerBase
     {
         private readonly IQuestionManager _questionManager;
+        private readonly UnitOfWork _unitOfWork;
 
-        public QuestionsController(IQuestionManager questionManager)
+        public QuestionsController(IQuestionManager questionManager, UnitOfWork unitOfWork)
         {
             _questionManager = questionManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("{id}/Options")]
@@ -34,6 +37,7 @@ namespace IP_MVC.Controllers.api
         [HttpPut("{id}/Title")]
         public IActionResult UpdateTitle(int id, [FromBody] string text)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
 
             if (question == null)
@@ -45,12 +49,15 @@ namespace IP_MVC.Controllers.api
             newQuestion.Text = text;
 
             _questionManager.UpdateAsync(question, newQuestion);
+            
+            _unitOfWork.Commit();
             return NoContent();
         }
         
         [HttpPut("{id}/Option")]
         public IActionResult AddOption(int id, [FromBody] string option)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
             
             if (question == null)
@@ -59,12 +66,15 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.AddOptionToQuestion(id, option);
+            
+            _unitOfWork.Commit();
             return NoContent();
         }
 
         [HttpPost("UpdateRangeQuestion")]
         public IActionResult UpdateRangeQuestion([FromQuery] int id, [FromQuery] int min, [FromQuery] int max)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
             {
@@ -72,13 +82,15 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.SetRangeQuestionValues(id, min, max);
+            
+            _unitOfWork.Commit();
             return Ok();
         }
 
-        //implement the deleteOption
         [HttpPost("DeleteOption")]
         public IActionResult DeleteOption([FromQuery] int id, [FromQuery] string option)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
             if (question == null)
             {
@@ -86,6 +98,8 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.DeleteOptionFromQuestion(id, option);
+            
+            _unitOfWork.Commit();
             return Ok();
         }
 
@@ -94,6 +108,7 @@ namespace IP_MVC.Controllers.api
         {
             try
             {
+                _unitOfWork.BeginTransaction();
                 if (file == null || file.Length == 0)
                 {
                     return BadRequest("No file was uploaded.");
@@ -109,13 +124,20 @@ namespace IP_MVC.Controllers.api
                 // Upload the file to Google Cloud Storage
                 var storage = StorageClient.Create();
                 using var fileStream = System.IO.File.OpenRead(filePath);
-                var objectName = $"Questions/{file.FileName}";
-                storage.UploadObject("phygital-public", objectName, null, fileStream);
+                var fileName = HttpUtility.UrlEncode(file.FileName);
+                var objectName = $"Questions/{fileName}";
+                string json = await System.IO.File.ReadAllTextAsync("service-acc-key.json");
+                JsonDocument doc = JsonDocument.Parse(json);
+                string projectId = doc.RootElement.GetProperty("project_id").GetString();
+                storage.UploadObject(projectId+"-public", objectName, null, fileStream);
                 Console.WriteLine($"Uploaded {objectName}.");
-
+                //encode the file name to avoid any special characters
+                
                 // Save the URL of the uploaded file in your database
-                var fileUrl = $"https://storage.googleapis.com/phygital-public/{objectName}";
-
+                var fileUrl = $"https://storage.googleapis.com/{projectId}-public/{objectName}";
+                //encode the file name to avoid any special characters
+                
+                
                 var description = "Uploaded media";
                 // get the media type from the file extension
                 var mediaType = file.ContentType switch
@@ -127,7 +149,8 @@ namespace IP_MVC.Controllers.api
                     _ => throw new Exception("Unsupported media type")
                 };
                 _questionManager.AddMediaToQuestion(questionId, fileUrl, description, mediaType);
-
+                
+                _unitOfWork.Commit();
                 return Ok(new { filePath = fileUrl });
             }
             catch (Exception ex)

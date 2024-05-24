@@ -1,4 +1,3 @@
-using System.Collections;
 using BL.Domain.Answers;
 using BL.Interfaces;
 using DAL.Interfaces;

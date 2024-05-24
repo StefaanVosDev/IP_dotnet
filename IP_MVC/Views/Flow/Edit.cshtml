@@ -70,6 +70,13 @@
                     <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { questionId = question.Id })">Delete</a>
                 </td>
             </tr>
+            //if not last in the model.questisons
+            if (question != Model.Questions.Last())
+            {
+                <button id="arrowAfter@(question.Position)" class="bi-arrow-90deg-down"></button>
+                //todo: addEventListener between this and a new position from the question above or beneath
+            }
+            //put small arrows between every question to be able to change question order
         }
     }
     </tbody>

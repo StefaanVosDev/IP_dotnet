@@ -1,6 +1,5 @@
 using DAL.EF;
 using DAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Implementations;
 

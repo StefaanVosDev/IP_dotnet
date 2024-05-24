@@ -12,26 +12,17 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
     {
         return context.Set<Session>().Find(id);
     }
-
+    
     public void AddAnswerToSession(int sessionId, Answer answer, FlowType flowType)
     {
-        var session = context.Sessions.Include(s => s.Answers).FirstOrDefault(s => s.Id == sessionId);
-        if (session == null)
-        {
-            throw new Exception("No session found with this id");
-        }
+        var answerToRemove = context.Answers
+            .FirstOrDefault(a => a.Session.Id == sessionId && a.QuestionId == answer.QuestionId);
 
-        if (flowType == FlowType.LINEAR)
-        {
-            //TODO change needed for multiplayer
-            //efficient way to see if there already is an answer coupled to a question with this sessionId
-            if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))
-            {
-                session.Answers.Remove(session.Answers.First(a => a.QuestionId == answer.QuestionId));
-            }
+        if (answerToRemove !=null && flowType == FlowType.LINEAR)
+        { 
+            context.Answers.Remove(answerToRemove);
         }
-        session.Answers.Add(answer);
-        context.SaveChanges();
+        context.Answers.Add(answer);
     }
 
     public void Update(Session session)
@@ -72,7 +63,6 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
           context.Answers.Remove(session.Answers.First(a => a.QuestionId == answer.QuestionId));
         }
         session.Answers.Add(answer);
-        context.SaveChanges();
         return answer;
     }
 
