@@ -33,7 +33,7 @@ public class CloudStorageRepository : ICloudStorageRepository
         // Reset the position of the memory stream to 0
         memoryStream.Position = 0;
 
-        // Get the file extension and content typ   e
+        // Get the file extension and content type
         var fileExtension = Path.GetExtension(file.FileName)?.ToLower();
         var contentType = fileExtension switch
         {
