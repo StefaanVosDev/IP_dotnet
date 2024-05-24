@@ -5,6 +5,7 @@ using IP_MVC.Helpers;
 using BL.Domain.Answers;
 using BL.Implementations;
 using IP_MVC.Models;
+using WebApplication1.Models;
 
 namespace IP_MVC.Controllers
 {
@@ -124,6 +125,7 @@ namespace IP_MVC.Controllers
             ViewBag.FlowType = flowType;
             ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
             ViewBag.QuestionId = questionId;
+            ViewBag.Preview = false;
 
             return View($"Questions/Questions", viewModel);
         }
@@ -315,6 +317,34 @@ namespace IP_MVC.Controllers
 
             unitOfWork.Commit();
             return RedirectToAction("Edit");
+        }
+        
+        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
+        {
+            var questionsByFlowId = questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
+
+            if (redirectedQuestionId < 0 || redirectedQuestionId >= questionsByFlowId.Count)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
+
+            var question = questionsByFlowId[redirectedQuestionId];
+
+            var viewModel = new QuestionViewModel()
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            ViewData["currentIndex"] = redirectedQuestionId;
+            ViewData["questionCount"] = questionManager.GetQuestionsByFlowId(question.FlowId).Count();
+            ViewBag.FlowType = question.Type;
+            ViewBag.Preview = true;
+            
+            return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
         }
     }
 }
