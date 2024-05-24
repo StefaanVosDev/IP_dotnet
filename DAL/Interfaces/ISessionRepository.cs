@@ -7,7 +7,6 @@ public interface ISessionRepository : IRepository
 {
     Session GetSessionById(int id);
     void AddAnswerToSession(int sessionId, Answer answer, FlowType flowType);
-    void Update(Session session);
     IEnumerable<Answer> GetAnswersBySessionId(int sessionId);
     Answer UpdateAnswer(Answer answerToUpdate, Answer answer);
     Answer GetAnswerByQuestionId(int sessionId, int questionId);

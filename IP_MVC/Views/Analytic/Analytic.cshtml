@@ -6,52 +6,42 @@
     Layout = "_Layout";
 }
 
-<h1>Analytic</h1>
+<body class="analytics-page">
+<img class="overlay-image position-absolute bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
 
-<div>
-    @Html.DropDownList("Flows",
-        new SelectList(Model, "Id", "Name"),
-        "Select a Flow",
-        new { @class = "form-control" })
-</div>
+<div class="card border-1 border-black py-0 position-relative">
+    <div class="big-card-content overflow-scroll">
+       <div class="row w-100 m-0">
+           <div class="col-6 p-3 d-flex">
+               <a href="@Url.Action("Project", "Project")" class="align-content-center btn bi bi-box-arrow-left py-0 h-100"></a>
+           </div>
+           
+           <div class="col-6 dropdown p-3 d-flex justify-content-end">
+               <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                   Kies een flow
+               </button>
+               <ul class="dropdown-menu overflow-x-scroll w-100">
+                   @foreach (var flow in Model)
+                   {
+                       <li id="Flows">
+                           <button class="px-3 dropdown-item active-dropdown" type="submit" data-flow-id="@flow.Id">@(flow.Name)</button>
+                       </li>
+                   }
+               </ul>
+           </div>
+       </div>
 
-<div id="chartsContainer"></div>
+        <div class="row m-0 " id="chartsContainer">
+
+        </div>
+
+    </div >
+</div >
+</body>
+
 
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelector('#Flows').addEventListener('change', async function(e) {
-                const flowId = e.target.value;
-                const response = await fetch(`/api/Analytics/GetFlowAnalytics/${flowId}`);
-                const data = await response.json();
-
-                const chartsContainer = document.querySelector('#chartsContainer');
-                chartsContainer.innerHTML = '';
-
-                data.chartData.forEach(function(item, index) {
-                    const canvas = document.createElement('canvas');
-                    canvas.id = `flowAnalytics${index}`;
-                    chartsContainer.appendChild(canvas);
-
-                    const ctx = canvas.getContext('2d');
-
-                    new Chart(ctx, {
-                        type: item.type,
-                        data: item.data,
-                        options: item.options
-                    });
-                });
-
-                data.openQuestions.forEach(function(item, index) {
-                    if (item.question && item.answers && item.answers.length > 0) {
-                        const div = document.createElement('div');
-                        div.innerHTML = `<h2>${item.question}</h2><ul>${item.answers.filter(answer => answer != null).map(answer => `<li>${answer}</li>`).join('')}</ul>`;
-                        chartsContainer.appendChild(div);
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="~/dist/analytics.entry.js"></script>
 }

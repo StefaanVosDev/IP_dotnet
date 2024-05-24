@@ -3,7 +3,9 @@ using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using BL.Domain.Answers;
+using BL.Implementations;
 using IP_MVC.Models;
+using WebApplication1.Models;
 
 namespace IP_MVC.Controllers
 {
@@ -11,7 +13,8 @@ namespace IP_MVC.Controllers
         IFlowManager flowManager,
         ISessionManager sessionManager,
         IProjectManager projectManager,
-        IQuestionManager questionManager)
+        IQuestionManager questionManager,
+        UnitOfWork unitOfWork)
         : Controller
     {
         public IActionResult Flow(int projectId, int? parentFlowId)
@@ -43,6 +46,7 @@ namespace IP_MVC.Controllers
 
         public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active)
         {
+            unitOfWork.BeginTransaction();
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ActiveProject = active;
             
@@ -58,7 +62,8 @@ namespace IP_MVC.Controllers
             
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
-
+            
+            unitOfWork.Commit();
             return RedirectToAction("Question", new { id = newSession.Id });
         }
 
@@ -120,6 +125,7 @@ namespace IP_MVC.Controllers
             ViewBag.FlowType = flowType;
             ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
             ViewBag.QuestionId = questionId;
+            ViewBag.Preview = false;
 
             return View($"Questions/Questions", viewModel);
         }
@@ -155,6 +161,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, int redirectedQuestionId)
         {
+            unitOfWork.BeginTransaction();
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
@@ -188,12 +195,14 @@ namespace IP_MVC.Controllers
                 sessionManager.UpdateAnswer(oldAnswer, newAnswer);
             }
 
+            unitOfWork.Commit();
             return RedirectToAction("Question",
                 new { id = flowId, redirectedQuestionId });
         }
 
         public IActionResult Delete(int flowId)
         {
+            unitOfWork.BeginTransaction();
             var flowToRemove = flowManager.GetFlowById(flowId);
             var parentFlowId1 = flowToRemove.ParentFlowId;
             var projectId1 = flowToRemove.ProjectId;
@@ -204,6 +213,7 @@ namespace IP_MVC.Controllers
                 return RedirectToAction("Flow", new { projectId = projectId1 });
             }
 
+            unitOfWork.Commit();
             return RedirectToAction("Edit", new { parentFlowId = parentFlowId1 });
         }
 
@@ -227,6 +237,7 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult Edit(int parentFlowId, FlowEditViewModel newFlowModel)
         {
+            unitOfWork.BeginTransaction();
             var existingFlow = flowManager.GetFlowById(parentFlowId);
             if (existingFlow == null)
             {
@@ -239,6 +250,7 @@ namespace IP_MVC.Controllers
 
             flowManager.UpdateAsync(existingFlow, newFlow);
 
+            unitOfWork.Commit();
             return RedirectToAction("Flow", new { projectId = newFlow.ProjectId });
         }
 
@@ -253,23 +265,26 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
+            unitOfWork.BeginTransaction();
             //if (!ModelState.IsValid) return View(flow);
 
             flow.ProjectId = projectId;
             flow.ParentFlowId = parentFlowId;
             flowManager.AddAsync(flow);
 
+            unitOfWork.Commit();
+
             if (parentFlowId == null)
             {
                 return RedirectToAction("Flow", new { ProjectId = projectId });
             }
-
             return RedirectToAction("Edit", new { parentFlowId = flow.ParentFlowId });
         }
 
         [HttpPost]
         public IActionResult Reorder(int parentFlowId, int newPosition)
         {
+            unitOfWork.BeginTransaction();
             var flow = flowManager.GetFlowById(parentFlowId);
             var oldPosition = flow.Position;
             flow.Position = newPosition;
@@ -300,7 +315,36 @@ namespace IP_MVC.Controllers
             // Update all affected flows at once
             flowManager.UpdateAllAsync(affectedFlows);
 
+            unitOfWork.Commit();
             return RedirectToAction("Edit");
+        }
+        
+        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
+        {
+            var questionsByFlowId = questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
+
+            if (redirectedQuestionId < 0 || redirectedQuestionId >= questionsByFlowId.Count)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
+
+            var question = questionsByFlowId[redirectedQuestionId];
+
+            var viewModel = new QuestionViewModel()
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            ViewData["currentIndex"] = redirectedQuestionId;
+            ViewData["questionCount"] = questionManager.GetQuestionsByFlowId(question.FlowId).Count();
+            ViewBag.FlowType = question.Type;
+            ViewBag.Preview = true;
+            
+            return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
         }
     }
 }

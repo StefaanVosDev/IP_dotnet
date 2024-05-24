@@ -8,7 +8,6 @@ public interface ISessionManager : IManager<Session>
 {
     public Session GetSessionById(int id);
 
-    public void UpdateSession(Session session);
     public void AddAnswerToSession(int sessionId, Answer answer, FlowType flowType);
     public IEnumerable<Answer> GetAnswersBySessionId(int sessionId);
     Task<Session> CreateNewSession(int flowId);

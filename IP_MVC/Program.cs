@@ -74,6 +74,7 @@ builder.Services.AddSession(options =>
 });
 
 // Add scoped
+builder.Services.AddScoped<UnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IRepository,Repository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IFlowRepository, FlowRepository>();
@@ -91,6 +92,8 @@ builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IAnalyticsManager, AnalyticsManager>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<INoteManager, NoteManager>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserManager, UserManager>();
 
 
 

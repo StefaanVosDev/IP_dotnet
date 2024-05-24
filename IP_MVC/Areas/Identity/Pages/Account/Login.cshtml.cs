@@ -121,9 +121,6 @@ namespace IP_MVC.Areas.Identity.Pages.Account
                 var roles = await _userManager.GetRolesAsync(user);
                 
                 return RedirectToAction("Project", "Project");
-                
-
-                return LocalRedirect(returnUrl);
             }
             if (result.RequiresTwoFactor)
             {
