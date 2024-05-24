@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Implementations;
 using BL.Interfaces;
 using IP_MVC.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace IP_MVC.Controllers.api;
 public class FlowsController : ControllerBase    
 {
     private readonly IFlowManager _flowManager;
+    private readonly UnitOfWork _unitOfWork;
 
-    public FlowsController(IFlowManager flowManager)
+    public FlowsController(IFlowManager flowManager, UnitOfWork unitOfWork)
     {
         _flowManager = flowManager;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet("{flowId}")]
@@ -35,6 +38,7 @@ public class FlowsController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Change([FromBody] FlowEditDto updateDto)
     {
+        _unitOfWork.BeginTransaction();
         if (updateDto == null)
         {
             return BadRequest("Invalid flow data.");
@@ -47,6 +51,7 @@ public class FlowsController : ControllerBase
         updatedFlow.Description = updateDto.NewDescription;
         
         await _flowManager.UpdateAsync( flow, updatedFlow);
+        _unitOfWork.Commit();
         return NoContent(); 
     }
 }
