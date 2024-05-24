@@ -1,6 +1,7 @@
 import * as client from "./restFlowClient"
 
 const editButtons = document.querySelectorAll('.edit-flow-btn');
+const backButton = document.querySelectorAll('.btn-back');
 
 async function showFlow(id: string, projectCard: HTMLElement) {
     try {
@@ -56,4 +57,16 @@ editButtons.forEach(button => {
     button.addEventListener('click', () =>
         editFlow(button)
     )
+});
+
+backButton.forEach(button => {
+    button.addEventListener('click', () => {
+        const cardContainer = button.closest('.flip-card') as HTMLBodyElement;
+        if (cardContainer) {
+            const cardInner = cardContainer.querySelector('.flip-card-inner');
+            if (cardInner) {
+                cardInner.classList.toggle('flipped');
+            }
+        }
+    })
 });

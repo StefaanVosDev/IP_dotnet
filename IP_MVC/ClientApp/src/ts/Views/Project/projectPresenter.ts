@@ -1,6 +1,7 @@
 import * as client from "./restProjectClient"
 
 const editButtons = document.querySelectorAll('.edit-btn');
+const backButton = document.querySelectorAll('.btn-back');
 
 async function showProject(id: string, projectCard: HTMLElement) {
     try {
@@ -60,3 +61,14 @@ editButtons.forEach(button => {
     )
 });
 
+backButton.forEach(button => {
+    button.addEventListener('click', () => {
+        const cardContainer = button.closest('.flip-card') as HTMLBodyElement;
+        if (cardContainer) {
+            const cardInner = cardContainer.querySelector('.flip-card-inner');
+            if (cardInner) {
+                cardInner.classList.toggle('flipped');
+            }
+        }
+    })
+});
