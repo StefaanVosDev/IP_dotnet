@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Text.Json;
 using DAL.Interfaces;
 using Google.Cloud.Storage.V1;
 using Google.Cloud.SecretManager.V1;
@@ -12,9 +13,16 @@ public class CloudStorageRepository : ICloudStorageRepository
 
     public CloudStorageRepository()
     {
-        _bucketName = "phygital-public";
+        _bucketName= GetProjectId() + "-public";
         //set the environment variable to the path of the service account key
         Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "service-acc-key.json");
+    }
+
+    private async Task<string> GetProjectId()
+    {
+        string json = await System.IO.File.ReadAllTextAsync("service-acc-key.json");
+        JsonDocument doc = JsonDocument.Parse(json);
+        return doc.RootElement.GetProperty("project_id").GetString();
     }
     public void UploadFile(IFormFile file, string fileName, string folderName)
     {
@@ -25,7 +33,7 @@ public class CloudStorageRepository : ICloudStorageRepository
         // Reset the position of the memory stream to 0
         memoryStream.Position = 0;
 
-        // Get the file extension and content type
+        // Get the file extension and content typ   e
         var fileExtension = Path.GetExtension(file.FileName)?.ToLower();
         var contentType = fileExtension switch
         {

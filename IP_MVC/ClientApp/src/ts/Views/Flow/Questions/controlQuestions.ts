@@ -6,31 +6,35 @@ window.addEventListener('load', function() {
     let aKeyPressCount = 0;
     let lastAKeyPressTime = 0;
     const debounceTime = 500;
+    let intervalId: NodeJS.Timeout;
+    
 
     document.addEventListener('keydown', function(event: KeyboardEvent) {
         switch (event.key) {
             case 'a':
             case 'ArrowLeft':
-                const currentTime = new Date().getTime();
-                if (event.key === 'a') {
-                    aKeyPressCount++;
-                    if (aKeyPressCount === 1) {
-                        lastAKeyPressTime = currentTime;
-                    } else if (aKeyPressCount === 2 && currentTime - lastAKeyPressTime <= debounceTime) {
-                        if (selectedIndex >= 0) {
-                            options[selectedIndex].checked = !options[selectedIndex].checked;
-                        }
-                        aKeyPressCount = 0;
-                    } else {
-                        aKeyPressCount = 0;
-                    }
-                } else {
-                    (document.getElementById('prevQuestionButton') as HTMLButtonElement).click();
-                }
+                (document.getElementById('prevQuestionButton') as HTMLButtonElement).click();
                 break;
             case 'd':
             case 'ArrowRight':
-                (document.getElementById('nextQuestionButton') as HTMLButtonElement).click();
+                aKeyPressCount++;
+                if (aKeyPressCount === 1) {
+                    lastAKeyPressTime = new Date().getTime();
+                    intervalId = setInterval(() => {
+                        const currentTime = new Date().getTime();
+                        if (currentTime - lastAKeyPressTime > debounceTime) {
+                            options[selectedIndex].checked = !options[selectedIndex].checked;
+                            aKeyPressCount = 0;
+                            clearInterval(intervalId);
+                        }
+                    }, debounceTime);
+                } else if (aKeyPressCount === 2 && new Date().getTime() - lastAKeyPressTime <= debounceTime) {
+                    if (selectedIndex >= 0) {
+                        (document.getElementById('nextQuestionButton') as HTMLButtonElement).click();
+                    }
+                    aKeyPressCount = 0;
+                    clearInterval(intervalId);
+                }
                 break;
             case 'w':
             case 'ArrowUp':

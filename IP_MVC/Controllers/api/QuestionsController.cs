@@ -1,8 +1,7 @@
+using System.Text.Json;
 using BL.Domain;
-using BL.Domain.Questions;
 using BL.Interfaces;
 using Google.Cloud.Storage.V1;
-using IP_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IP_MVC.Controllers.api
@@ -79,11 +78,14 @@ namespace IP_MVC.Controllers.api
                 var storage = StorageClient.Create();
                 using var fileStream = System.IO.File.OpenRead(filePath);
                 var objectName = $"Questions/{file.FileName}";
-                storage.UploadObject("phygital-public", objectName, null, fileStream);
+                string json = await System.IO.File.ReadAllTextAsync("service-acc-key.json");
+                JsonDocument doc = JsonDocument.Parse(json);
+                string projectId = doc.RootElement.GetProperty("project_id").GetString();
+                storage.UploadObject(projectId+"-public", objectName, null, fileStream);
                 Console.WriteLine($"Uploaded {objectName}.");
 
                 // Save the URL of the uploaded file in your database
-                var fileUrl = $"https://storage.googleapis.com/phygital-public/{objectName}";
+                var fileUrl = $"https://storage.googleapis.com/{projectId}-public/{objectName}";
                 
                 var description = "Uploaded media";
                 // get the media type from the file extension
