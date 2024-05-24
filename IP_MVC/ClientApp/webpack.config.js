@@ -10,11 +10,11 @@ module.exports = {
         range: './src/ts/Views/Flow/Questions/range.ts',
         redirectedQuestionId: './src/ts/Views/Flow/Questions/redirectedQuestionId.ts',
         goingToNextQuestionCircularFlow: './src/ts/Views/Flow/goingToNextQuestionCircularFlow.ts',
-        createFlow: './src/ts/Views/Flow/createFlow.ts',
+        showPopUp: './src/ts/showPopUp.ts',
         createScroll: './src/ts/Views/Flow/createScroll.ts',
         analytics: './src/ts/Analytics/analytics.ts',
         controlQuestions: './src/ts/Views/Flow/Questions/controlQuestions.ts',
-        EditQuestion: './src/ts/Views/Question/editQuestionPresenter.ts',
+        editQuestion: './src/ts/Views/Question/editQuestionPresenter.ts',
         editProject: './src/ts/Views/Project/projectPresenter.ts',
         editFlow: './src/ts/Views/Flow/flowPresenter.ts'
     },

@@ -204,7 +204,45 @@ namespace IP_MVC.Controllers
                 return RedirectToAction("Flow", new { projectId = projectId1 });
             }
 
-            return RedirectToAction("Flow", new { projectId = projectId1 });
+            unitOfWork.Commit();
+            return RedirectToAction("Flow", new { parentFlowId = parentFlowId1 });
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int parentFlowId)
+        {
+            var flow = flowManager.GetFlowById(parentFlowId);
+            var subflows = flowManager.GetFlowsByParentId(parentFlowId);
+            var questions = questionManager.GetQuestionsByFlowId(parentFlowId);
+
+            var model = new FlowEditViewModel
+            {
+                Flow = flow,
+                SubFlows = subflows,
+                Questions = questions
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int parentFlowId, FlowEditViewModel newFlowModel)
+        {
+            unitOfWork.BeginTransaction();
+            var existingFlow = flowManager.GetFlowById(parentFlowId);
+            if (existingFlow == null)
+            {
+                return NotFound();
+            }
+
+            var newFlow = existingFlow;
+            newFlow.Name = newFlowModel.Flow.Name;
+            newFlow.Description = newFlowModel.Flow.Description;
+
+            flowManager.UpdateAsync(existingFlow, newFlow);
+
+            unitOfWork.Commit();
+            return RedirectToAction("Flow", new { projectId = newFlow.ProjectId });
         }
 
         [HttpGet]
@@ -265,7 +303,36 @@ namespace IP_MVC.Controllers
             // Update all affected flows at once
             flowManager.UpdateAllAsync(affectedFlows);
 
+            unitOfWork.Commit();
             return RedirectToAction("Flow");
+        }
+        
+        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
+        {
+            var questionsByFlowId = questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
+
+            if (redirectedQuestionId < 0 || redirectedQuestionId >= questionsByFlowId.Count)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
+
+            var question = questionsByFlowId[redirectedQuestionId];
+
+            var viewModel = new QuestionViewModel()
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            ViewData["currentIndex"] = redirectedQuestionId;
+            ViewData["questionCount"] = questionManager.GetQuestionsByFlowId(question.FlowId).Count();
+            ViewBag.FlowType = question.Type;
+            ViewBag.Preview = true;
+            
+            return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
         }
     }
 }
