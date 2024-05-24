@@ -1,12 +1,12 @@
 // Get one flow by id
-export async function getFlow(projectId: string) {
-    const response = await fetch(`/api/Flows/${projectId}`, {
+export async function getFlow(flowId: string) {
+    const response = await fetch(`/api/Flows/${flowId}`, {
         headers: {
             'Accept': 'application/json'
         }
     });
     if (!response.ok) {
-        throw new Error(`Unable to get flow with id ${projectId}`)
+        throw new Error(`Unable to get flow with id ${flowId}`)
     }
     return response.json();
 }
