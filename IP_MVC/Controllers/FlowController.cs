@@ -347,33 +347,5 @@ namespace IP_MVC.Controllers
             
             return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
         }
-        
-        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
-        {
-            var questionsByFlowId = questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
-
-            if (redirectedQuestionId < 0 || redirectedQuestionId >= questionsByFlowId.Count)
-            {
-                var errorViewModel = new ErrorViewModel()
-                {
-                    RequestId = "Question not found"
-                };
-                return View("Error", errorViewModel);
-            }
-
-            var question = questionsByFlowId[redirectedQuestionId];
-
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            ViewData["currentIndex"] = redirectedQuestionId;
-            ViewData["questionCount"] = questionManager.GetQuestionsByFlowId(question.FlowId).Count();
-            ViewBag.FlowType = question.Type;
-            ViewBag.Preview = true;
-            
-            return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
-        }
     }
 }

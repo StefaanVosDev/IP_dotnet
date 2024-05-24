@@ -40,8 +40,8 @@ namespace IP_MVC.Controllers
             
             await _questionManager.DeleteAsync(question);
 
-            _unitOfWork.Commit()
-            return RedirectToAction("Edit", "Flows", new {parentFlowId = question.FlowId});
+            _unitOfWork.Commit();
+            return RedirectToAction("Flow", "Flow", new {parentFlowId = question.FlowId});
         }
 
 
