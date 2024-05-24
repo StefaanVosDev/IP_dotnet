@@ -136,48 +136,12 @@ namespace IP_MVC.Controllers
                 };
                 return View("Error", errorViewModel);
             }
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            
+
             var questions = _questionManager.GetQuestionsByFlowId(question.FlowId).ToList();
             //get the position of this question in the list
-            var currentIndex = questions.IndexOf(question) + 1;
-            ViewData["currentIndex"] = currentIndex;
-            ViewData["questionCount"] = questions.Count;
-            ViewBag.FlowType = question.Type;
+            var currentIndex = questions.IndexOf(question);
             
-            return View($"Questions", viewModel);
-        }
-        
-        [HttpGet]
-        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
-        {
-            var questionsByFlowId = _questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
-
-            if (redirectedQuestionId - 1 < 0 || redirectedQuestionId - 1 >= questionsByFlowId.Count)
-            {
-                var errorViewModel = new ErrorViewModel()
-                {
-                    RequestId = "Question not found"
-                };
-                return View("Error", errorViewModel);
-            }
-
-            var question = questionsByFlowId[redirectedQuestionId - 1];
-
-            var viewModel = new QuestionViewModel()
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
-            ViewData["currentIndex"] = redirectedQuestionId;
-            ViewData["questionCount"] = _questionManager.GetQuestionsByFlowId(question.FlowId).Count();
-            ViewBag.FlowType = question.Type;
-
-            return View($"Questions", viewModel);
+            return RedirectToAction("RedirectTroughPreview", "Flow", new {redirectedQuestionId = currentIndex, flowId = question.FlowId});
         }
     }
 }
