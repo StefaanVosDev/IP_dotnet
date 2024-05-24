@@ -1,5 +1,7 @@
 using System.Text.Json;
+using System.Web;
 using BL.Domain;
+using BL.Implementations;
 using BL.Interfaces;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
@@ -122,15 +124,19 @@ namespace IP_MVC.Controllers.api
                 // Upload the file to Google Cloud Storage
                 var storage = StorageClient.Create();
                 using var fileStream = System.IO.File.OpenRead(filePath);
-                var objectName = $"Questions/{file.FileName}";
+                var fileName = HttpUtility.UrlEncode(file.FileName);
+                var objectName = $"Questions/{fileName}";
                 string json = await System.IO.File.ReadAllTextAsync("service-acc-key.json");
                 JsonDocument doc = JsonDocument.Parse(json);
                 string projectId = doc.RootElement.GetProperty("project_id").GetString();
                 storage.UploadObject(projectId+"-public", objectName, null, fileStream);
                 Console.WriteLine($"Uploaded {objectName}.");
-
+                //encode the file name to avoid any special characters
+                
                 // Save the URL of the uploaded file in your database
                 var fileUrl = $"https://storage.googleapis.com/{projectId}-public/{objectName}";
+                //encode the file name to avoid any special characters
+                
                 
                 var description = "Uploaded media";
                 // get the media type from the file extension
