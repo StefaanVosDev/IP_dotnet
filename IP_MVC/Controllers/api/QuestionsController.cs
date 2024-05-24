@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Web;
 using BL.Domain;
+using BL.Domain.Questions;
 using BL.Implementations;
 using BL.Interfaces;
 using Google.Cloud.Storage.V1;
@@ -26,7 +27,7 @@ namespace IP_MVC.Controllers.api
         {
             var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
             
-            if (!options.Any())
+            if (options == null || !options.Any())
             {
                 return NoContent();
             }
@@ -162,6 +163,43 @@ namespace IP_MVC.Controllers.api
                 // Return a 500 status code with a detailed error message
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+        [HttpPost("{questionId}/Reorder/{newPosition}")]
+        public IActionResult Reorder(int questionId, int newPosition)
+        {
+            _unitOfWork.BeginTransaction();
+            var question = _questionManager.GetQuestionById(questionId);
+            var oldPosition = question.Position;
+            question.Position = newPosition;
+
+            List<Question> affectedQuestions;
+            if (newPosition < oldPosition)
+            {
+                // The question has been moved up, so increment the position of all questions between the old and new position
+                affectedQuestions = _questionManager.GetQuestionsBetweenPositionsByFlowId(question.FlowId, newPosition, oldPosition-1).ToList();
+                foreach (var affectedQuestion in affectedQuestions)
+                {
+                    affectedQuestion.Position++;
+                }
+            }
+            else
+            {
+                // The question has been moved down, so decrement the position of all questions between the old and new position
+                affectedQuestions = _questionManager.GetQuestionsBetweenPositionsByFlowId(question.FlowId, oldPosition+1, newPosition).ToList();
+                foreach (var affectedQuestion in affectedQuestions)
+                {
+                    affectedQuestion.Position--;
+                }
+            }
+
+            // Add the initially moved question to the list of affected questions
+            affectedQuestions.Add(question);
+
+            // Update all affected questions at once
+            _questionManager.UpdateAllAsync(affectedQuestions);
+
+            _unitOfWork.Commit();
+            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId} );
         }
     }
 }

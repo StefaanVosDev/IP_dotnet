@@ -26,9 +26,9 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
         return _context.Set<Question>().Where(q => q.FlowId == id).Include(q => q.Media).ToList();
     }
 
-    public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition)
+    public IEnumerable<Question> GetQuestionsBetweenPositionsByFlowId(int flowId, int newPosition, int oldPosition)
     {
-        return _context.Set<Question>().Where(q => q.Position >= newPosition && q.Position <= oldPosition).ToList();
+        return _context.Set<Question>().Where(q => q.FlowId == flowId && q.Position >= newPosition && q.Position <= oldPosition).ToList();
     }
 
     public List<string> GetOptionsSingleOrMultipleChoiceQuestion(int id)

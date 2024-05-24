@@ -25,7 +25,7 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
     
     public async Task<Queue<int>> GetQuestionQueueByFlowIdAsync(int flowId)
     {
-        var questionIds = (await GetQuestionsByFlowIdAsync(flowId)).Select(q => q.Id).ToList();
+        var questionIds = (await GetQuestionsByFlowIdAsync(flowId)).OrderBy(q => q.Position).Select(q => q.Id).ToList();
         return new Queue<int>(questionIds);
     }
     

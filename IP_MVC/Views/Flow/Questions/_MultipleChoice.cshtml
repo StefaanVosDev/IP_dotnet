@@ -6,7 +6,7 @@
     var question = ViewData["questionType"]  as MultipleChoiceQuestion ;
 }
 
-@if ( question?.Options != null)
+@if (question?.Options != null)
 {
     var selectedOptions = earlierAnswer != null ? earlierAnswer.AnswerText.Split('\n') : Array.Empty<string>();
 
@@ -22,4 +22,3 @@
         </div>
     }
 }
-

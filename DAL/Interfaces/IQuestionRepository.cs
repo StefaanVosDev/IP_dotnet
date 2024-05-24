@@ -8,7 +8,7 @@ public interface IQuestionRepository : IRepository
     public Question GetQuestionByIdWithMedia(int questionId);
     IEnumerable<Question> GetQuestionsByFlowId(int flowId);
     IEnumerable<Question> GetQuestionsByFlowIdWithMedia(int flowId);
-    IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition);
+    IEnumerable<Question> GetQuestionsBetweenPositionsByFlowId(int flowId, int newPosition, int oldPosition);
 
     public List<string> GetOptionsSingleOrMultipleChoiceQuestion(int id);
     public (int, int) GetRangeQuestionValues(int id);

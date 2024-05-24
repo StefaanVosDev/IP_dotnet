@@ -8,15 +8,13 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
-    "jquery": "^3.7.1",
-    "jquery-validation": "^1.20.0",
-    "jquery-validation-unobtrusive": "^4.0.0",
+    "sortablejs": "^1.15.2",
     "swiper": "^11.1.1"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.5",
     "@types/bootstrap": "^5.2.10",
-    "@types/jquery": "^3.5.29",
+    "@types/sortablejs": "^1.15.8",
     "css-loader": "^6.10.0",
     "mini-css-extract-plugin": "^2.8.1",
     "sass": "^1.72.0",

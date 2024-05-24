@@ -96,3 +96,14 @@ export async function deleteOption(questionId: string, option: string) {
         throw e;
     }
 }
+
+export async function reOrderQuestions(questionId: string, position: number) {
+    try {
+        const response = fetch(`/api/Questions/${questionId}/Reorder/${position}`, {
+            method: 'POST',
+        });
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+}

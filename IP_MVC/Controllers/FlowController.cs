@@ -51,6 +51,8 @@ namespace IP_MVC.Controllers
             ViewBag.ActiveProject = active;
             
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
+            unitOfWork.Commit();
+
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
@@ -63,7 +65,6 @@ namespace IP_MVC.Controllers
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
             
-            unitOfWork.Commit();
             return RedirectToAction("Question", new { id = newSession.Id });
         }
 
@@ -222,8 +223,8 @@ namespace IP_MVC.Controllers
         {
             var flow = flowManager.GetFlowById(parentFlowId);
             var subflows = flowManager.GetFlowsByParentId(parentFlowId);
-            var questions = questionManager.GetQuestionsByFlowId(parentFlowId);
-
+            var questions = questionManager.GetQuestionsByFlowId(parentFlowId).OrderBy(q => q.Position);
+            
             var model = new FlowEditViewModel
             {
                 Flow = flow,

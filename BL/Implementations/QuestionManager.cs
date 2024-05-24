@@ -34,9 +34,9 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
         return repository.GetQuestionsByFlowId(flowId);
     }
 
-    public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition)
+    public IEnumerable<Question> GetQuestionsBetweenPositionsByFlowId(int flowId, int newPosition, int oldPosition)
     {
-        return repository.GetQuestionsBetweenPositions(newPosition, oldPosition);
+        return repository.GetQuestionsBetweenPositionsByFlowId(flowId, newPosition, oldPosition);
     }
     
     public List<string> GetOptionsSingleOrMultipleChoiceQuestion(int id)

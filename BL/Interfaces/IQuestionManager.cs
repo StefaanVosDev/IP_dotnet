@@ -10,7 +10,7 @@ public interface IQuestionManager : IManager<Question>
     public IEnumerable<Question> GetQuestionsByFlowId(int flowId);
     public IEnumerable<Question> GetQuestionsByFlowIdWithMedia(int flowId);
 
-    public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition);
+    public IEnumerable<Question> GetQuestionsBetweenPositionsByFlowId(int flowId, int newPosition, int oldPosition);
     
     public List<string> GetOptionsSingleOrMultipleChoiceQuestion(int id);
     public (int, int) GetRangeQuestionValues(int id);

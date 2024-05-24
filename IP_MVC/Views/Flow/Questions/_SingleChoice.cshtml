@@ -5,14 +5,16 @@
     var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
     var question = ViewData["questionType"]  as SingleChoiceQuestion ;
 }
-
-@foreach (var option in question!.Options)
+@if (question?.Options != null)
 {
-    bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
-    <div class="form-check m-3">
-        <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option" @(isSelected ? "checked" : "")>
-        <label class="form-check-label" for="radio@i">
-            @option
-        </label>
-    </div>
+    @foreach (var option in question!.Options)
+    {
+        bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
+        <div class="form-check m-3">
+            <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option" @(isSelected ? "checked" : "")>
+            <label class="form-check-label" for="radio@i">
+                @option
+            </label>
+        </div>
+    }
 }
