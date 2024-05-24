@@ -127,7 +127,7 @@ namespace IP_MVC.Controllers
             ViewBag.QuestionId = questionId;
             ViewBag.Preview = false;
 
-            return View($"Questions/Questions", viewModel);
+            return View("Questions/Questions", viewModel);
         }
  
         public IActionResult EndSubFlow()
@@ -214,7 +214,7 @@ namespace IP_MVC.Controllers
             }
 
             unitOfWork.Commit();
-            return RedirectToAction("Edit", new { parentFlowId = parentFlowId1 });
+            return RedirectToAction("Flow", new { parentFlowId = parentFlowId1 });
         }
 
         [HttpGet]
@@ -261,7 +261,7 @@ namespace IP_MVC.Controllers
             ViewBag.ProjectId = projectId;
             return View();
         }
-
+        
         [HttpPost]
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
@@ -278,7 +278,8 @@ namespace IP_MVC.Controllers
             {
                 return RedirectToAction("Flow", new { ProjectId = projectId });
             }
-            return RedirectToAction("Edit", new { parentFlowId = flow.ParentFlowId });
+
+            return RedirectToAction("Flow", new { parentFlowId = flow.ParentFlowId });
         }
 
         [HttpPost]
@@ -316,7 +317,35 @@ namespace IP_MVC.Controllers
             flowManager.UpdateAllAsync(affectedFlows);
 
             unitOfWork.Commit();
-            return RedirectToAction("Edit");
+            return RedirectToAction("Flow");
+        }
+        
+        public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
+        {
+            var questionsByFlowId = questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
+
+            if (redirectedQuestionId < 0 || redirectedQuestionId >= questionsByFlowId.Count)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
+
+            var question = questionsByFlowId[redirectedQuestionId];
+
+            var viewModel = new QuestionViewModel()
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            ViewData["currentIndex"] = redirectedQuestionId;
+            ViewData["questionCount"] = questionManager.GetQuestionsByFlowId(question.FlowId).Count();
+            ViewBag.FlowType = question.Type;
+            ViewBag.Preview = true;
+            
+            return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
         }
         
         public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)

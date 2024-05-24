@@ -39,9 +39,9 @@ namespace IP_MVC.Controllers
             var question = _questionManager.GetQuestionById(questionId);
             
             await _questionManager.DeleteAsync(question);
-            
-            _unitOfWork.Commit();
-            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
+
+            _unitOfWork.Commit()
+            return RedirectToAction("Edit", "Flows", new {parentFlowId = question.FlowId});
         }
 
 

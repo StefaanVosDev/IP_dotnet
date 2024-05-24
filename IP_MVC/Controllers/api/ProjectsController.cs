@@ -42,17 +42,13 @@ public class ProjectsController : ControllerBase
         {
             return BadRequest("Invalid project data.");
         }
-        
+          
         var project = await _projectManager.FindByIdAsync(updateDto.ProjectId);
-        
-        Project updatedProject = new Project
-        {
-            Id = updateDto.ProjectId,
-            Name = updateDto.NewName,
-            Description = updateDto.NewDescription,
-            AdminId = updateDto.AdminId
-        };
-        
+
+        var updatedProject = project;
+        updatedProject.Name = updateDto.NewName;
+        updatedProject.Description = updateDto.NewDescription;
+        updatedProject.AdminId = updateDto.AdminId;
         
         await _projectManager.UpdateAsync( project, updatedProject);
 
