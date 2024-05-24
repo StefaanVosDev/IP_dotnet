@@ -37,50 +37,19 @@ namespace IP_MVC.Controllers
         {
             _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(questionId);
-            
-            await _questionManager.DeleteAsync(question);
 
+            var questionsToUpdate = _questionManager.GetQuestionsByFlowId(question.FlowId)
+                .Where(q => q.Position > question.Position).ToList();
+
+            foreach (var q in questionsToUpdate)
+            {
+                q.Position--;
+            }
+            await _questionManager.DeleteAsync(question);
+            await _questionManager.UpdateAllAsync(questionsToUpdate);
+            
             _unitOfWork.Commit();
             return RedirectToAction("Flow", "Flow", new {parentFlowId = question.FlowId});
-        }
-
-
-        [HttpPost]
-        public IActionResult Reorder(int parentFlowId, int newPosition)
-        {
-            _unitOfWork.BeginTransaction();
-            var question = _questionManager.GetQuestionById(parentFlowId);
-            var oldPosition = question.Position;
-            question.Position = newPosition;
-
-            List<Question> affectedQuestions;
-            if (newPosition < oldPosition)
-            {
-                // The question has been moved up, so increment the position of all questions between the old and new position
-                affectedQuestions = _questionManager.GetQuestionsBetweenPositions(newPosition, oldPosition - 1).ToList();
-                foreach (var affectedQuestion in affectedQuestions)
-                {
-                    affectedQuestion.Position++;
-                }
-            }
-            else
-            {
-                // The question has been moved down, so decrement the position of all questions between the old and new position
-                affectedQuestions = _questionManager.GetQuestionsBetweenPositions(oldPosition + 1, newPosition).ToList();
-                foreach (var affectedQuestion in affectedQuestions)
-                {
-                    affectedQuestion.Position--;
-                }
-            }
-
-            // Add the initially moved question to the list of affected questions
-            affectedQuestions.Add(question);
-
-            // Update all affected questions at once
-            _questionManager.UpdateAllAsync(affectedQuestions);
-
-            _unitOfWork.Commit();
-            return RedirectToAction("Edit");
         }
         
         [HttpGet]
@@ -92,18 +61,29 @@ namespace IP_MVC.Controllers
 
         private Question CreateQuestion(QuestionType type, string text, Media media, int flowId)
         {
+            //Search the highest position with this flow id
+            var questions = _questionManager.GetQuestionsByFlowId(flowId).ToList();
+            int newPosition;
+            if (!questions.Any())
+            {
+                newPosition = 1;
+            }
+            else
+            {
+                newPosition = questions.Max(q => q.Position) + 1;
+            }
             switch (type)
             {
                 case QuestionType.MultipleChoice:
-                    return new MultipleChoiceQuestion { Text = text, Type = type, Media = media, FlowId = flowId };
+                    return new MultipleChoiceQuestion { Text = text, Type = type, Media = media, FlowId = flowId, Position = newPosition};
                 case QuestionType.Open:
-                    return new OpenQuestion { Text = text, Type = type, Media = media, FlowId = flowId };
+                    return new OpenQuestion { Text = text, Type = type, Media = media, FlowId = flowId, Position = newPosition};
                 case QuestionType.Range:
-                    return new RangeQuestion { Text = text, Type = type, Media = media, FlowId = flowId };
+                    return new RangeQuestion { Text = text, Type = type, Media = media, FlowId = flowId, Position = newPosition};
                 case QuestionType.SingleChoice:
-                    return new SingleChoiceQuestion { Text = text, Type = type, Media = media, FlowId = flowId };
+                    return new SingleChoiceQuestion { Text = text, Type = type, Media = media, FlowId = flowId, Position = newPosition};
                 default:
-                    return new Question { Text = text, Type = type, Media = media, FlowId = flowId };
+                    return new Question { Text = text, Type = type, Media = media, FlowId = flowId, Position = newPosition};
             }
         }
         [HttpPost]
