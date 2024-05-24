@@ -22,7 +22,11 @@ PUT https://localhost:7292/api/Flows
 Content-Type: application/json
 
 {
-  "id": "11",
+  "id": "1",
   "NewName": "test",
   "NewDescription": "test"
 }
+
+###
+GET https://localhost:7292/api/Flows/1
+Accept: application/json

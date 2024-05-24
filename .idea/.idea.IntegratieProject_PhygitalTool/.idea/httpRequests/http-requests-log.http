@@ -1,5 +1,30 @@
 PUT https://localhost:7292/api/Flows
 Content-Type: application/json
+Content-Length: 64
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "id": "1",
+  "NewName": "test",
+  "NewDescription": "test"
+}
+
+###
+
+GET https://localhost:7292/api/Flows/1
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-05-24T163429.200.json
+
+###
+
+PUT https://localhost:7292/api/Flows
+Content-Type: application/json
 Content-Length: 65
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)

@@ -19,23 +19,22 @@ public class FlowsController : ControllerBase
         _flowManager = flowManager;
     }
 
-    [HttpGet("{projectId}")]
-    public Task<IActionResult> GetFlow(int projectId)
+    [HttpGet("{flowId}")]
+    public Task<IActionResult> GetFlow(int flowId)
     {
-        var project = _flowManager.GetFlowById(projectId);
+        var flow = _flowManager.GetFlowById(flowId);
 
-        if (project == null)
+        if (flow == null)
         {
             return Task.FromResult<IActionResult>(NotFound());
         }
 
-        return Task.FromResult<IActionResult>(Ok(project));
+        return Task.FromResult<IActionResult>(Ok(flow));
     }
     
     [HttpPut]
     public async Task<IActionResult> Change([FromBody] FlowEditDto updateDto)
     {
-        
         if (updateDto == null)
         {
             return BadRequest("Invalid flow data.");
