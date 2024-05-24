@@ -37,7 +37,7 @@
                                             <div >
                                                 @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
                                                 {
-                                                    <button data-edit-project data-project-id="@flow.Id" class="btn py-0 edit-flow-btn">Edit</button>
+                                                    <button data-edit-flow data-flow-id="@flow.Id" class="btn py-0 edit-flow-btn">Edit</button>
                                                 }
                                             </div>
 
