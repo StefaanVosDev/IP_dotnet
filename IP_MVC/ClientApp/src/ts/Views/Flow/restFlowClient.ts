@@ -1,18 +1,18 @@
 // Get one flow by id
-export async function getFlow(id: string) {
-    const response = await fetch(`/api/Flow/${id}`, {
+export async function getFlow(projectId: string) {
+    const response = await fetch(`/api/Flows/${projectId}`, {
         headers: {
             'Accept': 'application/json'
         }
     });
     if (!response.ok) {
-        throw new Error(`Unable to get flow with id ${id}`)
+        throw new Error(`Unable to get flow with id ${projectId}`)
     }
     return response.json();
 }
 
 // Update all flow values
-export async function updateFlow(name: string, description: string, flowId: string) {
+export async function updateFlow(name: string, description: string, flowId:string) {
     const response = await fetch(`/api/Flows`, {
         method: 'PUT',
         headers: {
@@ -20,7 +20,7 @@ export async function updateFlow(name: string, description: string, flowId: stri
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            ProjectId: flowId,
+            Id: flowId,
             NewName: name,
             NewDescription: description
         }),

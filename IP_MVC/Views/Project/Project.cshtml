@@ -53,7 +53,32 @@
                             </div>
                         </div>
                         <div class="flip-card-back position-relative">
-                            @await Html.PartialAsync("_Edit", project)
+                           
+                           <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                           <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
+                               <div class="card-body overflow-y-scroll overflow-x-hidden">
+                                   <input type="hidden" id="id" value="@project.Id"/>
+                                   <input type="hidden" id="adminId" value="@project.AdminId"/>
+                           
+                                   <div class="form-group">
+                                       <label for="nameInput">Name</label>
+                                       <input type="text" class="form-control" id="nameInput" value="@project.Name" required>
+                                   </div>
+                                   <div class="form-group">
+                                       <label for="descriptionInput">Description</label>
+                                       <input type="text" class="form-control" id="descriptionInput" value="@project.Description" required>
+                                   </div>
+                               </div>
+                           
+                               <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
+                                   <div>
+                                       <button type="submit" class="btn py-0" id="updateProjectButton">Update</button>
+                                   </div>
+                                   <div>
+                                       <a class="btn py-0 " href="@Url.Action("Flow", "Flow", new { projectId = project.Id })">Edit Flows</a>
+                                   </div>
+                               </div>
+                           </div>
                         </div>
                     </div>
                 </div>

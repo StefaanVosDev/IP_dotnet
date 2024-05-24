@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
 
-    <div class="card border-1 border-black pt-3 h-75">
+    <div class="card border-1 border-black pt-3 h-75 position-relative">
         <div class="big-card-content overflow-scroll">
             <div class="row m-0">
                 @foreach (var flow in Model)
@@ -21,7 +21,7 @@
                         <div class="flip-card bg-transparent">
                             <div class="flip-card-inner">
                                 <div class="flip-card-front w-100">
-                                    <div class="little-card card border-1 border-black card-clickable" data-parent-flow-id="@flow.Id">
+                                    <div class="small-card card border-1 border-black position-absolute card-clickable w-100" data-parent-flow-id="@flow.Id">
                                         <div class="front card-body overflow-y-scroll overflow-x-hidden">
                                             <h5 class="card-title">@flow.Name</h5>
                                             <p class="card-text">@flow.Description</p>
@@ -37,7 +37,7 @@
                                             <div >
                                                 @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
                                                 {
-                                                    <button data-edit-project data-project-id="@flow.Id" class="btn py-0 edit-btn">Edit</button>
+                                                    <button data-edit-project data-project-id="@flow.Id" class="btn py-0 edit-flow-btn">Edit</button>
                                                 }
                                             </div>
 
@@ -56,8 +56,30 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flip-card-back position-relative">
-                                    @await Html.PartialAsync("_Edit", flow)
+                                <div class="flip-card-back w-100 position-relative">
+                                   <div class="small-card card border-1 border-black card-clickable" data-parent-flow-id="@flow.Id">
+                                       <div class="card-body overflow-y-scroll overflow-x-hidden">
+                                           <input type="hidden" id="flowId" value="@flow.Id"/>
+                                   
+                                           <div class="form-group">
+                                               <label for="nameInput">Name</label>
+                                               <input type="text" class="form-control" id="nameInput" value="@flow.Name" required>
+                                           </div>
+                                           <div class="form-group">
+                                               <label for="descriptionInput">Description</label>
+                                               <input type="text" class="form-control" id="descriptionInput" value="@flow.Description" required>
+                                           </div>
+                                       </div>
+                                   
+                                       <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
+                                           <div>
+                                               <button type="submit" class="btn py-0" id="updateFlowButton">Update</button>
+                                           </div>
+                                           <div>
+                                               <a class="btn py-0 " href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.ParentFlowId })">Edit SubFlows</a>
+                                           </div>
+                                       </div>
+                                   </div>
                                 </div>
                             </div >
                         </div >

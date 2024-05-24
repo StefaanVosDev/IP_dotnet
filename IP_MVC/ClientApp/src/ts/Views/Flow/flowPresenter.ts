@@ -1,34 +1,33 @@
 import * as client from "./restFlowClient"
 
-const editButtons = document.querySelectorAll('.edit-btn');
+const editButtons = document.querySelectorAll('.edit-flow-btn');
 
 async function showFlow(id: string, projectCard: HTMLElement) {
     try {
-        const project = await client.getFlow(id);
+        const flow = await client.getFlow(id);
         const cardBody = projectCard.querySelector('.front')!;
 
         cardBody.innerHTML = `
-                            <h5 class="card-title">${project.name}</h5>
-                            <p class="card-text">${project.description}</p>`;
+                            <h5 class="card-title">${flow.name}</h5>
+                            <p class="card-text">${flow.description}</p>`;
     } catch (e) {
-        console.error('Error showing flow: ', e);
+        console.error('Error showing project: ', e);
     }
 
 }
 
-async function changeProject(flowCard: HTMLElement) {
+async function changeFlow(flowCard: HTMLElement) {
     const nameInput = flowCard.querySelector('#nameInput') as HTMLInputElement;
     const descriptionInput = flowCard.querySelector('#descriptionInput') as HTMLInputElement;
-    const projectIdInput = flowCard.querySelector('#id') as HTMLInputElement;
-
+    const flowIdInput = flowCard.querySelector('#flowId') as HTMLInputElement;
     try {
-        await client.updateFlow(nameInput.value, descriptionInput.value, projectIdInput.value);
+        await client.updateFlow(nameInput.value, descriptionInput.value, flowIdInput.value);
     } catch (error) {
         console.error('Error updating flow:', error);
         alert('There was an issue updating the flow. Please try again.');
     }
 
-    await showFlow(projectIdInput.value, flowCard);
+    await showFlow(flowIdInput.value, flowCard);
 
     const cardInner = flowCard.querySelector('.flip-card-inner');
     if (cardInner) {
@@ -43,11 +42,11 @@ function editFlow(editButton: Element) {
         if (cardInner) {
             cardInner.classList.toggle('flipped');
 
-            const updateProjectButton = cardContainer.querySelector("#updateProjectButton");
-            if (updateProjectButton) {
-                updateProjectButton.addEventListener('click', async () => changeProject(cardContainer), {once: true});
+            const updateFlowButton = cardContainer.querySelector("#updateFlowButton");
+            if (updateFlowButton) {
+                updateFlowButton.addEventListener('click', async () => changeFlow(cardContainer), {once: true});
             } else {
-                console.error("updateProjectButton not found");
+                console.error("updateFlowButton not found");
             }
         }
     }

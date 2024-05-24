@@ -1,3 +1,55 @@
+PUT https://localhost:7292/api/Flows
+Content-Type: application/json
+Content-Length: 65
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "id": "11",
+  "NewName": "test",
+  "NewDescription": "test"
+}
+
+###
+
+PUT https://localhost:7292/api/Flows
+Content-Type: application/json
+Content-Length: 65
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "id": "11",
+  "NewName": "test",
+  "NewDescription": "test"
+}
+
+<> 2024-05-24T121854.500.txt
+
+###
+
+PUT https://localhost:7292/api/Flow/Flows
+Content-Type: application/json
+{ '11', 'test', 'test'}: 
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
+PUT https://localhost:7292/api/Flows
+Content-Type: application/json
+{ '11', 'test', 'test'}: 
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
 GET https://localhost:7292/Question/GetOptions?id=1
 Accept: application/json
 User-Agent: IntelliJ HTTP Client/JetBrains Rider 2024.1.1
