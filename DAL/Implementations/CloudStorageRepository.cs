@@ -2,7 +2,6 @@ using System.Collections.Specialized;
 using System.Text.Json;
 using DAL.Interfaces;
 using Google.Cloud.Storage.V1;
-using Google.Cloud.SecretManager.V1;
 using Microsoft.AspNetCore.Http;
 
 namespace DAL.Implementations;
@@ -71,22 +70,6 @@ public class CloudStorageRepository : ICloudStorageRepository
             }
         }
         return null;
-    }
-    private string AccessSecret(string secretId)
-    {
-        // Create the Secret Manager client.
-        SecretManagerServiceClient client = SecretManagerServiceClient.Create();
-
-        // Build the resource name of the secret version.
-        SecretVersionName secretVersionName = new SecretVersionName("269636205630", secretId, "latest");
-
-        // Access the secret version.
-        AccessSecretVersionResponse result = client.AccessSecretVersion(secretVersionName);
-
-        // Get the secret payload and decode it.
-        string payload = result.Payload.Data.ToStringUtf8();
-
-        return payload;
     }
     public void DeleteFile(string fileName)
     {

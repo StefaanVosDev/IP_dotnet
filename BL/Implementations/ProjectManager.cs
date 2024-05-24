@@ -1,9 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using BL.Domain;
-using BL.Domain.Answers;
 using BL.Interfaces;
 using DAL.Interfaces;
-using ValidationContext = AutoMapper.ValidationContext;
 
 namespace BL.Implementations;
 
@@ -22,11 +19,6 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
     public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
     {
         return repository.GetParentFlowsByProjectId(projectId);
-    }
-
-    public void StoreAnswers(int id, List<Answer> answers)
-    {
-        repository.StoreAnswers(id, answers);
     }
 
     public IEnumerable<Project> GetProjectsByAdminId(string adminId)

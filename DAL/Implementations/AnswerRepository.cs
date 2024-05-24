@@ -1,5 +1,3 @@
-using System.Collections;
-using BL.Domain;
 using BL.Domain.Answers;
 using DAL.EF;
 using DAL.Interfaces;

@@ -66,16 +66,18 @@
                 <td>@question.Text</td>
                 <td></td>
                 <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { parentFlowId = question.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { parentFlowId = question.Id })">Delete</a>
+                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { questionId = question.Id })">Edit</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { questionId = question.Id })">Delete</a>
                 </td>
             </tr>
+            //if not last in the model.questisons
+            if (question != Model.Questions.Last())
+            {
+                <button id="arrowAfter@(question.Position)" class="bi-arrow-90deg-down"></button>
+                //todo: addEventListener between this and a new position from the question above or beneath
+            }
+            //put small arrows between every question to be able to change question order
         }
     }
     </tbody>
 </table>
-
-@section Scripts
-{
-    <script src="~/dist/createFlow.entry.js"></script>
-}

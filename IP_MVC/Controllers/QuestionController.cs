@@ -1,23 +1,28 @@
 using BL.Domain;
 using BL.Domain.Questions;
+using BL.Implementations;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces;
+using IP_MVC.Models;
+using WebApplication1.Models;
 
 namespace IP_MVC.Controllers
 {
     public class QuestionController : Controller
     {
         private readonly IQuestionManager _questionManager;
+        private readonly UnitOfWork _unitOfWork;
 
-        public QuestionController(IQuestionManager questionManager)
+        public QuestionController(IQuestionManager questionManager, UnitOfWork unitOfWork)
         {
-            this._questionManager = questionManager;
+            _questionManager = questionManager;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public IActionResult Edit(int parentFlowId)
+        public IActionResult Edit(int questionId)
         {
-            var question = _questionManager.GetQuestionById(parentFlowId);
+            var question = _questionManager.GetQuestionById(questionId);
 
             if (question.Type == QuestionType.Range)
             {
@@ -28,18 +33,22 @@ namespace IP_MVC.Controllers
             return View(question);
         }
 
-        public async Task<IActionResult> Delete(int parentFlowId)
+        public async Task<IActionResult> Delete(int questionId)
         {
-            var question = _questionManager.GetQuestionById(parentFlowId);
+            _unitOfWork.BeginTransaction();
+            var question = _questionManager.GetQuestionById(questionId);
             
             await _questionManager.DeleteAsync(question);
-            return RedirectToAction("Edit", "Flow");
+            
+            _unitOfWork.Commit();
+            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
         }
 
 
         [HttpPost]
         public IActionResult Reorder(int parentFlowId, int newPosition)
         {
+            _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(parentFlowId);
             var oldPosition = question.Position;
             question.Position = newPosition;
@@ -70,6 +79,7 @@ namespace IP_MVC.Controllers
             // Update all affected questions at once
             _questionManager.UpdateAllAsync(affectedQuestions);
 
+            _unitOfWork.Commit();
             return RedirectToAction("Edit");
         }
         
@@ -99,38 +109,39 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string text, QuestionType type, Media media, int flowId)
         {
+            _unitOfWork.BeginTransaction();
             var question = CreateQuestion(type, text, media, flowId);
             await _questionManager.AddAsync(question);
-            return RedirectToAction("Edit", new { parentFlowId = question.Id });
-        }
-        
-        [HttpGet]
-        public IActionResult GetOptions(int id)
-        {
-            var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-            return Json(options);
-        }
-        
+            
+            _unitOfWork.Commit();
+            return RedirectToAction("Edit", new { questionId = question.Id });
+         }
+
         [HttpGet]
         public IActionResult GetRangeValues(int id)
         {
             var values = _questionManager.GetRangeQuestionValues(id);
             return Json(values);
         }
-        
-        [HttpPost]
-        public IActionResult UpdateTitle(int id, string text)
+
+        [HttpGet]
+        public IActionResult StartPreview(int id)
         {
             var question = _questionManager.GetQuestionById(id);
-            var newQuestion = question;
-            newQuestion.Text = text;
-            newQuestion.Position = question.Position;
-            newQuestion.Type = question.Type;
-            newQuestion.Media = question.Media;
-            newQuestion.FlowId = question.FlowId;
+            if (question == null)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
 
-            _questionManager.UpdateAsync(question, newQuestion);
-            return Ok();
+            var questions = _questionManager.GetQuestionsByFlowId(question.FlowId).ToList();
+            //get the position of this question in the list
+            var currentIndex = questions.IndexOf(question);
+            
+            return RedirectToAction("RedirectTroughPreview", "Flow", new {redirectedQuestionId = currentIndex, flowId = question.FlowId});
         }
     }
 }

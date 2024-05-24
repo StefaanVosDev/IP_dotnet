@@ -18,7 +18,12 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
 
     public IEnumerable<Question> GetQuestionsByFlowId(int flowId)
     {
-        return _context.Set<Question>().Where(q => q.FlowId == flowId).ToList();
+        return _context.Set<Question>().Where(q => q.FlowId == flowId).Include(q => q.Media).ToList();
+    }
+    
+    public IEnumerable<Question> GetQuestionsByFlowIdWithMedia(int id)
+    {
+        return _context.Set<Question>().Where(q => q.FlowId == id).Include(q => q.Media).ToList();
     }
 
     public IEnumerable<Question> GetQuestionsBetweenPositions(int newPosition, int oldPosition)
@@ -48,23 +53,19 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
     public void AddOptionToQuestion(int id, string option)
     {
         var singleChoiceQuestion = _context.Set<SingleChoiceQuestion>().FirstOrDefault(q => q.Id == id);
-        if (singleChoiceQuestion != null) {
-            if (singleChoiceQuestion.Options == null)
-                singleChoiceQuestion.Options = new List<string>();
+        if (singleChoiceQuestion != null)
+        {
+            singleChoiceQuestion.Options ??= new List<string>();
             singleChoiceQuestion.Options.Add(option);
-            _context.SaveChanges();
         }
         else
         {
             var multipleChoiceQuestion = _context.Set<MultipleChoiceQuestion>().FirstOrDefault(q => q.Id == id);
             if (multipleChoiceQuestion != null)
             {
-                //if the list is null, first make a new list
-                if (multipleChoiceQuestion.Options == null)
-                    multipleChoiceQuestion.Options = new List<string>();
-                
+                multipleChoiceQuestion.Options ??= new List<string>();
+
                 multipleChoiceQuestion.Options.Add(option);
-                _context.SaveChanges();
             }
         }
     }
@@ -76,7 +77,6 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
         {
             rangeQuestion.Min = min;
             rangeQuestion.Max = max;
-            _context.SaveChanges();
         }
     }
 
@@ -86,7 +86,6 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
         if (singleChoiceQuestion != null)
         {
             singleChoiceQuestion.Options.Remove(option);
-            _context.SaveChanges();
         }
         else
         {
@@ -94,7 +93,6 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
             if (multipleChoiceQuestion != null)
             {
                 multipleChoiceQuestion.Options.Remove(option);
-                _context.SaveChanges();
             }
         }
     }
@@ -108,14 +106,5 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
             type = type
         };
         _context.Set<Question>().FirstOrDefault(q => q.Id == questionId)!.Media = media;
-        _context.SaveChanges();
     }
-    /*{
-        var question = _context.Set<Question>().Include(question => question.Media).FirstOrDefault(q => q.Id == questionId);
-        if (question != null)
-        {
-            question.Media.url = path;
-            _context.SaveChanges();
-        }
-    }*/
 }

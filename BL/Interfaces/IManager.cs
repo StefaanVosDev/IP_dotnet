@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace BL;
+namespace BL.Interfaces;
 
 //TODO: Be sure that the IManager is set up correctly for the project.
 /// <summary>
