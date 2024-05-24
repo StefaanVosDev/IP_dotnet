@@ -19,10 +19,16 @@ namespace IP_MVC.Controllers
     {
         public IActionResult Flow(int projectId, int? parentFlowId)
         {
+            var active = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ProjectId = projectId;
             ViewBag.ParentFlowId = parentFlowId;
-            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
-            return View(projectManager.GetParentFlowsByProjectId(projectId));
+            ViewBag.ActiveProject = active;
+            var flows = projectManager.GetParentFlowsByProjectId(projectId);
+            if (active)
+            {
+                flows = projectManager.GetAvailableFlowsByProjectId(projectId);
+            }
+            return View(flows);
         }
 
         public IActionResult SubFlow(int parentFlowId, bool active)
@@ -247,6 +253,8 @@ namespace IP_MVC.Controllers
             var newFlow = existingFlow;
             newFlow.Name = newFlowModel.Flow.Name;
             newFlow.Description = newFlowModel.Flow.Description;
+            newFlow.StartDate = newFlowModel.Flow.StartDate;
+            newFlow.EndDate = newFlowModel.Flow.EndDate;
 
             flowManager.UpdateAsync(existingFlow, newFlow);
 

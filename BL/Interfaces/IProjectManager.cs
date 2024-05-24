@@ -8,4 +8,5 @@ public interface IProjectManager : IManager<Project>
     public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId);
     public Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId);
     public IEnumerable<Project> GetProjectsByAdminId(string adminId);
+    public IEnumerable<Flow> GetAvailableFlowsByProjectId(int projectId);
 }

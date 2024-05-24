@@ -9,4 +9,5 @@ public interface IProjectRepository : IRepository
     public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId);     
     public IEnumerable<Project> GetProjectsByAdminId(string adminId);
     ValueTask<Project> FindByIdAsync(int id);
+    public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date);
 }
