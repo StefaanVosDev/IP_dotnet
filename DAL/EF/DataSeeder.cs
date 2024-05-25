@@ -16,7 +16,6 @@ public class DataSeeder
 
     public async Task Seed(PhygitalDbContext context)
     {
-        await context.SaveChangesAsync();
         ArgumentNullException.ThrowIfNull(context);
         
         var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
