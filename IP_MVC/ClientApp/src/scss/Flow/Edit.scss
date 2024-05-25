@@ -8,6 +8,15 @@
     &:hover {
       z-index: 2;
     }
+  }
+  
+  .table{
+    --bs-table-bg: $light-blue;
+    --bs-table-border-color: $yellow;
+  }
 
+  .flow-card{
+    height: 40%;
   }
 }
+

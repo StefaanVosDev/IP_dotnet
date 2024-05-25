@@ -1,7 +1,7 @@
 @using IP_MVC
 @model BL.Domain.Flow
 
-<div class="popup-overlay" id="popupOverlay">
+<div class="popup-overlay z-3" id="popupOverlay">
     <div class="popup" id="popup">
         <span class="close" id="closePopup">&times;</span>
         <div class="popup-content">
@@ -16,8 +16,8 @@
             </div>
             <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) ? "True" : "False")'/>
             <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>
-            <input type="hidden" id="projectIdInput" value="@ViewBag.ProjectId"/>
-            <input type="hidden" id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
+            <input  id="projectIdInput" value="@ViewBag.ProjectId"/>
+            <input id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
             <button type="button" class="btn rounded-5" id="createButton">Create Flow</button>
         </div>
     </div>

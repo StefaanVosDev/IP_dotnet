@@ -43,7 +43,7 @@ public class FlowsController : ControllerBase
         {
             return BadRequest("Invalid flow data.");
         }
-        
+
         var flow =  _flowManager.GetFlowById(updateDto.Id);
 
         var updatedFlow = flow;
@@ -72,8 +72,11 @@ public class FlowsController : ControllerBase
             ParentFlowId = createDto.NewParentFlowId
         };
 
-        await _flowManager.AddAsync(newFlow);
+      
+        await _flowManager.AddAsync(newFlow); 
+        
         _unitOfWork.Commit();
-        return NoContent(); 
+       
+        return Ok(newFlow);
     }
 }
