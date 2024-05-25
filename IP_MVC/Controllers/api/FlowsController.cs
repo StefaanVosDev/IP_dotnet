@@ -54,4 +54,26 @@ public class FlowsController : ControllerBase
         _unitOfWork.Commit();
         return NoContent(); 
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] FlowCreateDto createDto)
+    {
+        _unitOfWork.BeginTransaction();
+        if (createDto == null)
+        {
+            return BadRequest("Invalid flow data.");
+        }
+
+        Flow newFlow = new Flow
+        {
+            Name = createDto.NewName,
+            Description = createDto.NewDescription,
+            ProjectId = createDto.NewProjectId,
+            ParentFlowId = createDto.NewParentFlowId
+        };
+
+        await _flowManager.AddAsync(newFlow);
+        _unitOfWork.Commit();
+        return NoContent(); 
+    }
 }

@@ -1,0 +1,30 @@
+@using IP_MVC
+@model BL.Domain.Flow
+
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup" id="popup">
+        <span class="close" id="closePopup">&times;</span>
+        <div class="popup-content">
+            <h5>Create Flow</h5>
+            <div class="form-group">
+                <label for="NewNameInput">Name</label>
+                <input id="NewNameInput" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label for="NewDescriptionInput">Description</label>
+                <textarea id="NewDescriptionInput" class="form-control"></textarea>
+            </div>
+            <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) ? "True" : "False")'/>
+            <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>
+            <input type="hidden" id="projectIdInput" value="@ViewBag.ProjectId"/>
+            <input type="hidden" id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
+            <button type="button" class="btn rounded-5" id="createButton">Create Flow</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/dist/showPopUp.entry.js" defer></script>
+    <script src="~/dist/editFlow.entry.js" defer></script>
+}

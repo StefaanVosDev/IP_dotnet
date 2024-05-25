@@ -1,92 +1,112 @@
-@* @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IP_MVC.Models.FlowEditViewModel
 
 @{
     ViewBag.Title = "Edit Flow";
     Layout = "_Layout";
-}
-
-<h2>Edit Flow</h2>
-
-<form asp-action="Edit" asp-controller="Flow" method="post">
-    <input type="hidden" asp-for="Flow.Id"/>
-
-    <div class="form-group">
-        <label asp-for="Flow.Name"></label>
-        <input asp-for="Flow.Name" class="form-control"/>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Flow.Description"></label>
-        <textarea asp-for="Flow.Description" class="form-control"></textarea>
-    </div>
-    <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
-<hr>
-<h3>Elements</h3>
-
-@if (Model?.SubFlows?.Any() == true || Model?.Questions?.Any() != true && Model?.Flow?.ParentFlowId == null)
-{
-    <a href="@Url.Action("Create", "Flow", new { parentFlowId = Model.Flow?.Id, projectId = Model.Flow.ProjectId })" class="btn btn-primary">Add subflow</a>
-}
-@if (Model?.Questions?.Any() == true || Model?.SubFlows?.Any() != true)
-{
-    <a href="@Url.Action("Create", "Question", new { parentFlowId = Model.Flow?.Id })" class="btn btn-primary">Add question</a>
-}
-
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @if (Model.SubFlows.Any())
+    var viewData = new ViewDataDictionary(ViewData)
     {
-        @foreach (var subflow in Model.SubFlows)
-        {
-            <tr>
-                <td>@subflow.Name</td>
-                <td>@subflow.Description</td>
-                <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { parentFlowId = subflow.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Flow", new { flowId = subflow.Id })">Delete</a>
-                </td>
-            </tr>
-        }
-    }
-    @if (Model.Questions.Any())
-    {
-        @foreach (var question in Model.Questions)
-        {
-            <tr>
-                <td>@question.Text</td>
-                <td></td>
-                <td>
-                    <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { questionId = question.Id })">Edit</a>
-                    <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { questionId = question.Id })">Delete</a>
-                </td>
-            </tr>
-            //if not last in the model.questisons
-            if (question != Model.Questions.Last())
-            {
-                <button id="arrowAfter@(question.Position)" class="bi-arrow-90deg-down"></button>
-                //todo: addEventListener between this and a new position from the question above or beneath
-            }
-            //put small arrows between every question to be able to change question order
-        }
-    }
-    </tbody>
-</table>
+        { "parentFlowId", Model.Flow?.Id },
+        { "projectId", Model.Flow?.ProjectId }
+    };
+}
+
+<body class="edit-page">
+<div class="container-fluid">
+    <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
+
+    <div class="card big-card-content border-1 border-black  h-75 position-relative">
+        <div class="big-card-content overflow-scroll">
+            <div class="row m-0 p-3 h-50 position-relative">
+                <div class="card h-100 overflow-y-scroll background-color-light-blue">
+
+                    <form asp-action="Edit" asp-controller="Flow" method="post">
+                        <input type="hidden" asp-for="Flow.Id"/>
+
+                        <div class="form-group">
+                            <label asp-for="Flow.Name"></label>
+                            <input asp-for="Flow.Name" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Flow.Description"></label>
+                            <textarea asp-for="Flow.Description" class="form-control"></textarea>
+                        </div>
+                        <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row m-0 p-3 h-50 position-relative">
+                <div class="card h-100 overflow-y-scroll background-color-light-blue">
+
+                    <h3>Elements</h3>
+
+                    @if (Model?.SubFlows?.Any() == true || Model?.Questions?.Any() != true && Model?.Flow?.ParentFlowId == null)
+                    {
+                        <button class="btn rounded-5 create-btn" id="popupButton">Add new SubFlow</button>
+                        @await Html.PartialAsync("_CreateFlow", new BL.Domain.Flow(), viewData)
+                    }
+                    @if (Model?.Questions?.Any() == true || Model?.SubFlows?.Any() != true)
+                    {
+                        <a href="@Url.Action("Create", "Question", new { parentFlowId = Model.Flow?.Id })" class="btn btn-primary" id="popupButton">Add question</a>
+                    }
+
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.SubFlows.Any())
+                        {
+                            @foreach (var subflow in Model.SubFlows)
+                            {
+                                <tr>
+                                    <td>@subflow.Name</td>
+                                    <td>@subflow.Description</td>
+                                    <td>
+                                        <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { parentFlowId = subflow.Id })">Edit</a>
+                                        <a class="btn btn-danger" href="@Url.Action("Delete", "Flow", new { flowId = subflow.Id })">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        @if (Model.Questions.Any())
+                        {
+                            @foreach (var question in Model.Questions)
+                            {
+                                <tr>
+                                    <td>@question.Text</td>
+                                    <td></td>
+                                    <td>
+                                        <a class="btn btn-primary" href="@Url.Action("Edit", "Question", new { questionId = question.Id })">Edit</a>
+                                        <a class="btn btn-danger" href="@Url.Action("Delete", "Question", new { questionId = question.Id })">Delete</a>
+                                    </td>
+                                </tr>
+                                //if not last in the model.questisons
+                                if (question != Model.Questions.Last())
+                                {
+                                    <button id="arrowAfter@(question.Position)" class="bi-arrow-90deg-down"></button>
+                                    //todo: addEventListener between this and a new position from the question above or beneath
+                                }
+                                //put small arrows between every question to be able to change question order
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
 
 @section Scripts
 {
-    <script src="~/dist/createFlow.entry.js"></script>
+    <script src="~/dist/showPopUp.entry.js" defer></script>
+    <script src="~/dist/editFlow.entry.js" defer></script>
 }
-*@
-
-
-@*!!! DEZE PAGINA NOG NIET VERWIJDEREN HEB HET NOG NODIG!!!!*@

@@ -12,7 +12,7 @@
 <body class="subFlow-page overflow-hidden">
 <div class="swiper">
     <div class="swiper-wrapper">
-        @foreach (var flow in Model)
+        @foreach (var subFlow in Model)
         {
             <div class="swiper-slide">
                 <div class="slide-card">
@@ -26,18 +26,18 @@
                     <div class="card border-1 border-black h-50 position-absolute card-clickable">
                         <div class="align-items-center h-100 overflow-y-scroll">
                             <div class="card-body ">
-                                <h5 class="card-title">@flow.Name</h5>
-                                <p class="card-text">@flow.Description</p>
+                                <h5 class="card-title">@subFlow.Name</h5>
+                                <p class="card-text">@subFlow.Description</p>
                             </div>
                         </div>
 
                         <div class="d-flex text-center position-sticky py-2 button-container">
-                                <div class="flex-grow-1 border-2">
-                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.LINEAR, active = @ViewBag.ActiveProject })" class="btn h-100 align-content-center">Start linear Flow</a>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, flowtype = FlowType.CIRCULAR, active = @ViewBag.ActiveProject  })" class="btn h-100 align-content-center">Start circular Flow</a>
-                                </div>
+                            <div class="flex-grow-1 border-2">
+                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, flowtype = FlowType.LINEAR, active = @ViewBag.ActiveProject })" class="btn h-100 align-content-center">Start linear Flow</a>
+                            </div>
+                            <div class="flex-grow-1">
+                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, flowtype = FlowType.CIRCULAR, active = @ViewBag.ActiveProject })" class="btn h-100 align-content-center">Start circular Flow</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,6 @@
     <div class="swiper-button-prev position-fixed"></div>
     <div class="swiper-button-next position-fixed"></div>
     <div class="swiper-pagination swiper-pagination-bullet-active"></div>
-
 </div >
 
 </body >

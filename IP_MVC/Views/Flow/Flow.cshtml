@@ -14,7 +14,7 @@
 
     <div class="card border-1 border-black pt-3 h-75 position-relative">
         <div class="big-card-content overflow-scroll">
-            <div class="row m-0">
+            <div class="row m-0" id="row">
                 @foreach (var flow in Model)
                 {
                     <div class="col col-sm-12 col-md-6 col-lg-4 col-xl-4 pb-3">
@@ -79,7 +79,7 @@
                                                 <button type="submit" class="btn py-0" id="updateFlowButton">Update</button>
                                             </div>
                                             <div>
-                                                <a class="btn py-0 " href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.ParentFlowId })">Edit SubFlows</a>
+                                                <a class="btn py-0 " href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id })">Edit SubFlows</a>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
             @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
             {
                 <button class="btn create-btn" id="popupButton">Create New Flow</button>
-                @await Html.PartialAsync("_Create", new BL.Domain.Flow())
+                @await Html.PartialAsync("_CreateFlow", new BL.Domain.Flow())
             }
             @if (@ViewBag.ActiveProject)
             {
@@ -103,8 +103,8 @@
             }
         </div>
     </div >
-</div >
-</body >
+</div>
+</body>
 
 @section Scripts
 {

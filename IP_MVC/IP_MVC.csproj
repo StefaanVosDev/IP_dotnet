@@ -131,7 +131,6 @@
 
     <ItemGroup>
       <Folder Include="Pages\" />
-      <Folder Include="Views\Flow\Questions\" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
