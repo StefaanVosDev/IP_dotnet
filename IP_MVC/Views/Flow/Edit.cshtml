@@ -31,6 +31,17 @@
                         <label asp-for="Flow.Description"></label>
                         <textarea asp-for="Flow.Description" class="form-control"></textarea>
                     </div>
+
+                    <div class="form-group">
+                        <label asp-for="Flow.StartDate"></label>
+                        <input asp-for="Flow.StartDate" class="form-control"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Flow.EndDate"></label>
+                        <input asp-for="Flow.EndDate" class="form-control"/>
+                    </div>
+
                     <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
                 </form>
             </div>
@@ -73,7 +84,7 @@
                         {
                             <tbody>
                             <tr>
-                                <td>@question.Text</td>
+                                <td class="question" data-question-id="@question.Id" data-position="@question.Position">@question.Text</td>
                                 <td class="align-content-center">
                                     <div class="row">
                                         <div class="col-6 ">
