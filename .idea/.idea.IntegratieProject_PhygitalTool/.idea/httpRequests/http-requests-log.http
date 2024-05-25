@@ -1,3 +1,19 @@
+POST https://localhost:7292/api/Flows
+Content-Type: application/json
+Content-Length: 107
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+ "NewName": "Rune TES",
+  "NewDescription": "Rune TES",
+  "NewProjectId": "5",
+  "NewParentFlowId": "2"
+}
+
+###
+
 PUT https://localhost:7292/api/Flows
 Content-Type: application/json
 Content-Length: 64

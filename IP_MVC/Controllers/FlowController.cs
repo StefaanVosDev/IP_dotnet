@@ -33,8 +33,11 @@ namespace IP_MVC.Controllers
 
         public IActionResult SubFlow(int parentFlowId, bool active)
         {
+            ViewBag.ProjectId = flowManager.GetFlowById(parentFlowId).ProjectId;
+            ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ActiveProject = active;
+            
             return View(flowManager.GetFlowsByParentId(parentFlowId));
         }
 

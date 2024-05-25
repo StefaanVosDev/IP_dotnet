@@ -6,7 +6,8 @@
 <body class="project-page">
 @if (User.IsInRole(CustomIdentityConstants.AdminRole))
 {
-    <a class="btn create-btn" href="@Url.Action("Create", "Project")">Create New project</a>
+      <button class="btn create-btn" id="popupButton">Create New Project</button>
+      @await Html.PartialAsync("_Create", new BL.Domain.Project())
 }
 <div class="container-fluid">
     <div class="row">
@@ -93,5 +94,6 @@
 
 @section Scripts
 {
+    <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/editProject.entry.js" defer></script>
 }

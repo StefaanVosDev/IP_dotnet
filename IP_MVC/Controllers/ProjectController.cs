@@ -38,7 +38,7 @@ public class ProjectController : Controller
     public async Task<IActionResult> Create(Project project)
     {
         _unitOfWork.BeginTransaction();
-        if (!ModelState.IsValid) return View(project);
+        if (!ModelState.IsValid) return RedirectToAction("Project");
 
         // Assign the UserId of the project to the current user's Id
         project.AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -49,11 +49,6 @@ public class ProjectController : Controller
         return RedirectToAction("Project");
     }
     
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
     public IActionResult Index()
     {
         throw new NotImplementedException();
