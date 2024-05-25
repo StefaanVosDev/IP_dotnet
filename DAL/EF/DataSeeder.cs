@@ -20,7 +20,8 @@ public class DataSeeder
         
         var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
         context.Add(project);
-
+        var adminUser = await _userManager.FindByNameAsync("admin@kdg.be");
+        project.AdminId = adminUser?.Id;
         await context.SaveChangesAsync();
         
         var flows = new List<Flow>
@@ -94,7 +95,9 @@ public class DataSeeder
                             description = "Dit is een afbeelding over de betrokkenheid van jongeren",
                             url="https://storage.googleapis.com/phygital-public/Questions/OVM-Jongeren-betrekken-bij-de-politiek-hoe-doe-je-dat.jpg",
                             type = MediaType.IMAGE
-                        }
+                        },
+                        new DateTime(2024, 1, 1).ToUniversalTime(),
+                        new DateTime(2024, 7, 1).ToUniversalTime()
                     ),
                     new Flow(
                         2,
@@ -166,7 +169,9 @@ public class DataSeeder
                             description = "Afbeelding over de kiesintenties en participatie aan verkiezingen",
                             url = "https://storage.googleapis.com/phygital-public/Questions/shutterstock_1937926147_1.jpg",
                             type = MediaType.IMAGE
-                        }
+                        },
+                        new DateTime(2024, 1, 1).ToUniversalTime(),
+                        new DateTime(2024, 7, 1).ToUniversalTime()
                     )
                 ],
                 new Media()
@@ -174,13 +179,13 @@ public class DataSeeder
                     description = "Afbeelding over de betrokkenheid bij het lokale beleid",
                     url = "https://storage.googleapis.com/phygital-public/Questions/betrekkingBevolking.jpg",
                     type = MediaType.IMAGE
-                }
+                },
+                new DateTime(2024, 1, 1).ToUniversalTime(),
+                new DateTime(2024, 7, 1).ToUniversalTime()
             )
         };
         
         project.Flows = flows; 
-        var adminUser = await _userManager.FindByNameAsync("admin@kdg.be");
-        project.AdminId = adminUser?.Id;
         await context.SaveChangesAsync();
     }
 }

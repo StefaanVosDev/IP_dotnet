@@ -28,4 +28,13 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
     {
         return _context.Set<Project>().FindAsync(id);
     }
+
+    public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date)
+    {
+        return _context.Set<Flow>().Where(f => f.ProjectId == projectId &&
+                                               f.ParentFlowId == null && 
+                                               f.StartDate <= date &&
+                                               f.EndDate >= date
+                                               );
+    }
 }

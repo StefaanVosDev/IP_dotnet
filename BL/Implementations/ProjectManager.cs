@@ -25,4 +25,10 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
     {
         return repository.GetProjectsByAdminId(adminId);
     }
+
+    public IEnumerable<Flow> GetAvailableFlowsByProjectId(int projectId)
+    {
+        DateTime today = DateTime.Today.ToUniversalTime();
+        return repository.FindAvailableFlowsByProjectId(projectId, today);
+    }
 }

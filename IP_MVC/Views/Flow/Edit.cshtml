@@ -20,6 +20,17 @@
         <label asp-for="Flow.Description"></label>
         <textarea asp-for="Flow.Description" class="form-control"></textarea>
     </div>
+
+    <div class="form-group">
+        <label asp-for="Flow.StartDate"></label>
+        <input asp-for="Flow.StartDate" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Flow.EndDate"></label>
+        <input asp-for="Flow.EndDate" class="form-control"/>
+    </div>
+    
     <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

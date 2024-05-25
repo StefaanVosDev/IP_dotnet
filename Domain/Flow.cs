@@ -18,12 +18,14 @@ public class Flow
     public int ProjectId { get; set; }
     public Project Project { get; set; }
     public Media Media { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
     
     public Flow()
     {
     }
 
-    public Flow(int position, string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows, Media media) 
+    public Flow(int position, string name, string description, int projectId, FlowType type, List<Question> questions, List<Flow> subFlows, Media media, DateTime startDate, DateTime endDate) 
     {
         Position = position;
         Name = name;
@@ -33,6 +35,8 @@ public class Flow
         Questions = questions;
         SubFlows = subFlows;
         Media = media;
+        StartDate = startDate;
+        EndDate = endDate;
     }
     
     public Flow(string name, string description, int projectId, Flow parentFlow) 
