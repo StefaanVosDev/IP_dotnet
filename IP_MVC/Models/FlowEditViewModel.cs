@@ -9,6 +9,4 @@ public class FlowEditViewModel
     public IEnumerable<Flow> SubFlows { get; set; }
     public IEnumerable<Question> Questions { get; set; }
     public int Position { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
 }

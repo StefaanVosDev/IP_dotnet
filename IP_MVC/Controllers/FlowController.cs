@@ -253,8 +253,8 @@ namespace IP_MVC.Controllers
             var newFlow = existingFlow;
             newFlow.Name = newFlowModel.Flow.Name;
             newFlow.Description = newFlowModel.Flow.Description;
-            newFlow.StartDate = newFlowModel.Flow.StartDate;
-            newFlow.EndDate = newFlowModel.Flow.EndDate;
+            newFlow.StartDate = newFlowModel.Flow.StartDate.ToUniversalTime();
+            newFlow.EndDate = newFlowModel.Flow.EndDate.ToUniversalTime();
 
             flowManager.UpdateAsync(existingFlow, newFlow);
 
@@ -278,6 +278,8 @@ namespace IP_MVC.Controllers
 
             flow.ProjectId = projectId;
             flow.ParentFlowId = parentFlowId;
+            flow.StartDate = flow.StartDate.ToUniversalTime();
+            flow.EndDate = flow.EndDate.ToUniversalTime();
             flowManager.AddAsync(flow);
 
             unitOfWork.Commit();
