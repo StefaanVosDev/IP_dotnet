@@ -1,5 +1,4 @@
 import * as client from "./restFlowClient"
-import {createFlow, getFlow, getFlowId} from "./restFlowClient";
 import {Flows} from "../../models/Flows.interfaces";
 import {updateSwiper} from "./createScroll";
 
@@ -85,7 +84,7 @@ async function addFlow() {
     };
     
     try {
-        await createFlow(flow);
+        await client.createFlow(flow);
         console.log('Flow created:', flow);
     } catch (error) {
         console.error('Error creating flow:', error);
