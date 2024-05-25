@@ -24,8 +24,8 @@
             </div>
             <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) ? "True" : "False")'/>
             <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>
-            <input id="projectIdInput" value="@ViewBag.ProjectId"/>
-            <input id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
+            <input type="hidden" id="projectIdInput" value="@ViewBag.ProjectId"/>
+            <input type="hidden" id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
             <button type="button" class="btn rounded-5" id="createButton">Create Flow</button>
         </div>
     </div>
