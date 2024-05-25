@@ -28,7 +28,7 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
 
     public IEnumerable<Flow> GetAvailableFlowsByProjectId(int projectId)
     {
-        DateTime today = DateTime.Today;
+        DateTime today = DateTime.Today.ToUniversalTime();
         return repository.FindAvailableFlowsByProjectId(projectId, today);
     }
 }
