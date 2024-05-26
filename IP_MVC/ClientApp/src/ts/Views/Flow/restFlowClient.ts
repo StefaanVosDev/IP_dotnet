@@ -63,3 +63,14 @@ export async function createFlow(flow: Flows) {
         }) .catch(reason => alert("Error updating flow:" + reason));
 }
 
+export async function getSubFlows(flowId: string) {
+    const response = await fetch(`/api/Flows/${flowId}/SubFlows`, {
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`Unable to get subflows for flow with id ${flowId}`)
+    }
+    return response.json();
+}
