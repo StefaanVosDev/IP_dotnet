@@ -3,18 +3,13 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+
 }
 
 <h2>Open question</h2>
 
 <form asp-controller="Flow" asp-action="SaveAnswerOpenQuestion" method="post">
-    <textarea class="form-control" name="Answer">
-        @if (earlierAnswer != null)
-        {
-            @earlierAnswer.AnswerText
-        }
-    </textarea>
     <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+    <textarea class="form-control" name="Answer"></textarea>
     <button type="submit">Submit</button>
 </form>

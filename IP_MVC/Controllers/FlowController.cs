@@ -265,6 +265,7 @@ namespace IP_MVC.Controllers
 
         public IActionResult CompletedOpenQuestion()
         {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             return View();
         }
 
