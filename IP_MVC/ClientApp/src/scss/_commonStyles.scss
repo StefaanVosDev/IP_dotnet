@@ -7,16 +7,31 @@
   }
 }
 
-.btn {
+.btn-blue {
   border-color: $light-blue;
   border-radius: 5em;
+  color: $dark-blue;
   box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
   transition: all 150ms ease-in-out;
 
   &:hover {
+    color: $dark-blue;
     box-shadow: 0 0 10px 0 $blue inset, 0 0 10px 10px $yellow;
   }
 }
+
+.btn-white {
+  border-radius: 5em;
+  color: $dark-blue;
+  box-shadow: 0 0 40px 40px white inset, 0 0 0 0 white;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    color: $dark-blue;
+    box-shadow: 0 0 10px 0 $blue inset, 0 0 10px 10px $yellow;
+  }
+}
+
 
 .arrow-submit-right {
   font-family: $signalcompressed-font, serif;
@@ -105,6 +120,10 @@
 
 .background-color-light-blue {
   background-color: $light-blue;
+}
+
+.background-color-white {
+  background-color: #fff
 }
 
 img{
