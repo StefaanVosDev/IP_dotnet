@@ -14,7 +14,7 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     {
         return _context.Set<Flow>().Where(f => f.ParentFlowId == flowId);
     }
-    public Flow getFlowById(int id)
+    public Flow GetFlowById(int id)
     {
         return _context.Set<Flow>().Find(id);
     }

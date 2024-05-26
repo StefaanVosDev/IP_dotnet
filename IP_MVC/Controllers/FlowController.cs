@@ -182,7 +182,6 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, int redirectedQuestionId)
         {
-            unitOfWork.BeginTransaction();
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
@@ -203,6 +202,7 @@ namespace IP_MVC.Controllers
                 Session = sessionManager.GetSessionById(sessionId),
                 Flow = flow
             };
+            unitOfWork.BeginTransaction();
 
             // If there is no answer given to this question yet, add the answer to the session
             if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
@@ -227,14 +227,20 @@ namespace IP_MVC.Controllers
             var flowToRemove = flowManager.GetFlowById(flowId);
             var parentFlowId1 = flowToRemove.ParentFlowId;
             var projectId1 = flowToRemove.ProjectId;
+            
+            var subFlows = flowManager.GetFlowsByParentId(flowId);
+            foreach (var subFlow in subFlows)
+            {
+                flowManager.DeleteAsync(subFlow);
+            }
+            
             flowManager.DeleteAsync(flowToRemove);
+            unitOfWork.Commit();
 
             if (parentFlowId1 == null)
             {
                 return RedirectToAction("Flow", new { projectId = projectId1 });
             }
-
-            unitOfWork.Commit();
             return RedirectToAction("Flow", new { parentFlowId = parentFlowId1 });
         }
 
@@ -250,7 +256,8 @@ namespace IP_MVC.Controllers
                 Flow = flow,
                 Questions = questions
             };
-
+            var active = HttpContext.Session.Get<bool>("projectActive");
+            ViewBag.ActiveProject = active;
             return View(model);
         }
 
@@ -262,6 +269,7 @@ namespace IP_MVC.Controllers
 
             if (existingFlow == null)
             {
+                unitOfWork.Commit();
                 return NotFound();
             }
 

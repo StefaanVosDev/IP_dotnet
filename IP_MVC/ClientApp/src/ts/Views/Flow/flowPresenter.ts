@@ -30,7 +30,12 @@ export function setupEditEventListener(){
 
 createButton.forEach(button => {
     button.addEventListener('click', async () => {
-        addFlow();
+        addFlow().then(() => {
+            const nameInput = document.getElementById('NewNameInput') as HTMLInputElement;
+            const descriptionInput = document.getElementById('NewDescriptionInput') as HTMLInputElement;
+            nameInput.value = '';
+            descriptionInput.value = '';
+        });
     })
 });
 
@@ -208,10 +213,14 @@ export function appendSubFlowToPage(flow: Flows, flowId: number) {
                     </div>
                     <div class="d-flex text-center position-sticky py-2 button-container">
                         <div class="flex-grow-1 border-2">
-                       @*Todo: add update button*@
+<!--                       @*Todo: add styling to update button*@-->
+                       <a class="btn py-0" href="@Url.Action("Edit, "Flow", new { parentFlowId = flow.Id })">Update flow</a>
+
                         </div>
                         <div class="flex-grow-1">
-                        @*Todo: Add delete button*@
+<!--                        @*Todo: Add styling to delete button*@-->
+                        <a class="btn py-0" href="@Url.Action("Delete, "Flow", new { flowId = flow.Id })">Update flow</a>
+
                         </div>
                     </div>
                 </div>
@@ -223,3 +232,28 @@ export function appendSubFlowToPage(flow: Flows, flowId: number) {
 }
 
 setupEditEventListener();
+
+async function deleteFlow() {
+    const deleteButtonsForFlow = document.getElementsByClassName('deleteFlowButton') as HTMLCollectionOf<HTMLButtonElement>
+    if (deleteButtonsForFlow === null) return;
+    for (let i=0; i < deleteButtonsForFlow.length; i++) {
+        deleteButtonsForFlow[i].addEventListener('click', async (event) => {
+            event.preventDefault();
+            const flowId = deleteButtonsForFlow[i].getAttribute('data-flow-id') as string;
+            const subFlows = await client.getSubFlows(flowId);
+            const subFlowsCount = subFlows.length;
+            if (subFlowsCount > 0) {
+                if (confirm(`This flow contains ${subFlowsCount} subflows, are you sure you want to delete this flow?`)) {
+                    window.location.href = deleteButtonsForFlow[i].getAttribute('href') as string;
+                }
+            } else {
+                if (confirm('Are you sure you want to delete this flow?')) {
+                    window.location.href = deleteButtonsForFlow[i].getAttribute('href') as string;
+                }
+            }
+        });
+    }
+}
+deleteFlow().then( q => 
+    console.log('is the flow deleted?')
+);

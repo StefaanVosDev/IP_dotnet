@@ -18,7 +18,7 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
 
     public Flow GetFlowById(int id)
     {
-        return repository.getFlowById(id);
+        return repository.GetFlowById(id);
     }
 
     public async Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int flowId)
@@ -40,8 +40,8 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
 
     public bool IsParentFlow(int flowId)
     {
-        var allSubFlows = repository.GetFlowsByParentId(flowId);
-        return !allSubFlows?.Any() ?? false;
+        var allSubFlows = GetFlowsByParentId(flowId);
+        return allSubFlows?.Any() ?? false;
     }
 
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
