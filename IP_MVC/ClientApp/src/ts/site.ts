@@ -13,7 +13,7 @@ import '../scss/Flow/EndFlow.scss'
 import '../scss/Project/Project.scss'
 import '../scss/Flow/questions/Questions.scss'
 import '../scss/site.scss';
-import '../scss/Analytics/analytics.scss';
+import '../scss/Analytics/Analytics.scss';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';

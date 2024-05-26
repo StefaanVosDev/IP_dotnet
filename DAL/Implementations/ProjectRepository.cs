@@ -6,21 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Implementations;
 
-public class ProjectRepository(PhygitalDbContext context) : Repository(context), IProjectRepository
+public class ProjectRepository : Repository, IProjectRepository
 {
-    private readonly DbContext _context = context;
+    private readonly PhygitalDbContext _context;
+
+    public ProjectRepository(PhygitalDbContext context) : base(context)
+    {
+        _context = context;
+    }
 
     public async Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
     {
         return await _context.Set<Flow>().Where(f => f.ProjectId == projectId).ToListAsync();
     }
 
-    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
+    public async Task<IEnumerable<Flow>> GetParentFlowsByProjectIdAsync(int projectId)
     {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId && f.ParentFlowId == null);
+        return await _context.Set<Flow>().Where(f => f.ProjectId == projectId && f.ParentFlowId == null).ToListAsync();
     }
 
-    public IEnumerable<Project> GetProjectsByAdminId(string adminId)
+    public async Task<IEnumerable<Project>> GetProjectsByAdminIdAsync(string adminId)
     {
         return _context.Set<Project>().Where(p => p.AdminId == adminId);
     }
@@ -32,11 +37,10 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
 
     public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date)
     {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId &&
-                                               f.ParentFlowId == null &&
-                                               f.StartDate <= date &&
-                                               f.EndDate >= date
-        );
+        return await _context.Set<Flow>().Where(f => f.ProjectId == projectId &&
+                                                     f.ParentFlowId == null &&
+                                                     f.StartDate <= date &&
+                                                     f.EndDate >= date).ToListAsync();
     }
 
     public IEnumerable<Project> GetProjectsByFacilitatorId(string userId)

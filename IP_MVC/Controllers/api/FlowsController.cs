@@ -79,4 +79,11 @@ public class FlowsController : ControllerBase
        
         return Ok(newFlow);
     }
+
+    [HttpGet("{flowId}/SubFlows")]
+    public IActionResult GetAllSubFlows(int flowId)
+    {
+        var subFlows = _flowManager.GetFlowsByParentId(flowId);
+        return Ok(subFlows);
+    }
 }

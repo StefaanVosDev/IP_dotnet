@@ -49,7 +49,7 @@ namespace IP_MVC.Controllers
             await _questionManager.UpdateAllAsync(questionsToUpdate);
             
             _unitOfWork.Commit();
-            return RedirectToAction("Flow", "Flow", new {parentFlowId = question.FlowId});
+            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
         }
         
         [HttpGet]

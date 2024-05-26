@@ -1,14 +1,14 @@
 @import '_variables.scss';
 
 html {
-  font-size: $base-font-size; 
+  font-size: $base-font-size;
   position: relative;
   min-height: 100%;
 }
 
 body {
-    font-size: calc(15px + 0.390625vw);
-    line-height: 1.5;
+  font-size: calc(15px + 0.390625vw);
+  line-height: 1.5;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -24,16 +24,6 @@ body {
   z-index: 1;
 }
 
-.create-btn {
-  border-color: $light-blue;
-  border-radius: 5em;
-  box-shadow: 0 0 40px 40px $light-blue inset, 0 0 0 0 $light-blue;
-  transition: all 150ms ease-in-out;
-
-  &:hover {
-    box-shadow: 0 0 10px 0 $blue inset, 0 0 10px 10px $yellow;
-  }
-}
 
 a.navbar-brand {
   white-space: normal;
@@ -74,11 +64,14 @@ button.accept-policy {
   line-height: inherit;
 }
 
-
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+}
+
+::-webkit-scrollbar{
+  display: none;
 }
