@@ -16,10 +16,11 @@
     ViewData["questionType"] = Model.Question;
 
     var subFlowId = ViewBag.subFlowId;
-    
+
     //todo: give this in the viewbag controller, add a checkbox?
     var facilitatorWatching = ViewBag.facilitatorWatching ?? true;
     var preview = ViewBag.Preview ?? false;
+    var showQr = ViewBag.showQrCode ?? true;
 }
 
 <body class="questions-page">
@@ -33,7 +34,8 @@
                     <a href="@Url.Action("Edit", "Question", new { questionId = Model.Question.Id })" class="btn arrow-submit-left"></a>
                     <span>Edit mode</span>
                 </div>
-            } else
+            }
+            else
             {
                 <div class="col-6 h-100">
                     <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = subFlowId, active = ViewBag.ActiveProject })" class="btn bi bi-box-arrow-left py-0 h-100"></a>
@@ -71,104 +73,107 @@
                     <p class="text-start fw-bold">Question</p>
                     <p>@Model.Question.Text</p>
                     
-                    <form id="myForm" asp-controller="Flow" asp-action="SaveAnswerAndRedirect" method="post">
-                        @switch (@Model.QuestionType)
-                        {
-                            case QuestionType.Open:
-                                @await Html.PartialAsync("Questions/_Open", new OpenQuestion())
-                                break;
-                            case QuestionType.Range:
-                                @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
-                                break;
-                            case QuestionType.MultipleChoice:
-                                @await Html.PartialAsync("Questions/_MultipleChoice", new MultipleChoiceQuestion())
-                                break;
-                            case QuestionType.SingleChoice:
-                                @await Html.PartialAsync("Questions/_SingleChoice", new SingleChoiceQuestion())
-                                break;
-                        }
-                        <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
-                        <input type="hidden" name="id" value="@Model.Question.Id"/>
-                        <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
+                        <form id="myForm" asp-controller="Flow" asp-action="SaveAnswerAndRedirect" method="post">
+                            @switch (@Model.QuestionType)
+                            {
+                                case QuestionType.Open:
+                                    <img height="250" width="250" src="@ViewBag.QrImage" alt="Qr code image" />
+                                    break;
+                                case QuestionType.Range:
+                                    @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
+                                    break;
+                                case QuestionType.MultipleChoice:
+                                    @await Html.PartialAsync("Questions/_MultipleChoice", new MultipleChoiceQuestion())
+                                    break;
+                                case QuestionType.SingleChoice:
+                                    @await Html.PartialAsync("Questions/_SingleChoice", new SingleChoiceQuestion())
+                                    break;
+                            }
+                            <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+                            <input type="hidden" name="id" value="@Model.Question.Id"/>
+                            <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
 
-                        <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
+                            <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
 
-                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div class="d-flex justify-content-between align-items-center py-2">
+                                @if (flowType == FlowType.LINEAR)
+                                {
+                                    <div>
+                                        @if (currentIndex != 0)
+                                        {
+                                            if (preview)
+                                            {
+                                                <button id="prevQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-controller="Flow" asp-action="RedirectTroughPreview"></button>
+                                            }
+                                            else
+                                            {
+                                                <button id="prevQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-controller="Flow" asp-action="SaveAnswerAndRedirect"></button>
+                                            }
+                                        }
+                                    </div>
+                                    @if (preview && currentIndex + 1 < questionCount)
+                                    {
+                                        <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-controller="Flow" asp-action="RedirectTroughPreview"></button>
+                                    }
+                                    else if (!preview)
+                                    {
+                                        <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-controller="Flow" asp-action="SaveAnswerAndRedirect"></button>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="row py-2">
+                                        <span id="countdown"></span>
+                                    </div>
+                                    <script src="/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
+                                }
+                            </div>
                             @if (flowType == FlowType.LINEAR)
                             {
-                                <div>
-                                    @if (currentIndex != 0)
-                                    {
-                                        if (preview)
+                                <div class="position-absolute py-1 top-0 end-0 dropdown">
+                                    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Quick navigation
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @for (var i = 0; i < questionCount; i++)
                                         {
-                                            <button id="prevQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex - 1)" form="myForm" class="btn arrow-submit-left" asp-controller="Flow" asp-action="RedirectTroughPreview"></button>
-                                        } else
-                                        {
-                                            <button id = "prevQuestionButton" type = "submit" name = "redirectedQuestionId@(currentIndex - 1)" form = "myForm" class ="btn arrow-submit-left" asp-controller="Flow" asp-action = "SaveAnswerAndRedirect"></button>
-                                        }
-                                    }
-                                </div>
-                                @if (preview && currentIndex + 1 < questionCount)
-                                {
-                                    <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-controller="Flow" asp-action="RedirectTroughPreview"></button>
-                                }
-                                else if (!preview)
-                                {
-                                    <button id="nextQuestionButton" type="submit" name="redirectedQuestionId@(currentIndex + 1)" form="myForm" class="btn arrow-submit-right" asp-controller="Flow" asp-action="SaveAnswerAndRedirect"></button>
-                                }
-                            }
-                            else
-                            {
-                                <div class="row py-2">
-                                    <span id="countdown"></span>
-                                </div>
-                                <script src="/dist/goingToNextQuestionCircularFlow.entry.js" defer="defer"></script>
-                            }
-                        </div>
-                        @if (flowType == FlowType.LINEAR)
-                        {
-                            <div class="position-absolute py-1 top-0 end-0 dropdown">
-                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Quick navigation
-                                </button>
-                                <ul class="dropdown-menu">
-                                    @for (var i = 0; i < questionCount; i++)
-                                    {
-                                        var index = i;
-                                        if (index == currentIndex)
-                                        {
-                                            if (preview)
+                                            var index = i;
+                                            if (index == currentIndex)
                                             {
-                                                <li>
-                                                    <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
-                                                </li>
-                                            } else
+                                                if (preview)
+                                                {
+                                                    <li>
+                                                        <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
+                                                }
+                                            }
+                                            else
                                             {
-                                                <button class="dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
-
+                                                if (preview)
+                                                {
+                                                    <li>
+                                                        <button class="dropdown-item" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li>
+                                                        <button class="dropdown-item" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
+                                                    </li>
+                                                }
                                             }
                                         }
-                                        else
-                                        {
-                                            if (preview)
-                                            {
-                                                <li>
-                                                    <button class="dropdown-item" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
-                                                </li>
-                                            } else
-                                            {
-                                                <li>
-                                                    <button class="dropdown-item" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
-                                                </li>
-                                            }
-                                        }
-                                    }
-                                </ul>
-                            </div>
-                        }
-                    </form>
+                                    </ul>
+                                </div>
+                            }
+                        </form>
+                    
                     @if (facilitatorWatching && !preview)
-                    { 
+                    {
                         <button class="btn create-btn" id="pauseButton">Pause </button>
                         @await Html.PartialAsync("_CreateNote", new Note())
                     }
