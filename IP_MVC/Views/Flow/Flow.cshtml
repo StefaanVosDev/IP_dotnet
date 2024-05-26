@@ -1,4 +1,5 @@
 @using BL.Domain
+@using BL.Implementations
 @using IP_MVC
 @model IEnumerable<BL.Domain.Flow> 
 @inject BL.Interfaces.IFlowManager FlowManager
@@ -43,14 +44,14 @@
 
 
                                             <div>
-                                                @if (FlowManager.IsParentFlow(flow.Id))
+                                                @if (ViewBag.IsParentFlow[flow.Id])
                                                 {
-                                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = @ViewBag.ActiveProject })" class="btn">SubFlows</a>
+                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn">Start Flow</a>
+                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn">Start Circular Flow</a>
                                                 }
                                                 else
                                                 {
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.LINEAR })" class="btn btn-primary">Start Flow</a>
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType.CIRCULAR })" class="btn btn-primary">Start Circular Flow</a>
+                                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = ViewBag.ActiveProject })" class="btn">SubFlows</a>
                                                 }
                                             </div>
                                         </div>
@@ -78,12 +79,22 @@
                                             <div>
                                                 <button type="submit" class="btn py-0" id="updateFlowButton">Update</button>
                                             </div>
-                                            @*TODO:Logica toeveogen voor de add question button*@
+
                                             <div>
-                                                <a class="btn py-0" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id })">Add questions</a>
-                                            </div>
-                                            <div>
-                                                <a class="btn py-0" href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })">Add SubFlows</a>
+                                              @if (!ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject)
+                                              {
+                                                  <a class="btn py-0" href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })">Edit SubFlows</a>
+                                              }
+                                              else if (ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject && !ViewBag.ContainsQuestions[flow.Id])
+                                              {
+                                                  <a class="btn py-0" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id})">Edit questions</a>
+                                                  <a class="btn py-0" href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })">Edit SubFlows</a>
+                                              }
+                                              else if (ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject && ViewBag.ContainsQuestions[flow.Id])
+                                              {
+                                                  <a class="btn py-0" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id})">Edit questions</a>
+                                              }
+
                                             </div>
                                         </div>
                                     </div>

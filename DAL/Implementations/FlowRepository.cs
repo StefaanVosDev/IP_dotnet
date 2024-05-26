@@ -10,7 +10,7 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
 {
     private readonly DbContext _context = context;
     
-    public IEnumerable<Flow> GetFlowsByParentId(int flowId)
+    public IEnumerable<Flow> GetFlowsByParentId(int? flowId)
     {
         return _context.Set<Flow>().Where(f => f.ParentFlowId == flowId);
     }

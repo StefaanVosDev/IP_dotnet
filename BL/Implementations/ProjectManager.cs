@@ -4,31 +4,38 @@ using DAL.Interfaces;
 
 namespace BL.Implementations;
 
-public class ProjectManager(IProjectRepository repository) : Manager<Project>(repository), IProjectManager
+public class ProjectManager : Manager<Project>, IProjectManager
 {
+    private readonly IProjectRepository _repository;
+
+    public ProjectManager(IProjectRepository repository) : base(repository)
+    {
+        _repository = repository;
+    }
+
     public async Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
     {
-        return await repository.GetFlowsByProjectIdAsync(projectId);
+        return await _repository.GetFlowsByProjectIdAsync(projectId);
     }
 
-    public ValueTask<Project> FindByIdAsync(int id)
+    public async ValueTask<Project> FindByIdAsync(int id)
     {
-        return repository.FindByIdAsync(id);
+        return await _repository.FindByIdAsync(id);
     }
 
-    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
+    public async Task<IEnumerable<Flow>> GetParentFlowsByProjectIdAsync(int projectId)
     {
-        return repository.GetParentFlowsByProjectId(projectId);
+        return await _repository.GetParentFlowsByProjectIdAsync(projectId);
     }
 
-    public IEnumerable<Project> GetProjectsByAdminId(string adminId)
+    public async Task<IEnumerable<Project>> GetProjectsByAdminIdAsync(string adminId)
     {
-        return repository.GetProjectsByAdminId(adminId);
+        return await _repository.GetProjectsByAdminIdAsync(adminId);
     }
 
-    public IEnumerable<Flow> GetAvailableFlowsByProjectId(int projectId)
+    public async Task<IEnumerable<Flow>> GetAvailableFlowsByProjectIdAsync(int projectId)
     {
         DateTime today = DateTime.Today.ToUniversalTime();
-        return repository.FindAvailableFlowsByProjectId(projectId, today);
+        return await _repository.FindAvailableFlowsByProjectIdAsync(projectId, today);
     }
 }

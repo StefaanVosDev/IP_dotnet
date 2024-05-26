@@ -5,9 +5,9 @@ namespace DAL.Interfaces;
 
 public interface IProjectRepository : IRepository
 {
-    public Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId);
-    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId);     
-    public IEnumerable<Project> GetProjectsByAdminId(string adminId);
+    Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId);
+    Task<IEnumerable<Flow>> GetParentFlowsByProjectIdAsync(int projectId);
+    Task<IEnumerable<Project>> GetProjectsByAdminIdAsync(string adminId);
     ValueTask<Project> FindByIdAsync(int id);
-    public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date);
+    Task<IEnumerable<Flow>> FindAvailableFlowsByProjectIdAsync(int projectId, DateTime date);
 }
