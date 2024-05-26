@@ -17,17 +17,29 @@ namespace IP_MVC.Controllers
         UnitOfWork unitOfWork)
         : Controller
     {
-        public IActionResult Flow(int projectId, int? parentFlowId)
+        public async Task<ViewResult> Flow(int projectId, int? parentFlowId)
         {
             var active = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ProjectId = projectId;
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = active;
-            var flows = projectManager.GetParentFlowsByProjectId(projectId);
+            var flows = await projectManager.GetParentFlowsByProjectIdAsync(projectId);
             if (active)
             {
-                flows = projectManager.GetAvailableFlowsByProjectId(projectId);
+                flows = await projectManager.GetAvailableFlowsByProjectIdAsync(projectId);
             }
+
+            var isParentFlow = new Dictionary<int, bool>();
+            var containsQuestions = new Dictionary<int, bool>();
+
+            foreach (var flow in flows)
+            {
+                isParentFlow[flow.Id] = flowManager.IsParentFlow(flow.Id);
+                containsQuestions[flow.Id] = questionManager.GetQuestionsByFlowId(flow.Id).Any();
+            }
+
+            ViewBag.IsParentFlow = isParentFlow;
+            ViewBag.ContainsQuestions = containsQuestions;
             return View(flows);
         }
 
@@ -229,14 +241,13 @@ namespace IP_MVC.Controllers
         [HttpGet]
         public IActionResult Edit(int parentFlowId)
         {
+            ViewBag.ActiveProject = false;
             var flow = flowManager.GetFlowById(parentFlowId);
-            var subflows = flowManager.GetFlowsByParentId(parentFlowId);
             var questions = questionManager.GetQuestionsByFlowId(parentFlowId).OrderBy(q => q.Position);
             
             var model = new FlowEditViewModel
             {
                 Flow = flow,
-                SubFlows = subflows,
                 Questions = questions
             };
 
@@ -248,6 +259,7 @@ namespace IP_MVC.Controllers
         {
             unitOfWork.BeginTransaction();
             var existingFlow = flowManager.GetFlowById(parentFlowId);
+
             if (existingFlow == null)
             {
                 return NotFound();

@@ -17,10 +17,10 @@ public class ProjectController : Controller
         _unitOfWork = unitOfWork;
     }
 
-    public IActionResult Project()
+    public async Task<IActionResult> Project()
     {
         var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var projects = _projectManager.GetProjectsByAdminId(adminId);
+        var projects =await _projectManager.GetProjectsByAdminIdAsync(adminId);
         return View(projects);
     }
 

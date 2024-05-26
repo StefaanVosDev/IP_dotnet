@@ -15,10 +15,10 @@ public class AdminController : Controller
     
     // GET
     [Authorize(Roles = CustomIdentityConstants.AdminRole)]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var projects = _projectManager.GetProjectsByAdminId(adminId);
+        var projects = await _projectManager.GetProjectsByAdminIdAsync(adminId);
         return View(projects);
     }
 }

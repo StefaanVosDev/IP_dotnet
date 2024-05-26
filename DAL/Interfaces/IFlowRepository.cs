@@ -7,7 +7,7 @@ namespace DAL.Interfaces;
 
 public interface IFlowRepository : IRepository
 {
-    public IEnumerable<Flow> GetFlowsByParentId(int flowId);
+    public IEnumerable<Flow> GetFlowsByParentId(int? flowId);
     public Flow getFlowById(int id);
     public Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int id);
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition);

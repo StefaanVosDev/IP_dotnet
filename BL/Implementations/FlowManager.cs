@@ -11,7 +11,7 @@ namespace BL.Implementations;
 public class FlowManager(IFlowRepository repository, ISessionManager sessionManager)
     : Manager<Flow>(repository), IFlowManager
 {
-    public IEnumerable<Flow> GetFlowsByParentId(int flowId)
+    public IEnumerable<Flow> GetFlowsByParentId(int? flowId)
     {
         return repository.GetFlowsByParentId(flowId);
     }

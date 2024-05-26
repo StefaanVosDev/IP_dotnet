@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Edit Flow";
     Layout = "_Layout";
+    
     var viewData = new ViewDataDictionary(ViewData)
     {
         { "parentFlowId", Model.Flow?.Id },
@@ -54,28 +55,7 @@
                 <h3 class="d-flex justify-content-center px-3 pt-2 m-0">Questions</h3>
 
                 <table class="table px-3 background-color-light-blue">
-                    @if (Model.SubFlows.Any())
-                    {
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Actions</th>
-                        </tr>
-                        @foreach (var subflow in Model.SubFlows)
-                        {
-                            <tbody>
-                            <tr>
-                                <td>@subflow.Name</td>
-                                <td>@subflow.Description</td>
-                                <td>
-                                    <a class="btn btn-primary" href="@Url.Action("Edit", "Flow", new { parentFlowId = subflow.Id })">Edit</a>
-                                    <a class="btn  bi bi-trash" href="@Url.Action("Delete", "Flow", new { flowId = subflow.Id })"></a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        }
-                    }
-                    @if (Model.Questions.Any())
+                    @if (Model.Questions.Any() || Model.Questions == null)
                     {
                         <thead class="thead-dark">
                         <tr>

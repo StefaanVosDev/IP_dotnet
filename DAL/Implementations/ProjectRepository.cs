@@ -5,36 +5,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Implementations;
 
-public class ProjectRepository(PhygitalDbContext context) : Repository(context), IProjectRepository
+public class ProjectRepository : Repository, IProjectRepository
 {
-    private readonly DbContext _context = context;
+    private readonly PhygitalDbContext _context;
+
+    public ProjectRepository(PhygitalDbContext context) : base(context)
+    {
+        _context = context;
+    }
 
     public async Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId)
     {
         return await _context.Set<Flow>().Where(f => f.ProjectId == projectId).ToListAsync();
     }
 
-    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId)
+    public async Task<IEnumerable<Flow>> GetParentFlowsByProjectIdAsync(int projectId)
     {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId && f.ParentFlowId == null);
-    }
-    
-    public IEnumerable<Project> GetProjectsByAdminId(string adminId)
-    {
-        return _context.Set<Project>().Where(p => p.AdminId == adminId);
+        return await _context.Set<Flow>().Where(f => f.ProjectId == projectId && f.ParentFlowId == null).ToListAsync();
     }
 
-    public ValueTask<Project> FindByIdAsync(int id)
+    public async Task<IEnumerable<Project>> GetProjectsByAdminIdAsync(string adminId)
     {
-        return _context.Set<Project>().FindAsync(id);
+        return await _context.Set<Project>().Where(p => p.AdminId == adminId).ToListAsync();
     }
 
-    public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date)
+    public async ValueTask<Project> FindByIdAsync(int id)
     {
-        return _context.Set<Flow>().Where(f => f.ProjectId == projectId &&
-                                               f.ParentFlowId == null && 
-                                               f.StartDate <= date &&
-                                               f.EndDate >= date
-                                               );
+        return await _context.Set<Project>().FindAsync(id);
+    }
+
+    public async Task<IEnumerable<Flow>> FindAvailableFlowsByProjectIdAsync(int projectId, DateTime date)
+    {
+        return await _context.Set<Flow>().Where(f => f.ProjectId == projectId &&
+                                                     f.ParentFlowId == null &&
+                                                     f.StartDate <= date &&
+                                                     f.EndDate >= date).ToListAsync();
     }
 }

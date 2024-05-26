@@ -11,10 +11,10 @@ public class Flow
     public string Name { get; set; }
     public string Description { get; set; }
     public FlowType Type { get; set; }
-    public List<Question> Questions { get; set; }
+    public IEnumerable<Question> Questions { get; set; }
     public int? ParentFlowId { get; set; }
     public Flow ParentFlow { get; set; }
-    public List<Flow> SubFlows { get; set; }
+    public IEnumerable<Flow> SubFlows { get; set; }
     public int ProjectId { get; set; }
     public Project Project { get; set; }
     public Media Media { get; set; }
