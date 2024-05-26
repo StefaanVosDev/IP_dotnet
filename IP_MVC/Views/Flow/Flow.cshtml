@@ -31,26 +31,26 @@
                                             <div >
                                                 @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
                                                 {
-                                                    <button class="btn bi bi-trash deleteFlowButton" data-flow-id="@flow.Id" href="@Url.Action("Delete", "Flow", new { flowId = flow.Id })"></button>
+                                                    <button class="btn bi bi-trash deleteFlowButton create-btn" data-flow-id="@flow.Id" href="@Url.Action("Delete", "Flow", new { flowId = flow.Id })"></button>
                                                 }
                                             </div>
                                             <div >
                                                 @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
                                                 {
-                                                    <button data-edit-flow data-flow-id="@flow.Id" class="btn py-0 edit-flow-btn">Edit</button>
+                                                    <button data-edit-flow data-flow-id="@flow.Id" class="btn py-0 create-btn edit-flow-btn">Edit</button>
                                                 }
                                             </div>
 
 
                                             <div>
-                                                @if (ViewBag.IsParentFlow[flow.Id])
+                                                @if (!ViewBag.IsParentFlow[flow.Id])
                                                 {
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn">Start Flow</a>
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn">Start Circular Flow</a>
+                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn create-btn">Start Flow</a>
+                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn create-btn">Start Circular Flow</a>
                                                 }
-                                                else /*if (ViewBag.ContainsQuestions[flow.Id])*/
+                                                else 
                                                 {
-                                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = ViewBag.ActiveProject })" class="btn">SubFlows</a>
+                                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = ViewBag.ActiveProject })" class="btn create-btn">Go to Subflows</a>
                                                 }
                                             </div>
                                         </div>
@@ -80,20 +80,19 @@
                                             </div>
 
                                             <div>
-                                              @if (!ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject)
+                                              @if (ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject)
                                               {
                                                   <a class="btn py-0" href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })">Edit SubFlows</a>
                                               }
-                                              else if (ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject && !ViewBag.ContainsQuestions[flow.Id])
+                                              else if (!ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject && !ViewBag.ContainsQuestions[flow.Id])
                                               {
                                                   <a class="btn py-0" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id})">Edit questions</a>
                                                   <a class="btn py-0" href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })">Edit SubFlows</a>
                                               }
-                                              else if (ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject && ViewBag.ContainsQuestions[flow.Id])
+                                              else if (!ViewBag.IsParentFlow[flow.Id] && User.IsInRole(CustomIdentityConstants.AdminRole) && !ViewBag.ActiveProject && ViewBag.ContainsQuestions[flow.Id])
                                               {
                                                   <a class="btn py-0" href="@Url.Action("Edit", "Flow", new { parentFlowId = flow.Id})">Edit questions</a>
                                               }
-
                                             </div>
                                         </div>
                                     </div>

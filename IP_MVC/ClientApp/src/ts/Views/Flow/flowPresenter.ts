@@ -26,6 +26,8 @@ export function setupEditEventListener(){
             }
         })
     });
+
+    deleteFlow();
 }
 
 createButton.forEach(button => {
@@ -132,21 +134,18 @@ export function appendFlowToPage(flow: Flows, flowId: number) {
     const isActiveProject = document.getElementById('activeProject') as HTMLInputElement;
     let deleteButtonHtml = '';
     let editButtonHtml = '';
-
     if (isAdminRole && isAdminRole.value === "True" && isActiveProject && isActiveProject.value === "False") {
-        deleteButtonHtml = `<a class="btn bi bi-trash" href="/Flow/Delete?flowId=${flowId}" onclick="return confirm('Are you sure you want to delete this flow?')"></a>`;
+        deleteButtonHtml = `<button class="btn bi bi-trash deleteFlowButton create-btn" data-flow-id="${flowId}" href="/Flow/Delete?flowId=${flowId}"></button>`;
         editButtonHtml = `<button data-edit-flow data-flow-id="${flowId}" class="btn py-0 edit-flow-btn">Edit</button>`;
     }
 
-    const flowActionsHtml = flow.IsParentFlow ? `
-        <a href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn arrow-submit-right"></a>
-    ` : `
-        <a href="/Flow/PlayFlow?parentFlowId=${flow.NewParentFlowId}&FlowType=LINEAR" class="btn btn-primary">Start Flow</a>
-        <a href="/Flow/PlayFlow?parentFlowId=${flow.NewParentFlowId}&FlowType=CIRCULAR" class="btn btn-primary">Start Circular Flow</a>
+    const flowActionsHtml = `
+        <a href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn create-btn">Go to Subflows</a>
     `;
 
     const subFlowEditButtonHtml = `         
-         <a class="btn py-0" href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn btn-primary">Edit SubFlows</a>
+         <a class="btn py-0" href="/Flow/Edit/${flowId}" class="btn btn-primary">Edit Questions</a>
+         <a class="btn py-0" href="/Flow/SubFlow/${flowId}" class="btn btn-primary">Edit SubFlows</a>
     `;
 
     flowDataElement.innerHTML += `
@@ -192,14 +191,28 @@ export function appendFlowToPage(flow: Flows, flowId: number) {
     `;
 }
 
-export function appendSubFlowToPage(flow: Flows, flowId: number) {
+export function appendSubFlowToPage(flow: Flows, subFlowId: number) {
     const flowDataElement = document.getElementById('swiper-element');
-    if (!flowDataElement) return;
+    const isAdminRole = document.getElementById('userRole') as HTMLInputElement;
     const isActiveProject = document.getElementById('activeProject') as HTMLInputElement;
+    if (!flowDataElement) return;
     const randomIndex = Math.floor(Math.random() * 4) + 1;
     const imageUrl = `https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_${randomIndex}.png`;
 
+    let deleteButtonHtml = '';
+    let editButtonHtml = '';
+    
+    if (isAdminRole && isAdminRole.value === "True" && isActiveProject && isActiveProject.value === "False") {
+        deleteButtonHtml = `<button class="btn bi bi-trash deleteFlowButton create-btn" data-flow-id="${subFlowId}" href="/Flow/Delete?flowId=${subFlowId}"></button>`;
+        editButtonHtml = ` <a class="btn py-0" href="/Flow/Edit/${subFlowId}" class="btn btn-primary">Edit Questions</a>
+`;
+    }
 
+    //TODO: Add START FLOW BUTTON
+    const flowActionsHtml = `
+        <a class="btn create-btn">Start Flow</a>
+    `;
+    
     flowDataElement.innerHTML +=`
         <div class="swiper-slide">
             <div class="slide-card">
@@ -211,18 +224,11 @@ export function appendSubFlowToPage(flow: Flows, flowId: number) {
                             <p class="card-text">${flow.NewDescription}</p>
                         </div>
                     </div>
-                    <div class="d-flex text-center position-sticky py-2 button-container">
-                        <div class="flex-grow-1 border-2">
-<!--                       @*Todo: add styling to update button*@-->
-                       <a class="btn py-0" href="@Url.Action("Edit, "Flow", new { parentFlowId = flow.Id })">Update flow</a>
-
-                        </div>
-                        <div class="flex-grow-1">
-<!--                        @*Todo: Add styling to delete button*@-->
-                        <a class="btn py-0" href="@Url.Action("Delete, "Flow", new { flowId = flow.Id })">Update flow</a>
-
-                        </div>
-                    </div>
+                      <div class="d-flex text-center position-sticky py-2 button-container">
+                          <div class="flex-grow-1">${deleteButtonHtml}</div>
+                          <div class="flex-grow-1">${editButtonHtml}</div>
+                          <div class="flex-grow-1">${flowActionsHtml}</div>
+                      </div>
                 </div>
             </div>
         </div>
@@ -230,8 +236,6 @@ export function appendSubFlowToPage(flow: Flows, flowId: number) {
     
     updateSwiper();
 }
-
-setupEditEventListener();
 
 async function deleteFlow() {
     const deleteButtonsForFlow = document.getElementsByClassName('deleteFlowButton') as HTMLCollectionOf<HTMLButtonElement>
@@ -254,6 +258,5 @@ async function deleteFlow() {
         });
     }
 }
-deleteFlow().then( q => 
-    console.log('is the flow deleted?')
-);
+
+setupEditEventListener();
