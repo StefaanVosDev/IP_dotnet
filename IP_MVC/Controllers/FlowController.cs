@@ -80,14 +80,6 @@ namespace IP_MVC.Controllers
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.showQrCode = showQr;
-
-            // Create QR code
-            QRCodeGenerator qrCodeGenerator = new();
-            Payload payload = new Url(Url.Action("OpenQuestion", "Flow"));
-            QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
-            BitmapByteQRCode qrCode = new(qrCodeData);
-            string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
-            ViewBag.QrImage = "data:image/png;base64," + base64String;
             
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
@@ -132,6 +124,14 @@ namespace IP_MVC.Controllers
                 Question = question,
                 QuestionType = question.Type
             };
+            
+            // Create QR code
+            QRCodeGenerator qrCodeGenerator = new();
+            Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {viewModel}));
+            QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
+            BitmapByteQRCode qrCode = new(qrCodeData);
+            string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
+            ViewBag.QrImage = "data:image/png;base64," + base64String;
 
             // Get the earlier answer given
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
@@ -219,9 +219,11 @@ namespace IP_MVC.Controllers
                 new { id = sessionId, redirectedQuestionId, showQr = true});
         }
 
-        public IActionResult OpenQuestion()
+        public IActionResult OpenQuestion(QuestionViewModel viewModel)
         {
-            return View();
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+            
+            return View(viewModel);
         }
 
         [HttpPost]

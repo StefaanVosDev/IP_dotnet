@@ -1,4 +1,4 @@
-@model dynamic
+@model IP_MVC.Models.QuestionViewModel
 
 @{
     ViewBag.Title = "title";
@@ -15,4 +15,6 @@
             @earlierAnswer.AnswerText
         }
     </textarea>
+    <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+    <button type="submit">Submit</button>
 </form>
