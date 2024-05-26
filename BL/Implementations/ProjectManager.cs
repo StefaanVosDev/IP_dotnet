@@ -1,6 +1,7 @@
 using BL.Domain;
 using BL.Interfaces;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace BL.Implementations;
 
@@ -35,5 +36,20 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
     public IEnumerable<Project> GetProjectsByFacilitatorId(string userId)
     {
         return repository.GetProjectsByFacilitatorId(userId);
+    }
+
+    public IEnumerable<IdentityUser> GetSearchedFacilitators(string searchTerm)
+    {
+        return repository.GetSearchedFacilitators(searchTerm);
+    }
+
+    public IEnumerable<IdentityUser> GetFacilitatorsByProjectId(int projectId)
+    {
+        return repository.GetFacilitatorsByProjectId(projectId);
+    }
+
+    public bool AddFacilitatorToProject(string userId, int projectId)
+    {
+        return repository.AddFacilitatorToProject(userId, projectId);
     }
 }

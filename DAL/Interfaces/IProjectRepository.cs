@@ -1,5 +1,6 @@
 using BL.Domain;
 using BL.Domain.Answers;
+using Microsoft.AspNetCore.Identity;
 
 namespace DAL.Interfaces;
 
@@ -11,4 +12,7 @@ public interface IProjectRepository : IRepository
     ValueTask<Project> FindByIdAsync(int id);
     public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date);
     public IEnumerable<Project> GetProjectsByFacilitatorId(string userId);
+    public IEnumerable<IdentityUser> GetSearchedFacilitators(string searchTerm);
+    public IEnumerable<IdentityUser> GetFacilitatorsByProjectId(int projectId);
+    public bool AddFacilitatorToProject(string userId, int projectId);
 }

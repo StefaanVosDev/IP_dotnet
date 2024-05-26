@@ -1,5 +1,6 @@
 using BL.Implementations;
 using BL.Interfaces;
+using IP_MVC.Models;
 using IP_MVC.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,5 +55,24 @@ public class ProjectsController : ControllerBase
 
         _unitOfWork.Commit();
         return NoContent();
+    }
+    
+    [HttpGet("ManageFacilitators")]
+    public IActionResult ManageFacilitators(string searchTerm)
+    {
+        var facilitators = _projectManager.GetSearchedFacilitators(searchTerm);
+        var usernames = facilitators.Select(f => f.UserName).ToList();
+        return Ok(usernames);
+    }
+    
+    [HttpPost("AddUser")]
+    public IActionResult AddUser([FromBody] AddUserModel model)
+    {
+        var user = _projectManager.GetSearchedFacilitators(model.UserName).FirstOrDefault();
+        if (user == null) return RedirectToAction("ManageFacilitators");
+
+        _projectManager.AddFacilitatorToProject(user.Id, model.ProjectId);
+
+        return RedirectToAction("ManageFacilitators");
     }
 } 

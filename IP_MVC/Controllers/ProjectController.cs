@@ -55,13 +55,24 @@ public class ProjectController : Controller
     {
         _unitOfWork.BeginTransaction();
         if (!ModelState.IsValid) return RedirectToAction("Project");
-
-        // Assign the UserId of the project to the current user's Id
+        
         project.AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         await _projectManager.AddAsync(project);
         
         _unitOfWork.Commit();
         return RedirectToAction("Project");
+    }
+    
+    [HttpGet]
+    public IActionResult ManageFacilitators(int projectId)
+    {
+        var facilitators = _projectManager.GetFacilitatorsByProjectId(projectId);
+        var model = new ManageFacilitatorsViewModel
+        {
+            Facilitators = facilitators,
+            ProjectId = projectId
+        };
+        return View(model);
     }
 }
