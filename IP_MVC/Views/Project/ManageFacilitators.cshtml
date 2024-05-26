@@ -17,9 +17,11 @@
     }
     else
     {
-        foreach (var facilitator in Model.Facilitators)
+        @foreach (var facilitator in Model.Facilitators)
         {
-            <li>@facilitator.UserName</li>
+            <li>
+                @facilitator.UserName
+                <a class="btn py-0 bi bi-trash" href="@Url.Action("RemoveUser", "Project", new { userId = facilitator.Id, projectId = Model.ProjectId })" onclick="return confirm('Are you sure you want to remove this facilitator?')"></a></li>
         }
     }
 </ul>

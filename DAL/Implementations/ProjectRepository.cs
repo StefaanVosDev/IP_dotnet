@@ -73,4 +73,15 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
         _context.Set<ProjectFacilitator>().Add(projectFacilitator);
         return _context.SaveChanges() > 0;
     }
+
+    public bool RemoveFacilitatorFromProject(string userId, int projectId)
+    {
+        var projectFacilitator = _context.Set<ProjectFacilitator>()
+            .FirstOrDefault(pf => pf.ProjectId == projectId && pf.FacilitatorId == userId);
+
+        if (projectFacilitator == null) return false;
+
+        _context.Set<ProjectFacilitator>().Remove(projectFacilitator);
+        return _context.SaveChanges() > 0;
+    }
 }

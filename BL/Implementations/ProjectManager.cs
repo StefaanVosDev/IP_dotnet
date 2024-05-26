@@ -52,4 +52,9 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
     {
         return repository.AddFacilitatorToProject(userId, projectId);
     }
+
+    public bool RemoveFacilitatorFromProject(string userId, int projectId)
+    {
+        return repository.RemoveFacilitatorFromProject(userId, projectId);
+    }
 }

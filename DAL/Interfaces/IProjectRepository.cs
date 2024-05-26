@@ -15,4 +15,5 @@ public interface IProjectRepository : IRepository
     public IEnumerable<IdentityUser> GetSearchedFacilitators(string searchTerm);
     public IEnumerable<IdentityUser> GetFacilitatorsByProjectId(int projectId);
     public bool AddFacilitatorToProject(string userId, int projectId);
+    public bool RemoveFacilitatorFromProject(string userId, int projectId);
 }

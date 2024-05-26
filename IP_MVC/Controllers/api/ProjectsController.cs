@@ -71,8 +71,14 @@ public class ProjectsController : ControllerBase
         var user = _projectManager.GetSearchedFacilitators(model.UserName).FirstOrDefault();
         if (user == null) return RedirectToAction("ManageFacilitators");
 
-        _projectManager.AddFacilitatorToProject(user.Id, model.ProjectId);
+        var result = _projectManager.AddFacilitatorToProject(user.Id, model.ProjectId);
+
+        if (!result)
+        {
+            return BadRequest("Failed to add the user to the project.");
+        }
 
         return RedirectToAction("ManageFacilitators");
     }
+    
 } 

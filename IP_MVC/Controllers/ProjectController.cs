@@ -75,4 +75,10 @@ public class ProjectController : Controller
         };
         return View(model);
     }
+    
+    [HttpDelete]
+    public IActionResult RemoveUser(int projectId, string userId)
+    {
+        throw new NotImplementedException();
+    }
 }
