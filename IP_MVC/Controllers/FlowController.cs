@@ -130,7 +130,7 @@ namespace IP_MVC.Controllers
             {
                 // Create QR code
                 QRCodeGenerator qrCodeGenerator = new();
-                Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {questionId}));
+                Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {questionId}, protocol: HttpContext.Request.Scheme));
                 QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
                 BitmapByteQRCode qrCode = new(qrCodeData);
                 string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
