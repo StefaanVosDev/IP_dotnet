@@ -128,6 +128,10 @@ namespace IP_MVC.Areas.Identity.Pages.Account
                 {
                     return RedirectToAction("PlatformAdminDashboard", "PlatformAdmin");
                 }
+                if (roles.Contains(CustomIdentityConstants.FacilitatorRole))
+                {
+                    return RedirectToAction("FacilitatorDashboard", "Facilitator");
+                }
             }
             if (result.RequiresTwoFactor)
             {
