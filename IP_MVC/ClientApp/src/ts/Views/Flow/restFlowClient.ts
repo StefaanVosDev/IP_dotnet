@@ -57,7 +57,7 @@ export async function createFlow(flow: Flows) {
             if (flow.NewParentFlowId == null){
                 appendFlowToPage(flow, data.id)
             } else {
-                appendSubFlowToPage(flow, data.Id);
+                appendSubFlowToPage(flow, data.id);
             }
             setupEditEventListener();
         }) .catch(reason => alert("Error updating flow:" + reason));

@@ -67,6 +67,7 @@ namespace IP_MVC.Controllers
         public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active)
         {
             unitOfWork.BeginTransaction();
+
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ActiveProject = active;
 
@@ -221,27 +222,23 @@ namespace IP_MVC.Controllers
                 new { id = flowId, redirectedQuestionId });
         }
 
+        
         public IActionResult Delete(int flowId)
         {
             unitOfWork.BeginTransaction();
             var flowToRemove = flowManager.GetFlowById(flowId);
-            var parentFlowId1 = flowToRemove.ParentFlowId;
             var projectId1 = flowToRemove.ProjectId;
-            
+
             var subFlows = flowManager.GetFlowsByParentId(flowId);
             foreach (var subFlow in subFlows)
             {
                 flowManager.DeleteAsync(subFlow);
             }
-            
+
             flowManager.DeleteAsync(flowToRemove);
             unitOfWork.Commit();
-
-            if (parentFlowId1 == null)
-            {
-                return RedirectToAction("Flow", new { projectId = projectId1 });
-            }
-            return RedirectToAction("Flow", new { parentFlowId = parentFlowId1 });
+            
+            return RedirectToAction("Flow", new { projectId = projectId1 });
         }
 
         [HttpGet]
@@ -250,7 +247,7 @@ namespace IP_MVC.Controllers
             ViewBag.ActiveProject = false;
             var flow = flowManager.GetFlowById(parentFlowId);
             var questions = questionManager.GetQuestionsByFlowId(parentFlowId).OrderBy(q => q.Position);
-            
+
             var model = new FlowEditViewModel
             {
                 Flow = flow,
