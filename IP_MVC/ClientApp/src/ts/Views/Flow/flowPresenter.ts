@@ -135,17 +135,17 @@ export function appendFlowToPage(flow: Flows, flowId: number) {
     let deleteButtonHtml = '';
     let editButtonHtml = '';
     if (isAdminRole && isAdminRole.value === "True" && isActiveProject && isActiveProject.value === "False") {
-        deleteButtonHtml = `<button class="btn bi bi-trash deleteFlowButton create-btn" data-flow-id="${flowId}" href="/Flow/Delete?flowId=${flowId}"></button>`;
-        editButtonHtml = `<button data-edit-flow data-flow-id="${flowId}" class="btn py-0 edit-flow-btn">Edit</button>`;
+        deleteButtonHtml = `<button class="btn btn-blue bi bi-trash deleteFlowButton create-btn" data-flow-id="${flowId}" href="/Flow/Delete?flowId=${flowId}"></button>`;
+        editButtonHtml = `<button data-edit-flow data-flow-id="${flowId}" class="btn btn-blue py-0 edit-flow-btn">Edit</button>`;
     }
 
     const flowActionsHtml = `
-        <a href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn create-btn">Go to Subflows</a>
+        <a href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn btn-blue">Go to Subflows</a>
     `;
 
     const subFlowEditButtonHtml = `         
-         <a class="btn py-0" href="/Flow/Edit/${flowId}" class="btn btn-primary">Edit Questions</a>
-         <a class="btn py-0" href="/Flow/SubFlow/${flowId}" class="btn btn-primary">Edit SubFlows</a>
+         <a class="btn btn-blue py-0" href="/Flow/Edit/${flowId}" class="btn btn-primary">Edit Questions</a>
+         <a class="btn btn-blue py-0" href="/Flow/SubFlow/${flowId}" class="btn btn-primary">Edit SubFlows</a>
     `;
 
     flowDataElement.innerHTML += `
@@ -179,8 +179,8 @@ export function appendFlowToPage(flow: Flows, flowId: number) {
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
-                                <div><button class="btn py-0 btn-back">Back</button></div>
-                                <div><button type="submit" class="btn py-0" id="updateFlowButton">Update</button></div>
+                                <div><button class="btn btn-blue py-0 btn-back">Back</button></div>
+                                <div><button type="submit" class="btn btn-blue py-0" id="updateFlowButton">Update</button></div>
                                 <div>${subFlowEditButtonHtml}</div>
                             </div>
                         </div>
@@ -203,14 +203,14 @@ export function appendSubFlowToPage(flow: Flows, subFlowId: number) {
     let editButtonHtml = '';
     
     if (isAdminRole && isAdminRole.value === "True" && isActiveProject && isActiveProject.value === "False") {
-        deleteButtonHtml = `<button class="btn bi bi-trash deleteFlowButton create-btn" data-flow-id="${subFlowId}" href="/Flow/Delete?flowId=${subFlowId}"></button>`;
-        editButtonHtml = ` <a class="btn py-0" href="/Flow/Edit/${subFlowId}" class="btn btn-primary">Edit Questions</a>
+        deleteButtonHtml = `<button class="btn btn-white bi bi-trash deleteFlowButton create-btn" data-flow-id="${subFlowId}" href="/Flow/Delete?flowId=${subFlowId}"></button>`;
+        editButtonHtml = ` <a class="btn btn-white py-0" href="/Flow/Edit/${subFlowId}" class="btn btn-primary">Edit Questions</a>
 `;
     }
 
     //TODO: Add START FLOW BUTTON
     const flowActionsHtml = `
-        <a class="btn create-btn">Start Flow</a>
+        <a class="btn btn-white">Start Flow</a>
     `;
     
     flowDataElement.innerHTML +=`
