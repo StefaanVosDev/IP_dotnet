@@ -10,6 +10,7 @@
 
 <form asp-controller="Flow" asp-action="SaveAnswerOpenQuestion" method="post">
     <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+    <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
     <textarea class="form-control" name="Answer"></textarea>
     <button type="submit">Submit</button>
 </form>

@@ -3,6 +3,7 @@ using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using BL.Domain.Answers;
+using BL.Domain.Questions;
 using BL.Implementations;
 using IP_MVC.Models;
 using QRCoder;
@@ -124,14 +125,17 @@ namespace IP_MVC.Controllers
                 Question = question,
                 QuestionType = question.Type
             };
-            
-            // Create QR code
-            QRCodeGenerator qrCodeGenerator = new();
-            Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {viewModel}));
-            QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
-            BitmapByteQRCode qrCode = new(qrCodeData);
-            string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
-            ViewBag.QrImage = "data:image/png;base64," + base64String;
+
+            if (question.Type == QuestionType.Open)
+            {
+                // Create QR code
+                QRCodeGenerator qrCodeGenerator = new();
+                Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {questionId}));
+                QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
+                BitmapByteQRCode qrCode = new(qrCodeData);
+                string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
+                ViewBag.QrImage = "data:image/png;base64," + base64String;
+            }
 
             // Get the earlier answer given
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
@@ -219,9 +223,19 @@ namespace IP_MVC.Controllers
                 new { id = sessionId, redirectedQuestionId, showQr = true});
         }
 
-        public IActionResult OpenQuestion(QuestionViewModel viewModel)
+        public IActionResult OpenQuestion(int questionId)
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+            
+            // Haal de huidige vraag op
+            var question = questionManager.GetQuestionByIdAndType(questionId);
+
+            // Maak een QuestionViewModel aan en vul het met de vraag en het type
+            var viewModel = new QuestionViewModel
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
             
             return View(viewModel);
         }
@@ -266,6 +280,7 @@ namespace IP_MVC.Controllers
         public IActionResult CompletedOpenQuestion()
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+            
             return View();
         }
 
