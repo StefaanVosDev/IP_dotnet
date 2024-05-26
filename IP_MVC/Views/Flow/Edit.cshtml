@@ -19,13 +19,15 @@
             <div class="card  h-100 overflow-y-scroll background-color-light-blue py-2">
                 <h3 class="d-flex justify-content-center px-3 pt-2 m-0">Flow</h3>
 
-                <form asp-action="Edit" asp-controller="Flow" method="post">
+                <form asp-action="Edit" asp-controller="Flow" method="post" id="flowEditForm">
                     <input type="hidden" asp-for="Flow.Id"/>
+
 
                     <div class="form-group pb-1">
                         <label asp-for="Flow.Name"></label>
                         <input asp-for="Flow.Name" class="form-control"/>
                     </div>
+
 
                     <div class="form-group pb-1">
                         <label asp-for="Flow.Description"></label>
@@ -43,6 +45,7 @@
                     </div>
 
                     <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
+                    <input type="hidden" asp-for="Flow.ProjectId" value="@Model.Flow.ProjectId"/>
                 </form>
             </div>
         </div>
@@ -95,8 +98,6 @@
                                         </div>
                                     </div>
                                 </td>
-
-
                             </tr>
                             </tbody>
                         }
@@ -124,7 +125,7 @@
                  || (Model?.Questions?.Any() == true || Model?.SubFlows?.Any() != true))
             {
                 <div class="col d-flex justify-content-center h-100">
-                    <button type="submit" class="btn create-btn py-2 h-100 d-flex align-items-center">Save and go to Flow Page</button>
+                    <button id="saveAndRedirectButton" class="btn create-btn py-2 h-100 d-flex align-items-center">Save and go to Flow Page</button>
                 </div>
             }
         </div>

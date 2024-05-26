@@ -1,12 +1,15 @@
 using BL.Domain;
 using BL.Domain.Questions;
 using BL.Interfaces;
+using DAL.EF;
+using DAL.Implementations;
 using DAL.Interfaces;
 
 
 namespace BL.Implementations;
 
-public class FlowManager(IFlowRepository repository, ISessionManager sessionManager) : Manager<Flow>(repository), IFlowManager
+public class FlowManager(IFlowRepository repository, ISessionManager sessionManager)
+    : Manager<Flow>(repository), IFlowManager
 {
     public IEnumerable<Flow> GetFlowsByParentId(int flowId)
     {
@@ -22,13 +25,13 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
     {
         return await repository.GetQuestionsByFlowIdAsync(flowId);
     }
-    
+
     public async Task<Queue<int>> GetQuestionQueueByFlowIdAsync(int flowId)
     {
         var questionIds = (await GetQuestionsByFlowIdAsync(flowId)).OrderBy(q => q.Position).Select(q => q.Id).ToList();
         return new Queue<int>(questionIds);
     }
-    
+
     public int? GetParentFlowIdBySessionId(int sessionId)
     {
         var flow = GetFlowById(sessionManager.GetSessionById(sessionId).FlowId);
@@ -37,8 +40,14 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
 
     public bool IsParentFlow(int flowId)
     {
-        return GetFlowById(flowId).ParentFlowId == null;
+        using (var newContext = new PhygitalDbContext())
+        {
+            var repository = new FlowRepository(newContext);
+            var allSubFlows = repository.GetFlowsByParentId(flowId);
+            return !allSubFlows?.Any() ?? false;
+        }
     }
+
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
     {
         return repository.GetFlowsBetweenPositions(newPosition, oldPosition);

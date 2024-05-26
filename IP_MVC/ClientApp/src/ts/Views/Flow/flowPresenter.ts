@@ -3,6 +3,7 @@ import {Flows} from "../../models/Flows.interfaces";
 import {updateSwiper} from "./createScroll";
 
 const createButton = document.querySelectorAll('#createButton');
+const saveAndRedirectButton = document.querySelectorAll('#saveAndRedirectButton');
 
 export function setupEditEventListener(){
     const editButtons = document.querySelectorAll('.edit-flow-btn');
@@ -30,6 +31,15 @@ export function setupEditEventListener(){
 createButton.forEach(button => {
     button.addEventListener('click', async () => {
         addFlow();
+    })
+});
+
+saveAndRedirectButton.forEach(button => {
+    button.addEventListener('click', async () => {
+        const form = document.getElementById('flowEditForm') as HTMLFormElement;
+        if (form) {
+            form.submit();
+        }    
     })
 });
 
