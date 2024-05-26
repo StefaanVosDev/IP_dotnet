@@ -1,5 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+
 #nullable disable
 
 using System;
@@ -24,7 +25,8 @@ namespace IP_MVC.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
 
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,
+            UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -113,30 +115,22 @@ namespace IP_MVC.Areas.Identity.Pages.Account
             if (!ModelState.IsValid) return Page();
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe,
+                lockoutOnFailure: true);
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null) return LocalRedirect(returnUrl);
                 var roles = await _userManager.GetRolesAsync(user);
                 
-                if (roles.Contains(CustomIdentityConstants.AdminRole))
-                {
-                    return RedirectToAction("Project", "Project");
-                }
-                if (roles.Contains(CustomIdentityConstants.PlatformAdminRole))
-                {
-                    return RedirectToAction("PlatformAdminDashboard", "PlatformAdmin");
-                }
-                if (roles.Contains(CustomIdentityConstants.FacilitatorRole))
-                {
-                    return RedirectToAction("FacilitatorDashboard", "Facilitator");
-                }
+                return roles.Contains(CustomIdentityConstants.PlatformAdminRole) ? RedirectToAction("PlatformAdminDashboard", "PlatformAdmin") : RedirectToAction("ProjectDashboard", "Project");
             }
+
             if (result.RequiresTwoFactor)
             {
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
             }
+
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User account locked out.");

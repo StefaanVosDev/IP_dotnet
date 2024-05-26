@@ -2,6 +2,7 @@ using System.Security.Claims;
 using BL.Domain;
 using BL.Implementations;
 using BL.Interfaces;
+using IP_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IP_MVC.Controllers;
@@ -22,6 +23,21 @@ public class ProjectController : Controller
         var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var projects = _projectManager.GetProjectsByAdminId(adminId);
         return View(projects);
+    }
+    
+    public IActionResult ProjectDashboard()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var adminProjects = _projectManager.GetProjectsByAdminId(userId);
+        var facilitatorProjects = _projectManager.GetProjectsByFacilitatorId(userId);
+
+        var viewModel = new ProjectDashboardViewModel
+        {
+            AdminProjects = adminProjects,
+            FacilitatorProjects = facilitatorProjects
+        };
+
+        return View(viewModel);
     }
 
     public async Task<IActionResult> Delete(int parentFlowId)

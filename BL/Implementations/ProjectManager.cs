@@ -31,4 +31,9 @@ public class ProjectManager(IProjectRepository repository) : Manager<Project>(re
         DateTime today = DateTime.Today.ToUniversalTime();
         return repository.FindAvailableFlowsByProjectId(projectId, today);
     }
+
+    public IEnumerable<Project> GetProjectsByFacilitatorId(string userId)
+    {
+        return repository.GetProjectsByFacilitatorId(userId);
+    }
 }

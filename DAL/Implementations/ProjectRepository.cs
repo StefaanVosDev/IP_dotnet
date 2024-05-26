@@ -37,4 +37,12 @@ public class ProjectRepository(PhygitalDbContext context) : Repository(context),
                                                f.EndDate >= date
                                                );
     }
+
+    public IEnumerable<Project> GetProjectsByFacilitatorId(string userId)
+    {
+        return _context.Set<ProjectFacilitator>()
+            .Where(pf => pf.FacilitatorId == userId)
+            .Select(pf => pf.Project)
+            .ToList();
+    }
 }
