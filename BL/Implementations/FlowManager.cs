@@ -40,12 +40,8 @@ public class FlowManager(IFlowRepository repository, ISessionManager sessionMana
 
     public bool IsParentFlow(int flowId)
     {
-        using (var newContext = new PhygitalDbContext())
-        {
-            var repository = new FlowRepository(newContext);
-            var allSubFlows = repository.GetFlowsByParentId(flowId);
-            return !allSubFlows?.Any() ?? false;
-        }
+        var allSubFlows = repository.GetFlowsByParentId(flowId);
+        return !allSubFlows?.Any() ?? false;
     }
 
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
