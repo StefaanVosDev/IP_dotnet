@@ -22,7 +22,7 @@
                 <label asp-for="EndDate"></label>
                 <input asp-for="EndDate" class="form-control"/>
             </div>
-            <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) ? "True" : "False")'/>
+            <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) || User.IsInRole(CustomIdentityConstants.PlatformAdminRole) ? "True" : "False")'/>
             <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>
             <input type="hidden" id="projectIdInput" value="@ViewBag.ProjectId"/>
             <input type="hidden" id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
