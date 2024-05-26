@@ -120,7 +120,14 @@ namespace IP_MVC.Areas.Identity.Pages.Account
                 if (user == null) return LocalRedirect(returnUrl);
                 var roles = await _userManager.GetRolesAsync(user);
                 
-                return RedirectToAction("Project", "Project");
+                if (roles.Contains(CustomIdentityConstants.AdminRole))
+                {
+                    return RedirectToAction("Project", "Project");
+                }
+                if (roles.Contains(CustomIdentityConstants.PlatformAdminRole))
+                {
+                    return RedirectToAction("PlatformAdminDashboard", "PlatformAdmin");
+                }
             }
             if (result.RequiresTwoFactor)
             {
