@@ -48,9 +48,4 @@ public class ProjectController : Controller
         _unitOfWork.Commit();
         return RedirectToAction("Project");
     }
-    
-    public IActionResult Index()
-    {
-        throw new NotImplementedException();
-    }
 }
