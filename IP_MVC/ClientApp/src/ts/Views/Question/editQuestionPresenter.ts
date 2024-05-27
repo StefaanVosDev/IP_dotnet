@@ -11,6 +11,7 @@ const mediaInput = document.getElementById('mediaUpload') as HTMLInputElement;
 const changeNameButton = document.getElementById('editButton')!;
 const updateNameButton = document.getElementById('updateButton')!;
 const uploadMediaButton = document.getElementById('uploadButton')!;
+const addConditionalQuestionsButton = document.getElementById('addConditionalQuestionsButton')!;
 
 
 if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoice") {
@@ -22,10 +23,15 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
     async function showOptions() {
         try {
             optionTable.innerHTML = (await client.getOptions(questionId.value)).reduce(
-                (acc: string, option: string) => `${acc}
+                (acc: string, option: any) => `${acc}
                 <tr>
-                <td>${option}</td>
-                <td><button delete-option option-id="${option}" type="button" class="btn btn-danger">Delete option</button></td>
+                <td>${option.text}</td>
+                <td>
+                    <button delete-option option-id="${option.id}" type="button" class="btn btn-danger">Delete option</button>
+                </td>
+                <td>
+                    <button class="select-question" style="display: none" option-id="${option.id}" type="button" class="btn btn-primary">Select folowup question</button>
+                </td>
                 </tr>`, "<table>"
             ) + "</table>"
             console.clear();
@@ -110,11 +116,76 @@ function displayNameChange(display: boolean) {
     }
 }
 
+async function showSeperateAddButtons() {
+    const selectQuestionsButtons = document.querySelectorAll('.select-question') as NodeListOf<HTMLButtonElement>;
+    const flowId = document.getElementById('flowId') as HTMLInputElement;
+    const position = document.getElementById('position') as HTMLInputElement;
+
+    for (const selectButton of selectQuestionsButtons) {
+        if (selectButton == null) return;
+        selectButton.style.display = 'block';
+
+
+        let questionDropdown = selectButton.parentElement?.querySelector('select');
+        if (!questionDropdown) {
+            questionDropdown = document.createElement('select');
+            questionDropdown.style.display = 'none';
+            selectButton.parentElement?.appendChild(questionDropdown);
+        }
+
+        const optionId = selectButton.getAttribute('option-id') as string;
+        console.log('de option id is: ', optionId);
+        if (optionId == null) return;
+        
+       
+        
+        try {
+            selectButton.addEventListener('click', async (event) => {
+                event.preventDefault();
+                const currentOption = await client.getOptionById(optionId);
+                const currentNextQuestionId = currentOption.nextQuestionId;
+
+                document.querySelectorAll('select').forEach(select => {
+                    select.innerHTML = '';
+                    select.style.display = 'none';
+                });
+                
+                questionDropdown.innerHTML = (await client.getQuestionsByFlowIdAfterPosition(flowId.value, position.value)).reduce(
+                    (acc: string, question: any) => `${acc}
+                <option id="${question.id}" value="${question.text}" ${question.id == currentNextQuestionId ? 'selected': ''}>${question.text}</option>`, ""
+                );
+                questionDropdown.innerHTML+= `<option id="-1" value="End flow" ${currentNextQuestionId == -1 ? 'selected': ''}>End flow</option>`;
+                questionDropdown.style.display = 'block';
+            });
+            
+        } catch(e) {
+            questionDropdown.innerHTML = '<p>This question does not have any follow-up questions yet</p>'
+            console.error("Error showing options in table: ", e);
+        }
+    }
+}
+
+const saveQuestionButton = document.getElementById('saveQuestionButton') as HTMLButtonElement;
+saveQuestionButton.addEventListener('click', event => {
+    event.preventDefault();
+    const selectedQuestions = document.querySelectorAll('select') as NodeListOf<HTMLSelectElement>;
+    const visibleSelectFieldIndex = Array.from(selectedQuestions).findIndex(select => select.style.display == 'block');
+    const selectedRedirectedQuestion = selectedQuestions[visibleSelectFieldIndex]
+    const button     = document.querySelectorAll('.select-question') as NodeListOf<HTMLButtonElement>;
+    const optionId = button[visibleSelectFieldIndex].getAttribute('option-id') as string;
+    const selectedQuestionId = selectedRedirectedQuestion.options[selectedRedirectedQuestion.selectedIndex].id;
+    
+    if (optionId == null || questionId.value == null || selectedQuestionId == null) 
+        return;
+    client.ChangeRedirectedIdFromOption(questionId.value, optionId, selectedQuestionId);
+});
 
 changeNameButton.addEventListener('click', event => displayNameChange(true));
 updateNameButton.addEventListener('click', event =>
     client.updateQuestionTitle(questionId.value, titleInput.value)
 );
-
-
 uploadMediaButton.addEventListener('click', event => updateMedia());
+
+addConditionalQuestionsButton.addEventListener('click', event => {
+    showSeperateAddButtons();
+});

@@ -3,11 +3,11 @@ import {showQuestion} from "./createQuestionPresenter";
 import {Question} from "../../models/Questions.interfaces";
 
 export async function getOptions(questionId: string) {
-    const response = await fetch(`/api/Questions/${questionId}/Options`);
+    const response = await fetch(`/api/Options/GetAllOptions/${questionId}`);
     if (!response.ok) {
         throw Error(`Unable to get options: ${response.status} ${response.statusText}`);
     }
-    return response.json();
+    return await response.json();
 }
 
 export async function updateQuestionTitle(questionId: string, title: string) {
@@ -49,7 +49,7 @@ export async function updateQuestionRange(questionId: string, min: string, max: 
 // Add option from to question
 export async function postOption(questionId: string, newOption: string) {
     try {
-        const response = await fetch(`/api/Questions/${questionId}/Option`, {
+        const response = await fetch(`/api/Options/AddOption/${questionId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ export async function postMedia(formData: FormData) {
 // Delete an option from question
 export async function deleteOption(questionId: string, option: string) {
     try {
-        const response = await fetch(`/api/Questions/DeleteOption?id=${questionId}&option=${option}`, {
+        const response = await fetch(`/api/Options/DeleteOption?id=${questionId}&option=${option}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -130,4 +130,37 @@ export async function createQuestion(text: string, type: string, flowId: string)
             };
             showQuestion(question);
         }) .catch(reason => alert("Error creating Question:" + reason));
+}
+
+export async function getQuestionsByFlowIdAfterPosition(flowId: string, position: string) {
+    const response = await fetch(`/api/Questions/RedirectableQuestions?flowId=${flowId}&position=${position}`);
+    if (!response.ok) {
+        throw Error(`Unable to get questions: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+}
+
+export async function ChangeRedirectedIdFromOption(questionId: string, selectedOption: string, questionIdToRedirect: string) {
+try {
+    const response = await fetch(`/api/Options/ChangeRedirectedIdFromOption?questionId=${questionId}&selectedOption=${selectedOption}&nextQuestionId=${questionIdToRedirect}`, {
+        method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Unable to add conditional question');
+        }
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+}
+
+export async function getOptionById(optionId: string) {
+    const response = await fetch(`/api/Options/GetOptionById/${optionId}`);
+    if (!response.ok) {
+        throw Error(`Unable to get option: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
 }

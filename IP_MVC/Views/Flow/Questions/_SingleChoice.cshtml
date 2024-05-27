@@ -9,11 +9,11 @@
 {
     @foreach (var option in question!.Options)
     {
-        bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option;
+        bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option.Text;
         <div class="form-check m-3">
-            <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option" @(isSelected ? "checked" : "")>
+            <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option.Text" @(isSelected ? "checked" : "")>
             <label class="form-check-label" for="radio@i">
-                @option
+                @option.Text
             </label>
         </div>
     }

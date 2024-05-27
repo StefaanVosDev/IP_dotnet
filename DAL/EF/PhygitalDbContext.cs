@@ -35,8 +35,10 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Flow> Flows { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Session> Sessions { get; set; }
+    public DbSet<Option> Options { get; set; }
     public DbSet<Note> Notes { get; set; }
     public DbSet<ProjectFacilitator> ProjectFacilitators { get; set; }
+
 
     #endregion
 
@@ -76,8 +78,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<Flow>()
             .HasMany(s => s.SubFlows)
-            .WithOne(s => s.ParentFlow)
-            .HasForeignKey(s => s.ParentFlowId);
+            .WithOne(s => s.ParentFlow);
     }
 
     public bool CreateDatabase(bool wipeDatabase = true)
@@ -87,6 +88,7 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         return true;
     }
 
+    //todo: fix EmptyDatabase
     private void EmptyDatabase()
     {
         // Get all the DbSets properties
@@ -146,7 +148,8 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
     
     //TODO: run database migrations.
     //TODO:ProjectDirectory>cd DAL
-    //TODO:ProjectDirectory\DAL>dotnet ef migrations add {{migrationName}}
+    //TODO:ProjectDirectory\DAL>dotnet ef migrations
+    //{{migrationName}}
     //If dotnet ef is not installed:
     //ProjectDirectory>dotnet tool install --global dotnet-ef (--version {{version}})
 }

@@ -12,19 +12,28 @@ namespace IP_MVC.Controllers
     public class QuestionController : Controller
     {
         private readonly IQuestionManager _questionManager;
+        private readonly IOptionManager _optionManager;
         private readonly UnitOfWork _unitOfWork;
 
-        public QuestionController(IQuestionManager questionManager, UnitOfWork unitOfWork)
+        public QuestionController(IQuestionManager questionManager, IOptionManager optionManager, UnitOfWork unitOfWork)
         {
             _questionManager = questionManager;
             _unitOfWork = unitOfWork;
+            _optionManager = optionManager;
         }
 
         [HttpGet]
         public IActionResult Edit(int questionId)
         {
             var question = _questionManager.GetQuestionById(questionId);
-
+            if (question == null)
+            {
+                var errorViewModel = new ErrorViewModel()
+                {
+                    RequestId = "Question not found"
+                };
+                return View("Error", errorViewModel);
+            }
             if (question.Type == QuestionType.Range)
             {
                 var rangeQuestion = (RangeQuestion) question;
@@ -48,6 +57,8 @@ namespace IP_MVC.Controllers
             }
             await _questionManager.DeleteAsync(question);
             await _questionManager.UpdateAllAsync(questionsToUpdate);
+            
+            _optionManager.UpdateOptionsAfterQuestionDeletion(questionId);
             
             _unitOfWork.Commit();
             return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});

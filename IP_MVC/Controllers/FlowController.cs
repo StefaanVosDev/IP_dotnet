@@ -17,6 +17,7 @@ namespace IP_MVC.Controllers
         ISessionManager sessionManager,
         IProjectManager projectManager,
         IQuestionManager questionManager,
+        IOptionManager optionManager,
         UnitOfWork unitOfWork)
         : Controller
     {
@@ -81,7 +82,12 @@ namespace IP_MVC.Controllers
 
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
                          new Dictionary<int, Queue<int>>();
-            queues[parentFlowId] = await flowManager.GetQuestionQueueByFlowIdAsync(parentFlowId);
+            
+            var newList = await flowManager.GetQuestionQueueByFlowIdAsync(parentFlowId);
+            //sort the newList on the position of the question
+            newList = new Queue<int>(newList.OrderBy(q => questionManager.GetQuestionByIdAndType(q).Position));
+            queues[parentFlowId] = newList;
+            
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);
@@ -131,7 +137,7 @@ namespace IP_MVC.Controllers
             // Retrieve the current question ID from the queue.
             var questionId = questionQueue.ElementAt(currentIndex);
 
-            // Haal de huidige vraag op
+            // Retrieve the question based on the ID and type.
             var question = questionManager.GetQuestionByIdAndType(questionId);
 
             // Maak een QuestionViewModel aan en vul het met de vraag en het type
@@ -160,7 +166,7 @@ namespace IP_MVC.Controllers
             ViewData["questionCount"] = questionQueue.Count;
             ViewData["earlierAnswer"] = earlierAnswer;
             ViewBag.FlowType = flowType;
-            ViewBag.subFlowId = flowManager.GetParentFlowIdBySessionId(id);
+            ViewBag.subFlowId = question.FlowId;
             ViewBag.QuestionId = questionId;
             ViewBag.Preview = false;
 
@@ -191,7 +197,7 @@ namespace IP_MVC.Controllers
                 FlowId = parentId ?? 0
             };
 
-            ViewData["Message"] = "Thank you for completing the subflow!";
+            ViewData["Message"] = "Thank you for completing the subflow!";  
             return View(model);
         }
 
@@ -205,7 +211,8 @@ namespace IP_MVC.Controllers
             {
                 return RedirectToAction("Question", new { id = sessionId, redirectedQuestionId, showQr = true });
             }
-
+            
+            
             // Join the answer, in case of multiple answers
             var answerText = string.Join("\n", model.Answer);
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
@@ -275,6 +282,13 @@ namespace IP_MVC.Controllers
                 Flow = flow
             };
 
+            
+            // Look for the options in the database
+            var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
+
+            var matchingAnswer = allOptions?.FirstOrDefault(a => a.Text == model.Answer.FirstOrDefault());
+
+            
             // If there is no answer given to this question yet, add the answer to the session
             if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
             {
