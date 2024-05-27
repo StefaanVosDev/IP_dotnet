@@ -169,27 +169,37 @@ namespace IP_MVC.Controllers.api
                 return BadRequest("Invalid flow data.");
             }
 
-            Question newQuestion = new Question();
+            Question newQuestion;
+
+            switch (createDto.Type)
+            {
+                case "MultipleChoice":
+                    newQuestion = new MultipleChoiceQuestion();
+                    break;
+                case "SingleChoice":
+                    newQuestion = new SingleChoiceQuestion();
+                    break;
+                case "Open":
+                    newQuestion = new OpenQuestion();
+                    break;
+                case "Range":
+                    newQuestion = new RangeQuestion();
+                    break;
+                default:
+                    return BadRequest("Invalid question type.");
+            }
+
             newQuestion.Text = createDto.Text;
             newQuestion.FlowId = createDto.FlowId;
 
-            if (createDto.Type == "MultipleChoice")
-            {
-                newQuestion.Type = QuestionType.MultipleChoice;
+            var listQuestionsByFlowId = _questionManager.GetQuestionsByFlowId(createDto.FlowId).ToList();
+            var newPosition = 1;
+            if (listQuestionsByFlowId.Any())
+            { 
+                newQuestion.Position = listQuestionsByFlowId.Max(q => q.Position) + 1;
             }
-            else if (createDto.Type == "SingleChoice")
-            {
-                newQuestion.Type = QuestionType.SingleChoice;
-            }
-            else if (createDto.Type == "Open")
-            {
-                newQuestion.Type = QuestionType.Open;
-            }
-            else if (createDto.Type == "Range")
-            {
-                newQuestion.Type = QuestionType.Range;
-            }
-
+            newQuestion.Position = newPosition;
+            
             await _questionManager.AddAsync(newQuestion);
 
             _unitOfWork.Commit();
