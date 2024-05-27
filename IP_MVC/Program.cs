@@ -1,6 +1,5 @@
 using System.Text.Json;
 using BL;
-using BL.Domain;
 using BL.Domain.Questions;
 using BL.Implementations;
 using BL.Interfaces;
@@ -12,7 +11,6 @@ using Google.Cloud.SecretManager.V1;
 using IP_MVC;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +33,7 @@ builder.Services.AddDbContext<PhygitalDbContext>(options =>
     try
     {
         var connectionString = $"Host={AccessSecret("DB_IP")}" + builder.Configuration.GetConnectionString("Connection") + AccessSecret("db_password") + ";";
+        // var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
         var testConnection = new NpgsqlConnection(connectionString);
         testConnection.Open();
         testConnection.Close();
@@ -79,10 +78,13 @@ builder.Services.AddScoped<IRepository,Repository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IFlowRepository, FlowRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+builder.Services.AddScoped<IOptionRepository, OptionRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 builder.Services.AddScoped<Manager<Question>>();
+builder.Services.AddScoped<Manager<Option>>();
 builder.Services.AddScoped<IProjectManager, ProjectManager>();
 builder.Services.AddScoped<IQuestionManager, QuestionManager>();
+builder.Services.AddScoped<IOptionManager, OptionManager>();
 builder.Services.AddScoped<ISessionManager, SessionManager>();
 builder.Services.AddScoped<IFlowManager, FlowManager>();
 builder.Services.AddScoped<ICloudManager, CloudManager>();

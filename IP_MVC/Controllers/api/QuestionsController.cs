@@ -242,5 +242,16 @@ namespace IP_MVC.Controllers.api
 
             return Ok(newQuestion);
         }
+        
+        [HttpGet("RedirectableQuestions")]
+        public IActionResult RedirectableQuestions([FromQuery] int flowId, [FromQuery] int position)
+        {
+            var questions = _questionManager.GetQuestionsByFlowIdAfterPosition(flowId, position);
+            if (questions == null || !questions.Any())
+            {
+                return NoContent();
+            }
+            return Ok(questions);
+        }
     }
 }

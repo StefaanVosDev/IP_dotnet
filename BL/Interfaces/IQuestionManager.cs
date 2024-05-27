@@ -12,12 +12,11 @@ public interface IQuestionManager : IManager<Question>
 
     public IEnumerable<Question> GetQuestionsBetweenPositionsByFlowId(int flowId, int newPosition, int oldPosition);
     
-    public List<string> GetOptionsSingleOrMultipleChoiceQuestion(int id);
     public (int, int) GetRangeQuestionValues(int id);
     
-    public void AddOptionToQuestion(int id, string option);
     public void SetRangeQuestionValues(int id, int min, int max);
-    public void DeleteOptionFromQuestion(int id, string option);
     
     public void AddMediaToQuestion(int questionId, string path, string description, MediaType type);
+
+    public IEnumerable<Question> GetQuestionsByFlowIdAfterPosition(int flowId, int position);
 }

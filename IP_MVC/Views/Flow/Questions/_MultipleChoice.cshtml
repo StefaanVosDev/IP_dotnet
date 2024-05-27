@@ -12,12 +12,12 @@
 
     foreach (var option in question.Options)
     {
-        bool isSelected = selectedOptions.Contains(option);
+        bool isSelected = selectedOptions.Contains(option.Text);
 
         <div class="form-check m-3">
-            <input class="form-check-input" type="checkbox" id="check@i" name="Answer" value="@option" @(isSelected ? "checked" : "")>
+            <input class="form-check-input" type="checkbox" id="check@i" name="Answer" value="@option.Text" @(isSelected ? "checked" : "")>
             <label class="form-check-label" for="check@i">
-                @option
+                @option.Text
             </label>
         </div>
     }

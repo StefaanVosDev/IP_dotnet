@@ -18,6 +18,8 @@
 
 <input type="hidden" id="questionId" value="@Model?.Id">
 <input type="hidden" id="questionType" value="@Model?.Type">
+<input type="hidden" id="position" value="@Model?.Position">
+<input type="hidden" id="flowId" value="@Model?.FlowId">
 
 <div id="titleContainer">
     <h3 id="titleText">@Model?.Text</h3>
@@ -67,6 +69,8 @@
     case QuestionType.MultipleChoice:
     case QuestionType.SingleChoice:
         // Add options to the question
+        <button id="addConditionalQuestionsButton" class="btn btn-secondary">Add conditional questions</button>
+        <button id="saveQuestionButton" class="btn btn-secondary">Save follow up questions</button>
         <form>
             <h2>Add possible answers to the question</h2>
             <div id="optionTable">

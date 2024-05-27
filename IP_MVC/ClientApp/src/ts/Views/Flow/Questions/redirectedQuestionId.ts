@@ -3,8 +3,6 @@ const buttons = Array.from(document.querySelectorAll('button')).filter(input => 
     return name && /^redirectedQuestionId\d+$/.test(name);
 });
 
-console.log("Dit zijn de buttons")
-console.log(buttons)
 buttons.forEach(button => {
     button.addEventListener('click', function(event) {
         const name = button.getAttribute('name') as string;

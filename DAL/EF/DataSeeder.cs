@@ -1,5 +1,4 @@
 using BL.Domain;
-using BL.Domain.Answers;
 using BL.Domain.Questions;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,6 +15,7 @@ public class DataSeeder
 
     public async Task Seed(PhygitalDbContext context)
     {
+        
         ArgumentNullException.ThrowIfNull(context);
         
         var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
@@ -45,18 +45,19 @@ public class DataSeeder
                                 1,
                                 "Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten?",
                                 [
-                                    "Natuur en ecologie",
-                                    "Vrije tijd, sport, cultuur",
-                                    "Huisvesting",
-                                    "Onderwijs en kinderopvang",
-                                    "Gezondheidszorg en welzijn",
-                                    "Verkeersveiligheid en mobiliteit",
-                                    "Ondersteunen van lokale handel"
+                                    new Option("Natuur en ecologie",2 ),
+                                    new Option("Vrije tijd, sport, cultuur",2 ),
+                                    new Option("Huisvesting",2 ),
+                                    new Option("Onderwijs en kinderopvang",2 ),
+                                    new Option("Gezondheidszorg en welzijn",3 ),
+                                    new Option("Verkeersveiligheid en mobiliteit",3 ),
+                                    new Option("Ondersteunen van lokale handel", null)
                                 ],
                                 new Media()
                                 {
                                     description = "Dit is een video over hoe de bevolking naar de politiek kijkt",
-                                    url = "https://storage.googleapis.com/phygital-public/Questions/informatie_stemming.mp4",
+                                    url =
+                                        "https://storage.googleapis.com/phygital-public/Questions/informatie_stemming.mp4",
                                     type = MediaType.VIDEO
                                 }
                             ),
@@ -64,16 +65,37 @@ public class DataSeeder
                                 2,
                                 "Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?",
                                 [
-                                    "Meer lessen op school rond de partijprogramma’s",
-                                    "Activiteiten in mijn jeugdclub, sportclub… rond de verkiezingen",
-                                    "Een bezoek van de partijen aan mijn school, jeugd/sportclub, …",
-                                    "Een gesprek met mijn ouders rond de gemeentepolitiek",
-                                    "Een debat georganiseerd door een jeugdhuis met de verschillende partijen"
+                                    new Option()
+                                    {
+                                        Text = "Meer lessen op school rond de partijprogramma’s", NextQuestionId = 3
+                                    },
+                                    new Option()
+                                    {
+                                        Text = "Activiteiten in mijn jeugdclub, sportclub… rond de verkiezingen",
+                                        NextQuestionId = 3
+                                    },
+                                    new Option()
+                                    {
+                                        Text = "Een bezoek van de partijen aan mijn school, jeugd/sportclub, …",
+                                        NextQuestionId = 3
+                                    },
+                                    new Option()
+                                    {
+                                        Text = "Een gesprek met mijn ouders rond de gemeentepolitiek",
+                                        NextQuestionId = null
+                                    },
+                                    new Option()
+                                    {
+                                        Text =
+                                            "Een debat georganiseerd door een jeugdhuis met de verschillende partijen",
+                                        NextQuestionId = 3
+                                    }
                                 ],
                                 new Media()
                                 {
                                     description = "Afbeelding van alle partijen",
-                                    url = "https://storage.googleapis.com/phygital-public/Questions/afbeelding_partijen.jpg",
+                                    url =
+                                        "https://storage.googleapis.com/phygital-public/Questions/afbeelding_partijen.jpg",
                                     type = MediaType.IMAGE
                                 }
                             ),
@@ -84,8 +106,10 @@ public class DataSeeder
                                 5,
                                 new Media()
                                 {
-                                    description = "Dit is een afbeelding over de betrokkenheid van de bevolking bij de politiek",
-                                    url="https://storage.googleapis.com/phygital-public/Questions/bevolking_antwerpen.jpg",
+                                    description =
+                                        "Dit is een afbeelding over de betrokkenheid van de bevolking bij de politiek",
+                                    url =
+                                        "https://storage.googleapis.com/phygital-public/Questions/bevolking_antwerpen.jpg",
                                     type = MediaType.IMAGE
                                 })
                         ],
@@ -93,7 +117,8 @@ public class DataSeeder
                         new Media()
                         {
                             description = "Dit is een afbeelding over de betrokkenheid van jongeren",
-                            url="https://storage.googleapis.com/phygital-public/Questions/OVM-Jongeren-betrekken-bij-de-politiek-hoe-doe-je-dat.jpg",
+                            url =
+                                "https://storage.googleapis.com/phygital-public/Questions/OVM-Jongeren-betrekken-bij-de-politiek-hoe-doe-je-dat.jpg",
                             type = MediaType.IMAGE
                         },
                         new DateTime(2024, 1, 1).ToUniversalTime(),
@@ -110,11 +135,11 @@ public class DataSeeder
                                 1,
                                 "Waarop wil jij dat de focus wordt gelegd in het nieuwe stadspark?",
                                 [
-                                    "Sportinfrastructuur",
-                                    "Speeltuin voor kinderen",
-                                    "Zitbanken en picknickplaatsen",
-                                    "Ruimte voor kleine evenementen",
-                                    "Drank- en eetmogelijkheden"
+                                    new Option() { Text = "Sportinfrastructuur", NextQuestionId = 2 },
+                                    new Option() { Text = "Speeltuin voor kinderen", NextQuestionId = 2 },
+                                    new Option() { Text = "Zitbanken en picknickplaatsen", NextQuestionId = 3 },
+                                    new Option() { Text = "Ruimte voor kleine evenementen", NextQuestionId = 3 },
+                                    new Option() { Text = "Drank- en eetmogelijkheden", NextQuestionId = null }
                                 ],
                                 new Media()
                                 {
@@ -127,16 +152,28 @@ public class DataSeeder
                                 2,
                                 "Jij gaf aan dat je waarschijnlijk niet zal gaan stemmen. Om welke reden(en) zeg je dit?",
                                 [
-                                    "Ik ben niet geïnteresseerd in politiek",
-                                    "Ik weet niet waar ik moet gaan stemmen",
-                                    "Ik weet niet waarover de verkiezingen gaan",
-                                    "Ik weet niet wat de verschillende partijen willen doen",
-                                    "Ik weet niet wat de verschillende partijen willen doen"
+                                    new Option()
+                                        { Text = "Ik ben niet geïnteresseerd in politiek", NextQuestionId = null },
+                                    new Option()
+                                        { Text = "Ik weet niet waar ik moet gaan stemmen", NextQuestionId = null },
+                                    new Option()
+                                        { Text = "Ik weet niet waarover de verkiezingen gaan", NextQuestionId = null },
+                                    new Option()
+                                    {
+                                        Text = "Ik weet niet wat de verschillende partijen willen doen",
+                                        NextQuestionId = null
+                                    },
+                                    new Option()
+                                    {
+                                        Text = "Ik weet niet wat de verschillende partijen willen doen",
+                                        NextQuestionId = null
+                                    }
                                 ],
                                 new Media()
                                 {
                                     description = "Video over hoe het stemmen werkt",
-                                    url = "https://storage.googleapis.com/phygital-public/Questions/hoeWerkthetStemmen.mp3",
+                                    url =
+                                        "https://storage.googleapis.com/phygital-public/Questions/hoeWerkthetStemmen.mp3",
                                     type = MediaType.AUDIO
                                 }
                             ),
@@ -158,7 +195,8 @@ public class DataSeeder
                                 new Media()
                                 {
                                     description = "Afbeelding van de schepen van onderwijs",
-                                    url = "https://storage.googleapis.com/phygital-public/Questions/schepenVanOnderwijs.jpeg",
+                                    url =
+                                        "https://storage.googleapis.com/phygital-public/Questions/schepenVanOnderwijs.jpeg",
                                     type = MediaType.IMAGE
                                 }
                             )
@@ -167,7 +205,8 @@ public class DataSeeder
                         new Media()
                         {
                             description = "Afbeelding over de kiesintenties en participatie aan verkiezingen",
-                            url = "https://storage.googleapis.com/phygital-public/Questions/shutterstock_1937926147_1.jpg",
+                            url =
+                                "https://storage.googleapis.com/phygital-public/Questions/shutterstock_1937926147_1.jpg",
                             type = MediaType.IMAGE
                         },
                         new DateTime(2024, 1, 1).ToUniversalTime(),
