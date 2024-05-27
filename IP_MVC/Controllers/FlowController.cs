@@ -198,7 +198,6 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, int redirectedQuestionId)
         {
-            unitOfWork.BeginTransaction();
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             
             // If there is no answer given, redirect to the next question
