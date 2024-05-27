@@ -7,6 +7,7 @@ public class Project
     public string Description { get; set; }
     public List<Flow> Flows { get; set; }
     public string AdminId { get; set; }
+    public List<ProjectFacilitator> ProjectFacilitators { get; set; }
     
     public Project(string name, List<Flow> flows, string description, string adminId)
     {

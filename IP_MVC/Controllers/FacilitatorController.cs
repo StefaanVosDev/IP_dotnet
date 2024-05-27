@@ -7,7 +7,7 @@ public class FacilitatorController : Controller
 {
     // GET
     [Authorize(Roles = CustomIdentityConstants.FacilitatorRole)]
-    public IActionResult Index()
+    public IActionResult FacilitatorDashboard()
     {
         return View();
     }
