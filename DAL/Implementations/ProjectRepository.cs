@@ -27,7 +27,7 @@ public class ProjectRepository : Repository, IProjectRepository
 
     public async Task<IEnumerable<Project>> GetProjectsByAdminIdAsync(string adminId)
     {
-        return _context.Set<Project>().Where(p => p.AdminId == adminId);
+        return await _context.Set<Project>().Where(p => p.AdminId == adminId).ToListAsync();
     }
 
     public ValueTask<Project> FindByIdAsync(int id)
@@ -35,7 +35,7 @@ public class ProjectRepository : Repository, IProjectRepository
         return _context.Set<Project>().FindAsync(id);
     }
 
-    public IEnumerable<Flow> FindAvailableFlowsByProjectId(int projectId, DateTime date)
+    public async Task<IEnumerable<Flow>> FindAvailableFlowsByProjectIdAsync(int projectId, DateTime date)
     {
         return await _context.Set<Flow>().Where(f => f.ProjectId == projectId &&
                                                      f.ParentFlowId == null &&
