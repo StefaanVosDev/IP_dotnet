@@ -3,8 +3,11 @@ using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IP_MVC.Helpers;
 using BL.Domain.Answers;
+using BL.Domain.Questions;
 using BL.Implementations;
 using IP_MVC.Models;
+using QRCoder;
+using static QRCoder.PayloadGenerator;
 using WebApplication1.Models;
 
 namespace IP_MVC.Controllers
@@ -85,14 +88,15 @@ namespace IP_MVC.Controllers
 
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
-
-            return RedirectToAction("Question", new { id = newSession.Id });
+            
+            return RedirectToAction("Question", new { id = newSession.Id, showQr = true});
         }
 
-        public IActionResult Question(int id, int redirectedQuestionId)
+        public IActionResult Question(int id, int redirectedQuestionId, bool showQr)
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
-
+            ViewBag.showQrCode = showQr;
+            
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
 
@@ -136,6 +140,17 @@ namespace IP_MVC.Controllers
                 Question = question,
                 QuestionType = question.Type
             };
+
+            if (question.Type == QuestionType.Open)
+            {
+                // Create QR code
+                QRCodeGenerator qrCodeGenerator = new();
+                Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {questionId}, protocol: HttpContext.Request.Scheme));
+                QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
+                BitmapByteQRCode qrCode = new(qrCodeData);
+                string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
+                ViewBag.QrImage = "data:image/png;base64," + base64String;
+            }
 
             // Get the earlier answer given
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
@@ -183,15 +198,17 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult SaveAnswerAndRedirect(int flowId, int id, AnswerViewModel model, int redirectedQuestionId)
         {
+            unitOfWork.BeginTransaction();
+            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
+            
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = flowId, redirectedQuestionId });
+                return RedirectToAction("Question", new { id = sessionId, redirectedQuestionId, showQr = true });
             }
 
             // Join the answer, in case of multiple answers
             var answerText = string.Join("\n", model.Answer);
-            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
 
@@ -219,7 +236,68 @@ namespace IP_MVC.Controllers
 
             unitOfWork.Commit();
             return RedirectToAction("Question",
-                new { id = flowId, redirectedQuestionId });
+                new { id = sessionId, redirectedQuestionId, showQr = true});
+        }
+
+        public IActionResult OpenQuestion(int questionId)
+        {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+            
+            // Haal de huidige vraag op
+            var question = questionManager.GetQuestionByIdAndType(questionId);
+
+            // Maak een QuestionViewModel aan en vul het met de vraag en het type
+            var viewModel = new QuestionViewModel
+            {
+                Question = question,
+                QuestionType = question.Type
+            };
+            
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult SaveAnswerOpenQuestion(int flowId, AnswerViewModel model)
+        {
+            unitOfWork.BeginTransaction();
+            
+            // Join the answer, in case of multiple answers
+            var answerText = string.Join("\n", model.Answer);
+            var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
+            var flowType = HttpContext.Session.Get<FlowType>("flowType");
+            var flow = flowManager.GetFlowById(flowId);
+
+            // If no answers are given yet, save the answer
+            var newAnswer = new Answer
+            {
+                QuestionId = model.QuestionId,
+                AnswerText = answerText,
+                Session = sessionManager.GetSessionById(sessionId),
+                Flow = flow
+            };
+
+            // If there is no answer given to this question yet, add the answer to the session
+            if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
+            {
+                sessionManager.AddAnswerToSession(sessionId, newAnswer, flowType);
+            }
+            else
+            {
+                // If an answer is already given, search the old answer and update it
+                var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId);
+                sessionManager.UpdateAnswer(oldAnswer, newAnswer);
+            }
+            
+            
+            unitOfWork.Commit();
+            return RedirectToAction("CompletedOpenQuestion");
+        }
+
+        public IActionResult CompletedOpenQuestion()
+        {
+            ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
+            
+            return View();
         }
 
         
