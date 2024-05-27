@@ -17,16 +17,11 @@ public class ProjectController : Controller
         _projectManager = projectManager;
         _unitOfWork = unitOfWork;
     }
-
-    public async Task<IActionResult> Project()
-    {
-        var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var projects =await _projectManager.GetProjectsByAdminIdAsync(adminId);
-        return View(projects);
-    }
+    
     
     public async Task<IActionResult> ProjectDashboard()
     {
+        ViewBag.Dashboard = true;
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var adminProjects = await _projectManager.GetProjectsByAdminIdAsync(userId);
         var facilitatorProjects = _projectManager.GetProjectsByFacilitatorId(userId);
@@ -47,21 +42,21 @@ public class ProjectController : Controller
         await _projectManager.DeleteAsync(project);
         
         _unitOfWork.Commit();
-        return RedirectToAction("Project");
+        return RedirectToAction("ProjectDashboard");
     }
     
     [HttpPost]
     public async Task<IActionResult> Create(Project project)
     {
         _unitOfWork.BeginTransaction();
-        if (!ModelState.IsValid) return RedirectToAction("Project");
+        if (!ModelState.IsValid) return RedirectToAction("ProjectDashboard");
         
         project.AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         await _projectManager.AddAsync(project);
         
         _unitOfWork.Commit();
-        return RedirectToAction("Project");
+        return RedirectToAction("ProjectDashboard");
     }
     
     [HttpGet]

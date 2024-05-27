@@ -2,31 +2,37 @@
 @model BL.Domain.Flow
 
 <div class="popup-overlay z-3" id="popupOverlay">
+    <img src="https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_2.png" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
+
     <div class="popup" id="popup">
+        <h5 class="fw-bolder d-flex justify-content-center">Create FLow</h5>
         <span class="close" id="closePopup">&times;</span>
-        <div class="popup-content">
-            <h5>Create Flow</h5>
-            <div class="form-group">
-                <label for="NewNameInput">Name</label>
-                <input id="NewNameInput" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label for="NewDescriptionInput">Description</label>
-                <textarea id="NewDescriptionInput" class="form-control"></textarea>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate"></label>
-                <input asp-for="StartDate" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate"></label>
-                <input asp-for="EndDate" class="form-control"/>
-            </div>
-            <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) || User.IsInRole(CustomIdentityConstants.PlatformAdminRole) ? "True" : "False")'/>
-            <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>
-            <input type="hidden" id="projectIdInput" value="@ViewBag.ProjectId"/>
-            <input type="hidden" id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
-            <button type="button" class="btn rounded-5" id="createButton">Create Flow</button>
+        <div class="popup-content d-flex justify-content-center align-items-center position-relative">
+            <form class="w-50">
+
+                <div class="form-group mb-3">
+                    <label class="d-flex justify-content-start" for="NewNameInput">Name</label>
+                    <input id="NewNameInput" class="form-control"/>
+                </div>
+                <div class="form-group pb-3">
+                    <label class="d-flex justify-content-start" for="NewDescriptionInput">Description</label>
+                    <textarea id="NewDescriptionInput" class="form-control"></textarea>
+                </div>
+                <div class="form-group pb-3">
+                    <label class="d-flex justify-content-start" asp-for="StartDate"></label>
+                    <input asp-for="StartDate" class="form-control"/>
+                </div>
+                <div class="form-group pb-3">
+                    <label class="d-flex justify-content-start" asp-for="EndDate"></label>
+                    <input asp-for="EndDate" class="form-control"/>
+                </div>
+                <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) || User.IsInRole(CustomIdentityConstants.PlatformAdminRole) ? "True" : "False")'/>
+                <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>
+                <input type="hidden" id="projectIdInput" value="@ViewBag.ProjectId"/>
+                <input type="hidden" id="parentFlowIdInput" value="@ViewBag.ParentFlowId"/>
+                <button type="button" class="btn btn-blue rounded-5" id="createButton">Create Flow</button>
+
+            </form>
         </div>
     </div>
 </div>

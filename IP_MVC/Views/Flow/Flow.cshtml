@@ -107,7 +107,7 @@
             @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
             {
                 <div class="px-3">
-                    <a class="btn btn-blue" href="@Url.Action("Project", "Project")">Go back to projects</a>
+                    <a class="btn btn-blue" href="@Url.Action("ProjectDashboard", "Project")">Go back to projects</a>
 
                 </div>
                  <div class="px-3">
