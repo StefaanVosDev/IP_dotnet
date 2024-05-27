@@ -84,9 +84,8 @@ namespace IP_MVC.Controllers
                          new Dictionary<int, Queue<int>>();
             
             var newList = await flowManager.GetQuestionQueueByFlowIdAsync(parentFlowId);
-            //sort the newList on the position of the question
-            newList = new Queue<int>(newList.OrderBy(q => questionManager.GetQuestionByIdAndType(q).Position));
-            queues[parentFlowId] = newList;
+            
+            queues[parentFlowId] = new Queue<int>(newList);
             
             HttpContext.Session.Set("queues", queues);
 
@@ -197,7 +196,9 @@ namespace IP_MVC.Controllers
                 FlowId = parentId ?? 0
             };
 
-            ViewData["Message"] = "Thank you for completing the subflow!";  
+            ViewData["Message"] = "Thank you for completing the subflow!";
+            ViewBag.IsParentFlow = parentId != null;
+            ViewBag.ProjectId = flowManager.GetFlowById(session.FlowId).ProjectId;
             return View(model);
         }
 

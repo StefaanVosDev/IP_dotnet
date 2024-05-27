@@ -43,14 +43,17 @@
 
 
                                             <div>
-                                                @if (!ViewBag.IsParentFlow[flow.Id])
+                                                @if (ViewBag.ContainsQuestions[flow.Id])
                                                 {
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Start Flow</a>
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Start Circular Flow</a>
-                                                }
-                                                else
-                                                {
-                                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = ViewBag.ActiveProject })" class="btn btn-blue">Go to Subflows</a>
+                                                    @if (!ViewBag.IsParentFlow[flow.Id])
+                                                    {
+                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Start Flow</a>
+                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Start Circular Flow</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id, active = ViewBag.ActiveProject })" class="btn btn-blue">Go to Subflows</a>
+                                                    }
                                                 }
                                             </div>
                                         </div>
