@@ -39,9 +39,6 @@ namespace DAL.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RedirectionQuestionId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("SessionId")
                         .HasColumnType("integer");
 
@@ -192,6 +189,30 @@ namespace DAL.Migrations
                     b.ToTable("ProjectFacilitators");
                 });
 
+            modelBuilder.Entity("BL.Domain.Questions.Option", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("NextQuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Options");
+                });
+
             modelBuilder.Entity("BL.Domain.Questions.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -225,7 +246,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("Mediaid");
 
-                    b.ToTable("Question");
+                    b.ToTable("Questions");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Question");
 
@@ -531,6 +552,13 @@ namespace DAL.Migrations
                     b.Navigation("Facilitator");
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("BL.Domain.Questions.Option", b =>
+                {
+                    b.HasOne("BL.Domain.Questions.Question", null)
+                        .WithMany("Options")
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("BL.Domain.Questions.Question", b =>
