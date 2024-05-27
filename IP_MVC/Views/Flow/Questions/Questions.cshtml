@@ -77,6 +77,7 @@
                             {
                                 case QuestionType.Open:
                                     <img height="250" width="250" src="@ViewBag.QrImage" alt="Qr code image" />
+                                    <a href="@Url.Action("OpenQuestion", "Flow", new {questionId = @Model.Question.Id})" class="btn">Go to open question</a>
                                     break;
                                 case QuestionType.Range:
                                     @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
