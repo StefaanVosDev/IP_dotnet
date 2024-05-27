@@ -17,8 +17,8 @@ public class ProjectController : Controller
         _projectManager = projectManager;
         _unitOfWork = unitOfWork;
     }
-    
-    
+
+
     public async Task<IActionResult> ProjectDashboard()
     {
         ViewBag.Dashboard = true;
@@ -40,37 +40,41 @@ public class ProjectController : Controller
         _unitOfWork.BeginTransaction();
         var project = await _projectManager.FindByIdAsync(parentFlowId);
         await _projectManager.DeleteAsync(project);
-        
+
         _unitOfWork.Commit();
         return RedirectToAction("ProjectDashboard");
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Create(Project project)
     {
         _unitOfWork.BeginTransaction();
         if (!ModelState.IsValid) return RedirectToAction("ProjectDashboard");
-        
+
         project.AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         await _projectManager.AddAsync(project);
-        
+
         _unitOfWork.Commit();
         return RedirectToAction("ProjectDashboard");
     }
-    
+
+
     [HttpGet]
     public IActionResult ManageFacilitators(int projectId)
     {
         var facilitators = _projectManager.GetFacilitatorsByProjectId(projectId);
+        
         var model = new ManageFacilitatorsViewModel
         {
             Facilitators = facilitators,
             ProjectId = projectId
         };
-        return View(model);
+
+        return View("_ManageFacilitators", model);
     }
-    
+
+
     [HttpDelete]
     public IActionResult RemoveUser(int projectId, string userId)
     {

@@ -21,7 +21,7 @@
         {
             <li>
                 @facilitator.UserName
-                <a class="btn py-0 bi bi-trash" href="@Url.Action("RemoveUser", "Project", new { userId = facilitator.Id, projectId = Model.ProjectId })" onclick="return confirm('Are you sure you want to remove this facilitator?')"></a></li>
+                <a class="btn btn-white py-0 bi bi-trash" href="@Url.Action("RemoveUser", "Project", new { userId = facilitator.Id, projectId = Model.ProjectId })" onclick="return confirm('Are you sure you want to remove this facilitator?')"></a></li>
         }
     }
 </ul>
