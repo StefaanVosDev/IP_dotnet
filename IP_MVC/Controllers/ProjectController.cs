@@ -25,10 +25,10 @@ public class ProjectController : Controller
         return View(projects);
     }
     
-    public IActionResult ProjectDashboard()
+    public async Task<IActionResult> ProjectDashboard()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var adminProjects = _projectManager.GetProjectsByAdminId(userId);
+        var adminProjects = await _projectManager.GetProjectsByAdminIdAsync(userId);
         var facilitatorProjects = _projectManager.GetProjectsByFacilitatorId(userId);
 
         var viewModel = new ProjectDashboardViewModel

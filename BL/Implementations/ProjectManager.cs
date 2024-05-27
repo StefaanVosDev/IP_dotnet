@@ -42,26 +42,26 @@ public class ProjectManager : Manager<Project>, IProjectManager
 
     public IEnumerable<Project> GetProjectsByFacilitatorId(string userId)
     {
-        return repository.GetProjectsByFacilitatorId(userId);
+        return _repository.GetProjectsByFacilitatorId(userId);
     }
 
     public IEnumerable<IdentityUser> GetSearchedFacilitators(string searchTerm)
     {
-        return repository.GetSearchedFacilitators(searchTerm);
+        return _repository.GetSearchedFacilitators(searchTerm);
     }
 
     public IEnumerable<IdentityUser> GetFacilitatorsByProjectId(int projectId)
     {
-        return repository.GetFacilitatorsByProjectId(projectId);
+        return _repository.GetFacilitatorsByProjectId(projectId);
     }
 
     public bool AddFacilitatorToProject(string userId, int projectId)
     {
-        return repository.AddFacilitatorToProject(userId, projectId);
+        return _repository.AddFacilitatorToProject(userId, projectId);
     }
 
     public bool RemoveFacilitatorFromProject(string userId, int projectId)
     {
-        return repository.RemoveFacilitatorFromProject(userId, projectId);
+        return _repository.RemoveFacilitatorFromProject(userId, projectId);
     }
 }

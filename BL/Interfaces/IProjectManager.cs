@@ -6,10 +6,10 @@ namespace BL.Interfaces;
 public interface IProjectManager : IManager<Project>
 {
     ValueTask<Project> FindByIdAsync(int id);
-    public IEnumerable<Flow> GetParentFlowsByProjectId(int projectId);
+    public Task<IEnumerable<Flow>> GetParentFlowsByProjectIdAsync(int projectId);
     public Task<IEnumerable<Flow>> GetFlowsByProjectIdAsync(int projectId);
-    public IEnumerable<Project> GetProjectsByAdminId(string adminId);
-    public IEnumerable<Flow> GetAvailableFlowsByProjectId(int projectId);
+    public Task<IEnumerable<Project>> GetProjectsByAdminIdAsync(string adminId);
+    public Task<IEnumerable<Flow>> GetAvailableFlowsByProjectIdAsync(int projectId);
     public IEnumerable<Project> GetProjectsByFacilitatorId(string userId);
     public IEnumerable<IdentityUser> GetSearchedFacilitators(string searchTerm);
     public IEnumerable<IdentityUser> GetFacilitatorsByProjectId(int projectId);
