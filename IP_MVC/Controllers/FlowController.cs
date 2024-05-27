@@ -64,7 +64,7 @@ namespace IP_MVC.Controllers
                 return RedirectToAction("Flow", new { projectId });
             }
 
-            return RedirectToAction("Project", "Project");
+            return RedirectToAction("ProjectDashboard", "Project");
         }
 
         public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active)

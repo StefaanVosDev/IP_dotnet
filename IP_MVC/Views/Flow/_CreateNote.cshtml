@@ -2,16 +2,17 @@
 
 <div class="popup-overlay" id="pauseScreen">
     <div class="popup" id="popup">
+        <h5 class="fw-bolder d-flex justify-content-center">Add Note</h5>
+
         <span class="close" id="closeNote">&times;</span>
-        <div class="popup-content">
-            <form asp-controller="Note" asp-action="CreateNote" method="post">
-                <h5>Add note</h5>
-                <div class="form-group">
-                    <label asp-for="Content"></label>
+        <div class="popup-content d-flex justify-content-center align-items-center">
+            <form class="w-50" asp-controller="Note" asp-action="CreateNote" method="post">
+                <div class="form-group pb-3">
+                    <label class="d-flex justify-content-start" asp-for="Content"></label>
                     <textarea asp-for="Content" class="form-control"></textarea>
                 </div>
 
-                <input type="hidden" asp-for="QuestionId" id="questionId" value="@ViewBag.QuestionId" />
+                <input type="hidden" asp-for="QuestionId" id="questionId" value="@ViewBag.QuestionId"/>
                 <button type="submit" class="btn btn-primary" id="submitNote">Add note</button>
             </form>
         </div>
