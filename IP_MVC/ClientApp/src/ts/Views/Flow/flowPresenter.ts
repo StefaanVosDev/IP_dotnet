@@ -1,9 +1,8 @@
 import * as client from "./restFlowClient"
-import {Flows} from "../../models/Flows.interfaces";
+import {Flow} from "../../models/Flows.interfaces";
 import {updateSwiper} from "./createScroll";
 
 const createButton = document.querySelectorAll('#createButton');
-const saveAndRedirectButton = document.querySelectorAll('#saveAndRedirectButton');
 
 export function setupEditEventListener(){
     const editButtons = document.querySelectorAll('.edit-flow-btn');
@@ -38,15 +37,6 @@ createButton.forEach(button => {
             nameInput.value = '';
             descriptionInput.value = '';
         });
-    })
-});
-
-saveAndRedirectButton.forEach(button => {
-    button.addEventListener('click', async () => {
-        const form = document.getElementById('flowEditForm') as HTMLFormElement;
-        if (form) {
-            form.submit();
-        }    
     })
 });
 
@@ -92,7 +82,7 @@ async function addFlow() {
     const projectIdInput = document.getElementById('projectIdInput') as HTMLInputElement;
     const parentFlowIdInput = document.getElementById('parentFlowIdInput') as HTMLInputElement;
     
-    const flow: Flows = {
+    const flow: Flow = {
         NewName: nameInput.value,
         NewDescription: descriptionInput.value,
         NewProjectId: parseInt(projectIdInput.value),
@@ -126,7 +116,7 @@ function editFlow(editButton: Element) {
     }
 }
 
-export function appendFlowToPage(flow: Flows, flowId: number) {
+export function appendFlowToPage(flow: Flow, flowId: number) {
     const flowDataElement = document.getElementById('row');
     if (!flowDataElement) return;
 
@@ -191,7 +181,7 @@ export function appendFlowToPage(flow: Flows, flowId: number) {
     `;
 }
 
-export function appendSubFlowToPage(flow: Flows, subFlowId: number) {
+export function appendSubFlowToPage(flow: Flow, subFlowId: number) {
     const flowDataElement = document.getElementById('swiper-element');
     const isAdminRole = document.getElementById('userRole') as HTMLInputElement;
     const isActiveProject = document.getElementById('activeProject') as HTMLInputElement;

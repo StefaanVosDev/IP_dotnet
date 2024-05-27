@@ -1,17 +1,17 @@
 import * as client from "./restQuestionClient"
+import {Flow} from "../../models/Flows.interfaces";
 
 const titleText = document.getElementById('titleText')!;
 
-// Input elements
 const questionId = document.getElementById('questionId') as HTMLInputElement;
 const questionType = document.getElementById('questionType') as HTMLInputElement;
 const titleInput = document.getElementById('titleInput') as HTMLInputElement;
 const mediaInput = document.getElementById('mediaUpload') as HTMLInputElement;
 
-// Buttons
 const changeNameButton = document.getElementById('editButton')!;
 const updateNameButton = document.getElementById('updateButton')!;
 const uploadMediaButton = document.getElementById('uploadButton')!;
+
 
 if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoice") {
     const newOption = document.getElementById('newOption') as HTMLInputElement;
@@ -80,7 +80,6 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
     );
 }
 
-
 async function updateMedia() {
 
     //TODO: Error handling als geen file wordt geupload
@@ -111,8 +110,11 @@ function displayNameChange(display: boolean) {
     }
 }
 
+
 changeNameButton.addEventListener('click', event => displayNameChange(true));
 updateNameButton.addEventListener('click', event =>
     client.updateQuestionTitle(questionId.value, titleInput.value)
 );
+
+
 uploadMediaButton.addEventListener('click', event => updateMedia());

@@ -1,4 +1,7 @@
-// Get all options from question
+import {appendFlowToPage, appendSubFlowToPage, setupEditEventListener} from "../Flow/flowPresenter";
+import {showQuestion} from "./createQuestionPresenter";
+import {Question} from "../../models/Questions.interfaces";
+
 export async function getOptions(questionId: string) {
     const response = await fetch(`/api/Questions/${questionId}/Options`);
     if (!response.ok) {
@@ -7,7 +10,6 @@ export async function getOptions(questionId: string) {
     return response.json();
 }
 
-// Update question title 
 export async function updateQuestionTitle(questionId: string, title: string) {
     try {
         const response = await fetch(`/api/Questions/${questionId}/Title`, {
@@ -106,4 +108,26 @@ export async function reOrderQuestions(questionId: string, position: number) {
         console.error(e);
         throw e;
     }
+}
+
+export async function createQuestion(text: string, type: string, flowId: string) {
+    const response = await fetch('/api/Questions/Create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            Text: text,
+            Type: type,
+            FlowId: flowId
+        }),
+    }).then(response => response.json())
+        .then(data => {
+            const question: Question = {
+                Id: data.id,
+                NewText: data.text,
+                NewType: data.type
+            };
+            showQuestion(question);
+        }) .catch(reason => alert("Error creating Question:" + reason));
 }

@@ -1,4 +1,4 @@
-export interface Flows {
+export interface Flow {
     NewName: string;
     NewDescription: string;
     NewProjectId: number;

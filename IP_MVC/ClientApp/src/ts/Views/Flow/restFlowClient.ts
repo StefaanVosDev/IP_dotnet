@@ -1,4 +1,4 @@
-import {Flows} from "../../models/Flows.interfaces";
+import {Flow} from "../../models/Flows.interfaces";
 import {appendFlowToPage, appendSubFlowToPage, setupEditEventListener} from "./flowPresenter";
 
 // Get one flow by id
@@ -45,7 +45,7 @@ export async function updateFlow(name: string, description: string, flowId: stri
 }
 
 // Create a new flow
-export async function createFlow(flow: Flows) {
+export async function createFlow(flow: Flow) {
     const response = await fetch(`/api/Flows`, {
         method: 'POST',
         headers: {

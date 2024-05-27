@@ -245,6 +245,8 @@ namespace IP_MVC.Controllers
         public IActionResult Edit(int parentFlowId)
         {
             ViewBag.ActiveProject = false;
+            ViewBag.FlowId = parentFlowId;
+            
             var flow = flowManager.GetFlowById(parentFlowId);
             var questions = questionManager.GetQuestionsByFlowId(parentFlowId).OrderBy(q => q.Position);
 
@@ -281,16 +283,8 @@ namespace IP_MVC.Controllers
             unitOfWork.Commit();
             return RedirectToAction("Flow", new { projectId = newFlow.ProjectId });
         }
-
-        [HttpGet]
-        public IActionResult Create(int? parentFlowId, int projectId)
-        {
-            ViewBag.ParentFlowId = parentFlowId;
-            ViewBag.ProjectId = projectId;
-            return View();
-        }
-
-        [HttpPost]
+        
+        
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
             unitOfWork.BeginTransaction();
