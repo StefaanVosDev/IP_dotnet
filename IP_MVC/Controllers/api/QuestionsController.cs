@@ -5,6 +5,7 @@ using BL.Domain.Questions;
 using BL.Implementations;
 using BL.Interfaces;
 using Google.Cloud.Storage.V1;
+using IP_MVC.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IP_MVC.Controllers.api
@@ -26,7 +27,7 @@ namespace IP_MVC.Controllers.api
         public IActionResult GetAllOptions(int id)
         {
             var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-            
+
             if (options == null || !options.Any())
             {
                 return NoContent();
@@ -34,7 +35,7 @@ namespace IP_MVC.Controllers.api
 
             return Ok(options);
         }
-        
+
         [HttpPut("{id}/Title")]
         public IActionResult UpdateTitle(int id, [FromBody] string text)
         {
@@ -45,29 +46,29 @@ namespace IP_MVC.Controllers.api
             {
                 return NotFound();
             }
-            
+
             var newQuestion = question;
             newQuestion.Text = text;
 
             _questionManager.UpdateAsync(question, newQuestion);
-            
+
             _unitOfWork.Commit();
             return NoContent();
         }
-        
+
         [HttpPut("{id}/Option")]
         public IActionResult AddOption(int id, [FromBody] string option)
         {
             _unitOfWork.BeginTransaction();
             var question = _questionManager.GetQuestionById(id);
-            
+
             if (question == null)
             {
                 return NotFound();
             }
 
             _questionManager.AddOptionToQuestion(id, option);
-            
+
             _unitOfWork.Commit();
             return NoContent();
         }
@@ -83,7 +84,7 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.SetRangeQuestionValues(id, min, max);
-            
+
             _unitOfWork.Commit();
             return Ok();
         }
@@ -99,7 +100,7 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.DeleteOptionFromQuestion(id, option);
-            
+
             _unitOfWork.Commit();
             return Ok();
         }
@@ -130,15 +131,15 @@ namespace IP_MVC.Controllers.api
                 string json = await System.IO.File.ReadAllTextAsync("service-acc-key.json");
                 JsonDocument doc = JsonDocument.Parse(json);
                 string projectId = doc.RootElement.GetProperty("project_id").GetString();
-                storage.UploadObject(projectId+"-public", objectName, null, fileStream);
+                storage.UploadObject(projectId + "-public", objectName, null, fileStream);
                 Console.WriteLine($"Uploaded {objectName}.");
                 //encode the file name to avoid any special characters
-                
+
                 // Save the URL of the uploaded file in your database
                 var fileUrl = $"https://storage.googleapis.com/{projectId}-public/{objectName}";
                 //encode the file name to avoid any special characters
-                
-                
+
+
                 var description = "Uploaded media";
                 // get the media type from the file extension
                 var mediaType = file.ContentType switch
@@ -150,7 +151,7 @@ namespace IP_MVC.Controllers.api
                     _ => throw new Exception("Unsupported media type")
                 };
                 _questionManager.AddMediaToQuestion(questionId, fileUrl, description, mediaType);
-                
+
                 _unitOfWork.Commit();
                 return Ok(new { filePath = fileUrl });
             }
@@ -164,6 +165,7 @@ namespace IP_MVC.Controllers.api
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         [HttpPost("{questionId}/Reorder/{newPosition}")]
         public IActionResult Reorder(int questionId, int newPosition)
         {
@@ -176,7 +178,8 @@ namespace IP_MVC.Controllers.api
             if (newPosition < oldPosition)
             {
                 // The question has been moved up, so increment the position of all questions between the old and new position
-                affectedQuestions = _questionManager.GetQuestionsBetweenPositionsByFlowId(question.FlowId, newPosition, oldPosition-1).ToList();
+                affectedQuestions = _questionManager
+                    .GetQuestionsBetweenPositionsByFlowId(question.FlowId, newPosition, oldPosition - 1).ToList();
                 foreach (var affectedQuestion in affectedQuestions)
                 {
                     affectedQuestion.Position++;
@@ -185,7 +188,8 @@ namespace IP_MVC.Controllers.api
             else
             {
                 // The question has been moved down, so decrement the position of all questions between the old and new position
-                affectedQuestions = _questionManager.GetQuestionsBetweenPositionsByFlowId(question.FlowId, oldPosition+1, newPosition).ToList();
+                affectedQuestions = _questionManager
+                    .GetQuestionsBetweenPositionsByFlowId(question.FlowId, oldPosition + 1, newPosition).ToList();
                 foreach (var affectedQuestion in affectedQuestions)
                 {
                     affectedQuestion.Position--;
@@ -199,7 +203,44 @@ namespace IP_MVC.Controllers.api
             _questionManager.UpdateAllAsync(affectedQuestions);
 
             _unitOfWork.Commit();
-            return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId} );
+            return RedirectToAction("Edit", "Flow", new { parentFlowId = question.FlowId });
+        }
+
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] QuestionCreateDto createDto)
+        {
+            _unitOfWork.BeginTransaction();
+            if (createDto == null)
+            {
+                return BadRequest("Invalid flow data.");
+            }
+
+            Question newQuestion = new Question();
+            newQuestion.Text = createDto.Text;
+            newQuestion.FlowId = createDto.FlowId;
+
+            if (createDto.Type == "MultipleChoice")
+            {
+                newQuestion.Type = QuestionType.MultipleChoice;
+            }
+            else if (createDto.Type == "SingleChoice")
+            {
+                newQuestion.Type = QuestionType.SingleChoice;
+            }
+            else if (createDto.Type == "Open")
+            {
+                newQuestion.Type = QuestionType.Open;
+            }
+            else if (createDto.Type == "Range")
+            {
+                newQuestion.Type = QuestionType.Range;
+            }
+
+            await _questionManager.AddAsync(newQuestion);
+
+            _unitOfWork.Commit();
+
+            return Ok(newQuestion);
         }
     }
 }

@@ -18,4 +18,4 @@ popupOverlayBody.addEventListener('click', function (event) {
     if (event.target === popupOverlay) {
         showPopup(false);
     }
-}); 
+});

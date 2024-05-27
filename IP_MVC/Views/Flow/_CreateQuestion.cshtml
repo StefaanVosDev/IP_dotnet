@@ -1,0 +1,38 @@
+@using IP_MVC
+@model BL.Domain.Questions.Question
+
+
+@{
+    ViewBag.ShowingQuestionPartial = true;
+}
+
+<div class="popup-overlay z-3" id="popupOverlay">
+    <div class="popup" id="popup">
+        <span class="close" id="closePopup">&times;</span>
+        <div class="popup-content">
+            <h5>Create Question</h5>
+            <div class="form-group">
+                <label for="newQuestionType">Question Type</label>
+                <select id="newQuestionType" name="Type" class="form-control">
+                    <option value="MultipleChoice">Multiple Choice</option>
+                    <option value="Open">Open</option>
+                    <option value="Range">Range</option>
+                    <option value="SingleChoice">Single choice</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="newQuestionText">Question</label>
+                <input type="text" class="form-control" id="newQuestionText" name="Text" required>
+            </div>
+
+            <input type="hidden" name="flowIdInput" id="flowIdInput" value="@Model.FlowId"/>
+            <button type="button" class="btn btn-blue rounded-5" id="createButton">Create Question</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/dist/showPopUp.entry.js" defer></script>
+    <script src="~/dist/createQuestion.entry.js" defer></script>
+}

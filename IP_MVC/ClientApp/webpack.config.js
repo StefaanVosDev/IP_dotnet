@@ -17,6 +17,7 @@ module.exports = {
         editQuestion: './src/ts/Views/Question/editQuestionPresenter.ts',
         editProject: './src/ts/Views/Project/projectPresenter.ts',
         editFlow: './src/ts/Views/Flow/flowPresenter.ts',
+        createQuestion: './src/ts/Views/Question/createQuestionPresenter.ts',
         manageFacilitators: './src/ts/Views/Project/manageFacilitators.ts',
     },
     output: {
