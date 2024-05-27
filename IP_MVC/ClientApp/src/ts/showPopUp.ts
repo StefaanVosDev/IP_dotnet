@@ -9,7 +9,6 @@ function showPopup(open: boolean) {
     } else {
         popupOverlayBody.style.display = 'none';
     }
-    
 }
 
 popupButton.addEventListener('click', () => showPopup(true));

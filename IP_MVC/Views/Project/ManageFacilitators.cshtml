@@ -1,0 +1,32 @@
+@model IP_MVC.Models.ManageFacilitatorsViewModel
+
+@{
+    ViewBag.Title = "Manage Facilitators";
+    Layout = "_Layout";
+}
+
+<h5>Manage Facilitators</h5>
+<input type="hidden" id="projectId" value="@Model.ProjectId" />
+<input id="searchBox" class="form-control" placeholder="Search for a user">
+<div id="searchResult"></div>
+
+<ul id="currentFacilitators">
+    @if(!Model.Facilitators.Any())
+    {
+        <li>No facilitators</li>
+    }
+    else
+    {
+        @foreach (var facilitator in Model.Facilitators)
+        {
+            <li>
+                @facilitator.UserName
+                <a class="btn py-0 bi bi-trash" href="@Url.Action("RemoveUser", "Project", new { userId = facilitator.Id, projectId = Model.ProjectId })" onclick="return confirm('Are you sure you want to remove this facilitator?')"></a></li>
+        }
+    }
+</ul>
+
+@section Scripts
+{
+    <script src="~/dist/manageFacilitators.entry.js" defer></script>
+}

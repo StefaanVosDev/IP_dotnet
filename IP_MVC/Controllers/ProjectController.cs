@@ -2,6 +2,7 @@ using System.Security.Claims;
 using BL.Domain;
 using BL.Implementations;
 using BL.Interfaces;
+using IP_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IP_MVC.Controllers;
@@ -17,11 +18,26 @@ public class ProjectController : Controller
         _unitOfWork = unitOfWork;
     }
 
-    public IActionResult Project()
+    public async Task<IActionResult> Project()
     {
         var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var projects = _projectManager.GetProjectsByAdminId(adminId);
+        var projects =await _projectManager.GetProjectsByAdminIdAsync(adminId);
         return View(projects);
+    }
+    
+    public IActionResult ProjectDashboard()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var adminProjects = _projectManager.GetProjectsByAdminId(userId);
+        var facilitatorProjects = _projectManager.GetProjectsByFacilitatorId(userId);
+
+        var viewModel = new ProjectDashboardViewModel
+        {
+            AdminProjects = adminProjects,
+            FacilitatorProjects = facilitatorProjects
+        };
+
+        return View(viewModel);
     }
 
     public async Task<IActionResult> Delete(int parentFlowId)
@@ -38,9 +54,8 @@ public class ProjectController : Controller
     public async Task<IActionResult> Create(Project project)
     {
         _unitOfWork.BeginTransaction();
-        if (!ModelState.IsValid) return View(project);
-
-        // Assign the UserId of the project to the current user's Id
+        if (!ModelState.IsValid) return RedirectToAction("Project");
+        
         project.AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         await _projectManager.AddAsync(project);
@@ -50,11 +65,19 @@ public class ProjectController : Controller
     }
     
     [HttpGet]
-    public IActionResult Create()
+    public IActionResult ManageFacilitators(int projectId)
     {
-        return View();
+        var facilitators = _projectManager.GetFacilitatorsByProjectId(projectId);
+        var model = new ManageFacilitatorsViewModel
+        {
+            Facilitators = facilitators,
+            ProjectId = projectId
+        };
+        return View(model);
     }
-    public IActionResult Index()
+    
+    [HttpDelete]
+    public IActionResult RemoveUser(int projectId, string userId)
     {
         throw new NotImplementedException();
     }

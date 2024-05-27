@@ -29,7 +29,7 @@
         <div class="card-body">
             <h5 class="card-title">@Model.Name</h5>
             <p class="card-text">@Model.Description</p>
-            <a href="@Url.Action("SubFlow", "Flow", new { id = Model.Id })" class="btn btn-primary">View Subflows</a>
+            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = Model.Id })" class="btn btn-primary">View Subflows</a>
         </div>
     </div>
 </div>

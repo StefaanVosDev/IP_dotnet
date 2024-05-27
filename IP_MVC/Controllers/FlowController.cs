@@ -20,24 +20,39 @@ namespace IP_MVC.Controllers
         UnitOfWork unitOfWork)
         : Controller
     {
-        public IActionResult Flow(int projectId, int? parentFlowId)
+        public async Task<ViewResult> Flow(int projectId, int? parentFlowId)
         {
             var active = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ProjectId = projectId;
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = active;
-            var flows = projectManager.GetParentFlowsByProjectId(projectId);
+            var flows = await projectManager.GetParentFlowsByProjectIdAsync(projectId);
             if (active)
             {
-                flows = projectManager.GetAvailableFlowsByProjectId(projectId);
+                flows = await projectManager.GetAvailableFlowsByProjectIdAsync(projectId);
             }
+
+            var isParentFlow = new Dictionary<int, bool>();
+            var containsQuestions = new Dictionary<int, bool>();
+
+            foreach (var flow in flows)
+            {
+                isParentFlow[flow.Id] = flowManager.IsParentFlow(flow.Id);
+                containsQuestions[flow.Id] = questionManager.GetQuestionsByFlowId(flow.Id).Any();
+            }
+
+            ViewBag.IsParentFlow = isParentFlow;
+            ViewBag.ContainsQuestions = containsQuestions;
             return View(flows);
         }
 
-        public IActionResult SubFlow(int parentFlowId, bool active)
+        public IActionResult SubFlow(int parentFlowId, bool active = false)
         {
+            ViewBag.ProjectId = flowManager.GetFlowById(parentFlowId).ProjectId;
+            ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ActiveProject = active;
+
             return View(flowManager.GetFlowsByParentId(parentFlowId));
         }
 
@@ -50,15 +65,15 @@ namespace IP_MVC.Controllers
             }
 
             return RedirectToAction("Project", "Project");
-
         }
 
         public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active)
         {
             unitOfWork.BeginTransaction();
+
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ActiveProject = active;
-            
+
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
             unitOfWork.Commit();
 
@@ -70,7 +85,7 @@ namespace IP_MVC.Controllers
             HttpContext.Session.Set("queues", queues);
 
             HttpContext.Session.SetInt32("currentIndex", 0);
-            
+
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
             
@@ -151,7 +166,7 @@ namespace IP_MVC.Controllers
 
             return View("Questions/Questions", viewModel);
         }
- 
+
         public IActionResult EndSubFlow()
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
@@ -205,6 +220,7 @@ namespace IP_MVC.Controllers
                 Session = sessionManager.GetSessionById(sessionId),
                 Flow = flow
             };
+            unitOfWork.BeginTransaction();
 
             // If there is no answer given to this question yet, add the answer to the session
             if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
@@ -284,37 +300,39 @@ namespace IP_MVC.Controllers
             return View();
         }
 
+        
         public IActionResult Delete(int flowId)
         {
             unitOfWork.BeginTransaction();
             var flowToRemove = flowManager.GetFlowById(flowId);
-            var parentFlowId1 = flowToRemove.ParentFlowId;
             var projectId1 = flowToRemove.ProjectId;
-            flowManager.DeleteAsync(flowToRemove);
 
-            if (parentFlowId1 == null)
+            var subFlows = flowManager.GetFlowsByParentId(flowId);
+            foreach (var subFlow in subFlows)
             {
-                return RedirectToAction("Flow", new { projectId = projectId1 });
+                flowManager.DeleteAsync(subFlow);
             }
 
+            flowManager.DeleteAsync(flowToRemove);
             unitOfWork.Commit();
-            return RedirectToAction("Flow", new { parentFlowId = parentFlowId1 });
+            
+            return RedirectToAction("Flow", new { projectId = projectId1 });
         }
 
         [HttpGet]
         public IActionResult Edit(int parentFlowId)
         {
+            ViewBag.ActiveProject = false;
             var flow = flowManager.GetFlowById(parentFlowId);
-            var subflows = flowManager.GetFlowsByParentId(parentFlowId);
             var questions = questionManager.GetQuestionsByFlowId(parentFlowId).OrderBy(q => q.Position);
-            
+
             var model = new FlowEditViewModel
             {
                 Flow = flow,
-                SubFlows = subflows,
                 Questions = questions
             };
-
+            var active = HttpContext.Session.Get<bool>("projectActive");
+            ViewBag.ActiveProject = active;
             return View(model);
         }
 
@@ -323,8 +341,10 @@ namespace IP_MVC.Controllers
         {
             unitOfWork.BeginTransaction();
             var existingFlow = flowManager.GetFlowById(parentFlowId);
+
             if (existingFlow == null)
             {
+                unitOfWork.Commit();
                 return NotFound();
             }
 
@@ -347,7 +367,7 @@ namespace IP_MVC.Controllers
             ViewBag.ProjectId = projectId;
             return View();
         }
-        
+
         [HttpPost]
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
@@ -407,7 +427,7 @@ namespace IP_MVC.Controllers
             unitOfWork.Commit();
             return RedirectToAction("Flow");
         }
-        
+
         public IActionResult RedirectTroughPreview(int redirectedQuestionId, int flowId)
         {
             var questionsByFlowId = questionManager.GetQuestionsByFlowIdWithMedia(flowId).ToList();
@@ -432,7 +452,7 @@ namespace IP_MVC.Controllers
             ViewData["questionCount"] = questionManager.GetQuestionsByFlowId(question.FlowId).Count();
             ViewBag.FlowType = question.Type;
             ViewBag.Preview = true;
-            
+
             return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
         }
     }
