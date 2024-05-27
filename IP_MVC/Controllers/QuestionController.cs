@@ -4,6 +4,7 @@ using BL.Implementations;
 using Microsoft.AspNetCore.Mvc;
 using BL.Interfaces;
 using IP_MVC.Models;
+using QRCoder;
 using WebApplication1.Models;
 
 namespace IP_MVC.Controllers

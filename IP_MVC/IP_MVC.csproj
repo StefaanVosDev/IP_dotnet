@@ -22,6 +22,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+        <PackageReference Include="QRCoder" Version="1.5.1" />
         <PackageReference Include="RangeSlider" Version="1.0.0" />
     </ItemGroup>
 
@@ -118,6 +119,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\LICENSE.txt" />
+      <_ContentIncludedByDefault Remove="Views\Admin\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

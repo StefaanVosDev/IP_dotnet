@@ -20,6 +20,7 @@
     //todo: give this in the viewbag controller, add a checkbox?
     var facilitatorWatching = ViewBag.facilitatorWatching ?? true;
     var preview = ViewBag.Preview ?? false;
+    var showQr = ViewBag.showQrCode ?? true;
 }
 
 <body class="questions-page">
@@ -70,28 +71,28 @@
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 align-content-center">
                     <p class="text-start fw-bold">Question</p>
                     <p>@Model.Question.Text</p>
+                    
+                        <form id="myForm" asp-controller="Flow" asp-action="SaveAnswerAndRedirect" method="post">
+                            @switch (@Model.QuestionType)
+                            {
+                                case QuestionType.Open:
+                                    <img height="250" width="250" src="@ViewBag.QrImage" alt="Qr code image" />
+                                    break;
+                                case QuestionType.Range:
+                                    @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
+                                    break;
+                                case QuestionType.MultipleChoice:
+                                    @await Html.PartialAsync("Questions/_MultipleChoice", new MultipleChoiceQuestion())
+                                    break;
+                                case QuestionType.SingleChoice:
+                                    @await Html.PartialAsync("Questions/_SingleChoice", new SingleChoiceQuestion())
+                                    break;
+                            }
+                            <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
+                            <input type="hidden" name="id" value="@Model.Question.Id"/>
+                            <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
 
-                    <form id="myForm" asp-controller="Flow" asp-action="SaveAnswerAndRedirect" method="post">
-                        @switch (@Model.QuestionType)
-                        {
-                            case QuestionType.Open:
-                                @await Html.PartialAsync("Questions/_Open", new OpenQuestion())
-                                break;
-                            case QuestionType.Range:
-                                @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
-                                break;
-                            case QuestionType.MultipleChoice:
-                                @await Html.PartialAsync("Questions/_MultipleChoice", new MultipleChoiceQuestion())
-                                break;
-                            case QuestionType.SingleChoice:
-                                @await Html.PartialAsync("Questions/_SingleChoice", new SingleChoiceQuestion())
-                                break;
-                        }
-                        <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
-                        <input type="hidden" name="id" value="@Model.Question.Id"/>
-                        <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
-
-                        <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
+                            <input type="hidden" id="redirectedQuestionId" name="redirectedQuestionId" value="@currentIndex">
 
                         <div class="d-flex justify-content-between align-items-center py-2">
                             @if (flowType == FlowType.LINEAR)

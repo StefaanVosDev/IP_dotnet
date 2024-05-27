@@ -1,6 +1,7 @@
 using BL.Domain;
 using BL.Interfaces;
 using DAL.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace BL.Implementations;
 
@@ -37,5 +38,30 @@ public class ProjectManager : Manager<Project>, IProjectManager
     {
         DateTime today = DateTime.Today.ToUniversalTime();
         return await _repository.FindAvailableFlowsByProjectIdAsync(projectId, today);
+    }
+
+    public IEnumerable<Project> GetProjectsByFacilitatorId(string userId)
+    {
+        return _repository.GetProjectsByFacilitatorId(userId);
+    }
+
+    public IEnumerable<IdentityUser> GetSearchedFacilitators(string searchTerm)
+    {
+        return _repository.GetSearchedFacilitators(searchTerm);
+    }
+
+    public IEnumerable<IdentityUser> GetFacilitatorsByProjectId(int projectId)
+    {
+        return _repository.GetFacilitatorsByProjectId(projectId);
+    }
+
+    public bool AddFacilitatorToProject(string userId, int projectId)
+    {
+        return _repository.AddFacilitatorToProject(userId, projectId);
+    }
+
+    public bool RemoveFacilitatorFromProject(string userId, int projectId)
+    {
+        return _repository.RemoveFacilitatorFromProject(userId, projectId);
     }
 }

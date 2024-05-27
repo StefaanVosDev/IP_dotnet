@@ -14,7 +14,7 @@ RUN dotnet restore IP_MVC/IP_MVC.csproj
 
 
 COPY . .
-RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader swiper
+RUN npm install --save-dev mini-css-extract-plugin @popperjs/core bootstrap jquery jquery-validation jquery-validation-unobtrusive @tsconfig/recommended sass bootstrap-icons sass-loader swiper  @types/sortablejs
 RUN npm install 
 RUN dotnet publish -c Release -o out
 
