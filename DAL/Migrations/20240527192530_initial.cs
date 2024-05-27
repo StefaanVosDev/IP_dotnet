@@ -228,7 +228,9 @@ namespace DAL.Migrations
                     Type = table.Column<int>(type: "integer", nullable: false),
                     ParentFlowId = table.Column<int>(type: "integer", nullable: true),
                     ProjectId = table.Column<int>(type: "integer", nullable: false),
-                    Mediaid = table.Column<int>(type: "integer", nullable: true)
+                    Mediaid = table.Column<int>(type: "integer", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,6 +254,31 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProjectFacilitators",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    FacilitatorId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectFacilitators", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProjectFacilitators_AspNetUsers_FacilitatorId",
+                        column: x => x.FacilitatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProjectFacilitators_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
                 {
@@ -259,7 +286,6 @@ namespace DAL.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     QuestionId = table.Column<int>(type: "integer", nullable: false),
                     AnswerText = table.Column<string>(type: "text", nullable: true),
-                    RedirectionQuestionId = table.Column<int>(type: "integer", nullable: true),
                     SessionId = table.Column<int>(type: "integer", nullable: true),
                     FlowId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -279,7 +305,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Question",
+                name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -295,15 +321,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Question", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Question_Flows_FlowId",
+                        name: "FK_Questions_Flows_FlowId",
                         column: x => x.FlowId,
                         principalTable: "Flows",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Question_Media_Mediaid",
+                        name: "FK_Questions_Media_Mediaid",
                         column: x => x.Mediaid,
                         principalTable: "Media",
                         principalColumn: "id");
@@ -323,9 +349,9 @@ namespace DAL.Migrations
                 {
                     table.PrimaryKey("PK_Options", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Options_Question_QuestionId",
+                        name: "FK_Options_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id");
                 });
 
@@ -397,13 +423,23 @@ namespace DAL.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Question_FlowId",
-                table: "Question",
+                name: "IX_ProjectFacilitators_FacilitatorId",
+                table: "ProjectFacilitators",
+                column: "FacilitatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectFacilitators_ProjectId",
+                table: "ProjectFacilitators",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_FlowId",
+                table: "Questions",
                 column: "FlowId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Question_Mediaid",
-                table: "Question",
+                name: "IX_Questions_Mediaid",
+                table: "Questions",
                 column: "Mediaid");
         }
 
@@ -435,16 +471,19 @@ namespace DAL.Migrations
                 name: "Options");
 
             migrationBuilder.DropTable(
+                name: "ProjectFacilitators");
+
+            migrationBuilder.DropTable(
                 name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Flows");

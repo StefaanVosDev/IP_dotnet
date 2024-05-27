@@ -212,7 +212,6 @@ namespace IP_MVC.Controllers
                 return RedirectToAction("Question", new { id = sessionId, redirectedQuestionId, showQr = true });
             }
             
-            
             // Join the answer, in case of multiple answers
             var answerText = string.Join("\n", model.Answer);
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
@@ -241,6 +240,28 @@ namespace IP_MVC.Controllers
             }
 
             unitOfWork.Commit();
+            
+            
+            // Look for the options in the database
+            var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
+
+            var matchingAnswer = allOptions?.FirstOrDefault(a => a.Text == model.Answer.FirstOrDefault());
+
+            if (matchingAnswer != null)
+            {
+                redirectedQuestionId = matchingAnswer.NextQuestionId ?? 0;
+                if (redirectedQuestionId == -1)
+                {
+                    return RedirectToAction("EndSubFlow");
+                }
+                var question = questionManager.GetQuestionByIdAndType(redirectedQuestionId);
+
+                if (question != null && question.FlowId == flowId)
+                {
+                    redirectedQuestionId = question.Position - 1;
+                }
+            }
+
             return RedirectToAction("Question",
                 new { id = sessionId, redirectedQuestionId, showQr = true});
         }
@@ -281,13 +302,6 @@ namespace IP_MVC.Controllers
                 Session = sessionManager.GetSessionById(sessionId),
                 Flow = flow
             };
-
-            
-            // Look for the options in the database
-            var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-
-            var matchingAnswer = allOptions?.FirstOrDefault(a => a.Text == model.Answer.FirstOrDefault());
-
             
             // If there is no answer given to this question yet, add the answer to the session
             if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)

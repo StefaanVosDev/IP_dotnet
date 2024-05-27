@@ -23,19 +23,6 @@ namespace IP_MVC.Controllers.api
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("{id}/Options")]
-        public IActionResult GetAllOptions(int id)
-        {
-            var options = _questionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-
-            if (options == null || !options.Any())
-            {
-                return NoContent();
-            }
-
-            return Ok(options);
-        }
-
         [HttpPut("{id}/Title")]
         public IActionResult UpdateTitle(int id, [FromBody] string text)
         {
@@ -56,23 +43,6 @@ namespace IP_MVC.Controllers.api
             return NoContent();
         }
 
-        [HttpPut("{id}/Option")]
-        public IActionResult AddOption(int id, [FromBody] string option)
-        {
-            _unitOfWork.BeginTransaction();
-            var question = _questionManager.GetQuestionById(id);
-
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            _questionManager.AddOptionToQuestion(id, option);
-
-            _unitOfWork.Commit();
-            return NoContent();
-        }
-
         [HttpPost("UpdateRangeQuestion")]
         public IActionResult UpdateRangeQuestion([FromQuery] int id, [FromQuery] int min, [FromQuery] int max)
         {
@@ -84,22 +54,6 @@ namespace IP_MVC.Controllers.api
             }
 
             _questionManager.SetRangeQuestionValues(id, min, max);
-
-            _unitOfWork.Commit();
-            return Ok();
-        }
-
-        [HttpPost("DeleteOption")]
-        public IActionResult DeleteOption([FromQuery] int id, [FromQuery] string option)
-        {
-            _unitOfWork.BeginTransaction();
-            var question = _questionManager.GetQuestionById(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            _questionManager.DeleteOptionFromQuestion(id, option);
 
             _unitOfWork.Commit();
             return Ok();

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PhygitalDbContext))]
-    [Migration("20240525151246_addNote")]
-    partial class addNote
+    [Migration("20240527192530_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,6 @@ namespace DAL.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RedirectionQuestionId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("SessionId")
                         .HasColumnType("integer");
 
@@ -68,6 +65,9 @@ namespace DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int?>("Mediaid")
                         .HasColumnType("integer");
 
@@ -82,6 +82,9 @@ namespace DAL.Migrations
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -166,6 +169,29 @@ namespace DAL.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("BL.Domain.ProjectFacilitator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FacilitatorId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacilitatorId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectFacilitators");
+                });
+
             modelBuilder.Entity("BL.Domain.Questions.Option", b =>
                 {
                     b.Property<int>("Id")
@@ -223,7 +249,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("Mediaid");
 
-                    b.ToTable("Question");
+                    b.ToTable("Questions");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Question");
 
@@ -514,6 +540,23 @@ namespace DAL.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("BL.Domain.ProjectFacilitator", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Facilitator")
+                        .WithMany()
+                        .HasForeignKey("FacilitatorId");
+
+                    b.HasOne("BL.Domain.Project", "Project")
+                        .WithMany("ProjectFacilitators")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Facilitator");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("BL.Domain.Questions.Option", b =>
                 {
                     b.HasOne("BL.Domain.Questions.Question", null)
@@ -597,6 +640,8 @@ namespace DAL.Migrations
             modelBuilder.Entity("BL.Domain.Project", b =>
                 {
                     b.Navigation("Flows");
+
+                    b.Navigation("ProjectFacilitators");
                 });
 
             modelBuilder.Entity("BL.Domain.Questions.Question", b =>
