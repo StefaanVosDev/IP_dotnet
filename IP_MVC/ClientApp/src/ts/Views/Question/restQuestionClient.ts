@@ -123,9 +123,9 @@ export async function createQuestion(text: string, type: string, flowId: string)
     }).then(response => response.json())
         .then(data => {
             const question: Question = {
-                Id: data.id,
-                NewText: data.text,
-                NewType: data.type
+                id: data.id,
+                text: data.text,
+                type: data.type
             };
             showQuestion(question);
         }) .catch(reason => alert("Error creating Question:" + reason));
