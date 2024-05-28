@@ -79,12 +79,16 @@ async function changeFlow(flowCard: HTMLElement) {
 async function addFlow() {
     const nameInput = document.getElementById('NewNameInput') as HTMLInputElement;
     const descriptionInput = document.getElementById('NewDescriptionInput') as HTMLInputElement;
+    const startDateInput = document.getElementById('NewStartDateInput') as HTMLInputElement;
+    const endDateInput = document.getElementById('NewEndDateInput') as HTMLInputElement;
     const projectIdInput = document.getElementById('projectIdInput') as HTMLInputElement;
     const parentFlowIdInput = document.getElementById('parentFlowIdInput') as HTMLInputElement;
     
     const flow: Flow = {
         NewName: nameInput.value,
         NewDescription: descriptionInput.value,
+        NewStartDate: new Date(startDateInput.value),
+        NewEndDate: new Date(endDateInput.value),
         NewProjectId: parseInt(projectIdInput.value),
         NewParentFlowId: parentFlowIdInput.value ? parseInt(parentFlowIdInput.value) : null,
         IsParentFlow: !parentFlowIdInput.value
