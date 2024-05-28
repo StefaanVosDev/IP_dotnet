@@ -20,5 +20,3 @@ import '../scss/site.scss';
 import '../scss/Analytics/Analytics.scss';
 import '../scss/Flow/questions/questionCompleet.scss';
 import '../scss/Flow/questions/openQuestion.scss';
-
-console.log('The \'site\' bundle has been loaded!');

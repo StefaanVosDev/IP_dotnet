@@ -4,6 +4,7 @@
   .card {
     background-color: $light-blue;
     width: 59%;
+    height: 45%;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -19,22 +20,9 @@
     .card-body {
       flex: 3;
     }
-    
-    .card-body::-webkit-scrollbar{
-      display: none;
-    }
 
     .d-flex {
       flex: 1;
-    }
-
-    .button-container {
-      padding-left: 2vh;
-      padding-right: 3vh;
-    }
-    
-    .button-container::-webkit-scrollbar{
-      display: none;
     }
   }
 
@@ -59,7 +47,13 @@
     width: 100%;
     backface-visibility: hidden;
   }
+  
+  .dropdown-menu{
+    --bs-dropdown-min-width: auto;
+  }
+  
   .flip-card-back {
     transform: rotateY(180deg);
   }
+  
 }

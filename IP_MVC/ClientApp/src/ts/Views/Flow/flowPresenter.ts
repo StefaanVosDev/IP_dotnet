@@ -137,9 +137,19 @@ export function appendFlowToPage(flow: Flow, flowId: number) {
         <a href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn btn-blue">Go to Subflows</a>
     `;
 
-    const subFlowEditButtonHtml = `         
-         <a class="btn btn-blue py-0" href="/Flow/Edit/${flowId}" class="btn btn-primary">Edit Questions</a>
-         <a class="btn btn-blue py-0" href="/Flow/SubFlow/${flowId}" class="btn btn-primary">Edit SubFlows</a>
+    const subFlowEditButtonHtml = `       
+            <div class="btn-group">
+                <button class="btn bi bi-menu-button-wide btn-blue dropdown-toggle py-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right background-color-light-blue">
+                    <li class="px-1 pb-1">
+                        <a class="btn btn-blue dropdown-item p-2 d-flex justify-content-center" href="/Flow/Edit/${flowId}" class="btn btn-primary">Edit Questions</a>
+                    </li>
+                    <li class="px-1">
+                        <a class="btn btn-blue dropdown-item p-2 d-flex justify-content-center" href="/Flow/SubFlow/${flowId}" class="btn btn-primary">Edit SubFlows</a>
+                    </li>
+                </ul>
+            </div>  
     `;
 
     flowDataElement.innerHTML += `
@@ -172,7 +182,7 @@ export function appendFlowToPage(flow: Flow, flowId: number) {
                                     <input type="text" class="form-control" id="descriptionInput" value="${flow.NewDescription}" required>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
+                            <div class="d-flex justify-content-between align-items-center position-sticky button-container py-1">
                                 <div><button class="btn btn-blue py-0 btn-back">Back</button></div>
                                 <div><button type="submit" class="btn btn-blue py-0" id="updateFlowButton">Update</button></div>
                                 <div>${subFlowEditButtonHtml}</div>
@@ -212,7 +222,7 @@ export function appendSubFlowToPage(flow: Flow, subFlowId: number) {
             <div class="slide-card">
                 <img src="${imageUrl}" class="card-img-top w-100 vh-100 z-1 position-relative" alt="Afbeelding_van_flow">
                 <div class="card border-1 border-black h-50 position-absolute card-clickable">
-                    <div class="align-items-center h-100 overflow-y-scroll">
+                    <div class="align-items-center h-100">
                         <div class="card-body ">
                             <h5 class="card-title">${flow.NewName}</h5>
                             <p class="card-text">${flow.NewDescription}</p>
