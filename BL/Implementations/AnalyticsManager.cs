@@ -8,7 +8,7 @@ public class AnalyticsManager : IAnalyticsManager
 {
     public object GetSingleChoiceQuestionData(SingleChoiceQuestion question, IEnumerable<Answer> answers)
     {
-        var answerGroups = answers.GroupBy(a => a.AnswerText);
+        var answerGroups = answers.GroupBy(a => a.AnswerTextPlayer1);
         var labels = question.Options;
         var data = answerGroups.Select(g => g.Count()).ToList();
 
@@ -53,7 +53,7 @@ public class AnalyticsManager : IAnalyticsManager
 
     public object GetMultipleChoiceQuestionData(MultipleChoiceQuestion question, IEnumerable<Answer> answers)
     {
-        var answerGroups = answers.SelectMany(a => a.AnswerText.Split(';')).GroupBy(a => a);
+        var answerGroups = answers.SelectMany(a => a.AnswerTextPlayer1.Split(';')).GroupBy(a => a);
         var labels = question.Options;
         var data = answerGroups.Select(g => g.Count()).ToList();
 
@@ -108,7 +108,10 @@ public class AnalyticsManager : IAnalyticsManager
     
     public object GetRangeQuestionData(RangeQuestion question, IEnumerable<Answer> answers)
     {
-        var answerValues = answers.Select(a => int.Parse(a.AnswerText)).ToList();
+        var enumerable = answers as Answer[] ?? answers.ToArray();
+        var answerValuesPlayer1 = enumerable.Select(a => int.Parse(a.AnswerTextPlayer1)).ToList();
+        var answerValuesPlayer2 = enumerable.Select(a => int.Parse(a.AnswerTextPlayer2)).ToList();
+        var answerValues = answerValuesPlayer1.Concat(answerValuesPlayer2).ToList();
 
         var min = question.Min;
         var max = question.Max;
@@ -178,7 +181,7 @@ public class AnalyticsManager : IAnalyticsManager
         return new
         {
             question = question.Text,
-            answers = answers.Select(a => a.AnswerText).ToList()
+            answers = answers.Select(a => a.AnswerTextPlayer1).ToList()
         };
     }
 }

@@ -78,7 +78,6 @@ namespace IP_MVC.Controllers
 
             var newSession = await sessionManager.CreateNewSession(parentFlowId);
             unitOfWork.Commit();
-
             HttpContext.Session.SetInt32("sessionId", newSession.Id);
 
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues") ??
@@ -137,13 +136,7 @@ namespace IP_MVC.Controllers
 
             // Retrieve the question based on the ID and type.
             var question = questionManager.GetQuestionByIdAndType(questionId);
-
-            // Maak een QuestionViewModel aan en vul het met de vraag en het type
-            var viewModel = new QuestionViewModel
-            {
-                Question = question,
-                QuestionType = question.Type
-            };
+            var questionType = question.Type;
 
             if (question.Type == QuestionType.Open)
             {
@@ -160,9 +153,16 @@ namespace IP_MVC.Controllers
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var earlierAnswer = sessionManager.GetAnswerByQuestionId(sessionId, questionId);
 
+            // Prepare the view model.
+            var viewModel = new QuestionViewModel
+            {
+                Question = question,
+                QuestionType = questionType,
+                EarlierAnswer = earlierAnswer
+            };
+            ViewData["earlierAnswer"] = earlierAnswer;
             ViewData["currentIndex"] = currentIndex;
             ViewData["questionCount"] = questionQueue.Count;
-            ViewData["earlierAnswer"] = earlierAnswer;
             ViewBag.FlowType = flowType;
             ViewBag.FlowId = question.FlowId;
             ViewBag.ParentFlowId = flowManager.GetParentFlowIdBySessionId(sessionId);
@@ -173,6 +173,7 @@ namespace IP_MVC.Controllers
             return View("Questions/Questions", viewModel);
         }
 
+ 
         public IActionResult EndSubFlow()
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
@@ -209,13 +210,14 @@ namespace IP_MVC.Controllers
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             
             // If there is no answer given, redirect to the next question
-            if (model.Answer == null || !model.Answer.Any())
+            if (model.AnswerPlayer1 == null && model.AnswerPlayer2 == null)
             {
                 return RedirectToAction("Question", new {redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers
-            var answerText = string.Join("\n", model.Answer);
+            var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
+            var answerTextPlayer2 = string.Join("\n", model.AnswerPlayer2);
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
 
@@ -223,7 +225,8 @@ namespace IP_MVC.Controllers
             var newAnswer = new Answer
             {
                 QuestionId = model.QuestionId,
-                AnswerText = answerText,
+                AnswerTextPlayer1 = answerTextPlayer1,
+                AnswerTextPlayer2 = answerTextPlayer2,
                 Session = sessionManager.GetSessionById(sessionId),
                 Flow = flow
             };
@@ -241,30 +244,56 @@ namespace IP_MVC.Controllers
                 sessionManager.UpdateAnswer(oldAnswer, newAnswer);
             }
 
+            // Store the answers for both players in the session
+            HttpContext.Session.Set("player1Answer", model.AnswerPlayer1);
+            HttpContext.Session.Set("player2Answer", model.AnswerPlayer2);
+
             unitOfWork.Commit();
             
             
             // Look for the options in the database
             var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
 
-            var matchingAnswer = allOptions?.FirstOrDefault(a => a.Text == model.Answer.FirstOrDefault());
+            var matchingAnswerPlayer1 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer1);
+            var matchingAnswerPlayer2 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer2);
 
-            if (matchingAnswer != null)
+            int? redirectedQuestionIdPlayer1 = null;
+            int? redirectedQuestionIdPlayer2 = null;
+
+            if (matchingAnswerPlayer1 != null)
             {
-                redirectedQuestionId = matchingAnswer.NextQuestionId ?? 0;
-                if (redirectedQuestionId == -1)
+                redirectedQuestionIdPlayer1 = matchingAnswerPlayer1.NextQuestionId ?? 0;
+                if (redirectedQuestionIdPlayer1 == -1)
                 {
                     return RedirectToAction("EndSubFlow");
                 }
-                var question = questionManager.GetQuestionByIdAndType(redirectedQuestionId);
+                var questionPlayer1 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer1.Value);
 
-                if (question != null && question.FlowId == flowId)
+                if (questionPlayer1 != null && questionPlayer1.FlowId == flowId)
                 {
-                    redirectedQuestionId = question.Position - 1;
+                    redirectedQuestionIdPlayer1 = questionPlayer1.Position - 1;
                 }
             }
 
-            return RedirectToAction("Question", new {redirectedQuestionId });
+            if (matchingAnswerPlayer2 != null)
+            {
+                redirectedQuestionIdPlayer2 = matchingAnswerPlayer2.NextQuestionId ?? 0;
+                if (redirectedQuestionIdPlayer2 == -1)
+                {
+                    return RedirectToAction("EndSubFlow");
+                }
+                var questionPlayer2 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer2.Value);
+
+                if (questionPlayer2 != null && questionPlayer2.FlowId == flowId)
+                {
+                    redirectedQuestionIdPlayer2 = questionPlayer2.Position - 1;
+                }
+            }
+            
+            redirectedQuestionId = redirectedQuestionIdPlayer1 ?? redirectedQuestionIdPlayer2 ?? 0;
+
+        return RedirectToAction("Question",
+    new { id = sessionId, redirectedQuestionId, showQr = true});
         }
 
         public IActionResult OpenQuestion(int questionId)
@@ -290,7 +319,8 @@ namespace IP_MVC.Controllers
             unitOfWork.BeginTransaction();
             
             // Join the answer, in case of multiple answers
-            var answerText = string.Join("\n", model.Answer);
+            var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
+            var answerTextPlayer2 = string.Join("\n", model.AnswerPlayer2);
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
@@ -299,7 +329,8 @@ namespace IP_MVC.Controllers
             var newAnswer = new Answer
             {
                 QuestionId = model.QuestionId,
-                AnswerText = answerText,
+                AnswerTextPlayer1 = answerTextPlayer1,
+                AnswerTextPlayer2 = answerTextPlayer2,
                 Session = sessionManager.GetSessionById(sessionId),
                 Flow = flow
             };

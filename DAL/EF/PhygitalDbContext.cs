@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+
+using System.Text.Json;
 using BL.Domain;
 using BL.Domain.Answers;
 using BL.Domain.Questions;
@@ -62,9 +63,9 @@ public class PhygitalDbContext : IdentityDbContext<IdentityUser>
         {
             try
             {
-                //optionsBuilder.UseNpgsql(localConnection);
-                //var context = new NpgsqlConnection(connectionString);
-                //context.Open();
+                optionsBuilder.UseNpgsql(localConnection);
+                var context = new NpgsqlConnection(localConnection);
+                context.Open();
             }
             catch (NpgsqlException)
             {

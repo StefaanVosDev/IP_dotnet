@@ -136,8 +136,8 @@ using (var scope = app.Services.CreateScope())
             .GetRequiredService<RoleManager<IdentityRole>>();
         await SeedIdentity(userManager, roleManager);
        
-        // var dataSeeder = new DataSeeder(userManager);
-        // await dataSeeder.Seed(context);
+        //var dataSeeder = new DataSeeder(userManager);
+        //await dataSeeder.Seed(context);
     }
 }
 
