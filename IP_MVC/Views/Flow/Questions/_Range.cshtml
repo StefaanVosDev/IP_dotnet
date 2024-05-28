@@ -21,3 +21,7 @@
     <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer2" id="rangeInputPlayer2" style="width: 100%"/>
     <input type="hidden" id="selectedValuePlayer2" name="AnswerPlayer2" data-min="@question.Min" data-earlier-answer="@initialValuePlayer2" value="@initialValuePlayer2"/>
 </div>
+
+@section Scripts {
+    <script src="~/dist/orderQuestions.entry.js"></script>
+}

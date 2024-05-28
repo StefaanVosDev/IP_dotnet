@@ -20,10 +20,10 @@
             
             
             <div class="form-check m-3 box-container">
-                <input class="form-check-input" type="checkbox" id="checkPlayer1@i" name="AnswerPlayer1" value="@option" @(isSelectedPlayer1 ? "checked" : "")>
-                <input class="form-check-input" type="checkbox" id="checkPlayer2@i" name="AnswerPlayer2" value="@option" @(isSelectedPlayer2 ? "checked" : "")>
+                <input class="form-check-input" type="checkbox" id="checkPlayer1@i" name="AnswerPlayer1" value="@option.Text" @(isSelectedPlayer1 ? "checked" : "")>
+                <input class="form-check-input" type="checkbox" id="checkPlayer2@i" name="AnswerPlayer2" value="@option.Text" @(isSelectedPlayer2 ? "checked" : "")>
                 <label class="form-check-label" for="checkPlayer1@i">
-                    @option
+                    @option.Text
                 </label>
             </div>
         }
