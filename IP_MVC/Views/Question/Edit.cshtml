@@ -167,26 +167,6 @@
 </div>
 </body>
 
-@switch (Model?.Type)
-{
-    case QuestionType.Open:
-        // Open question doesn't need options, so redirect directly
-        break;
-    case QuestionType.MultipleChoice:
-    case QuestionType.SingleChoice:
-        // Add options to the question
-        @if (followupQuestions)
-        {
-            <button id="addConditionalQuestionsButton" class="btn btn-secondary">Add conditional questions</button>
-            <button style="display: none" id="saveQuestionButton" class="btn btn-secondary">Save follow up questions</button>
-        }
-
-        <form>
-            <h2>Add possible answers to the question</h2>
-            <div id="optionTable">
-                <!-- Options will be loaded here by the loadOptions function -->
-            </div>
-
 @section scripts{
     <script src="~/dist/editQuestion.entry.js" defer></script>
 }
