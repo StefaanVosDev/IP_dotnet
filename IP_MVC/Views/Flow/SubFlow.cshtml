@@ -12,7 +12,7 @@
 <body class="subFlow-page overflow-hidden">
 <div class="d-flex position-sticky px-3">
      <div class="border-2 px-3">
-            <a href="@Url.Action("Flow", "Flow", new { questionId = ViewBag.ParentFlowId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
+            <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
         </div>
     @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
     {

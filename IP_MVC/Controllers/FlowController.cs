@@ -47,12 +47,11 @@ namespace IP_MVC.Controllers
             return View(flows);
         }
 
-        public IActionResult SubFlow(int parentFlowId, bool active = false)
+        public IActionResult SubFlow(int parentFlowId)
         {
             ViewBag.ProjectId = flowManager.GetFlowById(parentFlowId).ProjectId;
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
-            ViewBag.ActiveProject = active;
 
             return View(flowManager.GetFlowsByParentId(parentFlowId));
         }
@@ -93,13 +92,12 @@ namespace IP_MVC.Controllers
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
             
-            return RedirectToAction("Question", new { id = newSession.Id, showQr = true});
+            return RedirectToAction("Question", new { id = newSession.Id });
         }
 
-        public IActionResult Question(int id, int redirectedQuestionId, bool showQr)
+        public IActionResult Question(int id, int redirectedQuestionId)
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
-            ViewBag.showQrCode = showQr;
             
             // Retrieve the dictionary of queues from the session.
             var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
@@ -164,10 +162,12 @@ namespace IP_MVC.Controllers
             ViewData["questionCount"] = questionQueue.Count;
             ViewData["earlierAnswer"] = earlierAnswer;
             ViewBag.FlowType = flowType;
-            ViewBag.subFlowId = question.FlowId;
+            ViewBag.FlowId = question.FlowId;
+            ViewBag.ParentFlowId = flowManager.GetParentFlowIdBySessionId(sessionId);
             ViewBag.QuestionId = questionId;
             ViewBag.Preview = false;
-
+            ViewBag.ProjectId = flowManager.GetFlowById(parentFlowId).ProjectId;
+            
             return View("Questions/Questions", viewModel);
         }
 
@@ -209,7 +209,7 @@ namespace IP_MVC.Controllers
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = sessionId, redirectedQuestionId, showQr = true });
+                return RedirectToAction("Question", new { id = sessionId, redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers
@@ -263,7 +263,7 @@ namespace IP_MVC.Controllers
             }
 
             return RedirectToAction("Question",
-                new { id = sessionId, redirectedQuestionId, showQr = true});
+                new { id = sessionId, redirectedQuestionId });
         }
 
         public IActionResult OpenQuestion(int questionId)

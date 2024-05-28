@@ -34,7 +34,7 @@
         <div class="flex-grow-1">
             @if (ViewBag.IsParentFlow)
             {
-                <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = Model.FlowId, active = ViewBag.ActiveProject })" class="btn btn-blue">Return to SubFlow</a>
+                <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = Model.FlowId })" class="btn btn-blue">Return to SubFlow</a>
             }
             else
             {
