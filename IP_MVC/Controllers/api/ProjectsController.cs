@@ -34,7 +34,7 @@ public class ProjectsController : ControllerBase
 
         return Ok(project);
     }
-    
+
     [HttpPut]
     public async Task<IActionResult> Change([FromBody] ProjectEditDto updateDto)
     {
@@ -43,20 +43,20 @@ public class ProjectsController : ControllerBase
         {
             return BadRequest("Invalid project data.");
         }
-          
+
         var project = await _projectManager.FindByIdAsync(updateDto.ProjectId);
 
         var updatedProject = project;
         updatedProject.Name = updateDto.NewName;
         updatedProject.Description = updateDto.NewDescription;
         updatedProject.AdminId = updateDto.AdminId;
-        
-        await _projectManager.UpdateAsync( project, updatedProject);
+
+        await _projectManager.UpdateAsync(project, updatedProject);
 
         _unitOfWork.Commit();
         return NoContent();
     }
-    
+
     [HttpGet("ManageFacilitators")]
     public IActionResult ManageFacilitators(string searchTerm)
     {
@@ -64,7 +64,7 @@ public class ProjectsController : ControllerBase
         var usernames = facilitators.Select(f => f.UserName).ToList();
         return Ok(usernames);
     }
-    
+
     [HttpPost("AddUser")]
     public IActionResult AddUser([FromBody] AddUserModel model)
     {
@@ -80,5 +80,16 @@ public class ProjectsController : ControllerBase
 
         return RedirectToAction("ManageFacilitators");
     }
-    
-} 
+
+    [HttpDelete("RemoveUser")]
+    [HttpPost]
+    public IActionResult RemoveUser(int projectId, string userName)
+    {
+        _unitOfWork.BeginTransaction();
+        var userId = _projectManager.GetSearchedFacilitators(userName).FirstOrDefault()?.Id;
+        _projectManager.RemoveFacilitatorFromProject(userId, projectId);
+        _unitOfWork.Commit();
+
+        return RedirectToAction("ManageFacilitators", new { projectId });
+    }
+}

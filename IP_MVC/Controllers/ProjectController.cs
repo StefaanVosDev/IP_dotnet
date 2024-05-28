@@ -75,9 +75,5 @@ public class ProjectController : Controller
     }
 
 
-    [HttpDelete]
-    public IActionResult RemoveUser(int projectId, string userId)
-    {
-        throw new NotImplementedException();
-    }
+    
 }

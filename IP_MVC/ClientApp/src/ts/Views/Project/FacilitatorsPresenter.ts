@@ -76,14 +76,27 @@ function displayFacilitator(user: string) {
     usernameDiv.textContent = user;
     menCardDiv.appendChild(usernameDiv);
 
-    const trashButton = document.createElement('a');
+    const trashButton = document.createElement('button');
     trashButton.className = "btn py-0 bi bi-trash btn-blue";
-    trashButton.href = `@Url.Action("RemoveUser", "Project", new { userId = facilitator.Id, projectId = Model.ProjectId })`;
     trashButton.onclick = function() {
-        return confirm('Are you sure you want to remove this facilitator?');
+        if (confirm('Are you sure you want to remove this facilitator?')) {
+            removeFacilitatorFromProject(user, projectId);
+        }
     };
     menCardDiv.appendChild(trashButton);
 
     facilitatorDiv.appendChild(menCardDiv);
     userPrint.appendChild(facilitatorDiv);
+}
+
+function removeFacilitatorFromProject(userId: string, projectId: string) {
+    fetch(`/api/Projects/RemoveUser`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId: userId, projectId: projectId })
+    }).then(() => {
+        
+    });
 }
