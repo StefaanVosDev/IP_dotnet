@@ -47,13 +47,21 @@
                                                 {
                                                     @if (!ViewBag.IsParentFlow[flow.Id])
                                                     {
-                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Start Flow</a>
-                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Start Circular Flow</a>
+                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Flow</a>
                                                     }
-                                                    else
+                                                    else if (ViewBag.Circular)
                                                     {
-                                                        <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn btn-blue">Go to Subflows</a>
-                                                    }
+                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Flow</a>
+                                                    }                                                }
+                                                else if (ViewBag.ContainsQuestions[flow.Id] && !ViewBag.IsParentFlow[flow.Id] && !ViewBag.ActiveProject)
+                                                {
+                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Linear</a>
+                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Circular</a>
+
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = flow.Id })" class="btn btn-blue">Go to Subflows</a>
                                                 }
                                             </div>
                                         </div>
