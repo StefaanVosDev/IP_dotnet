@@ -84,8 +84,7 @@ namespace IP_MVC.Controllers
                          new Dictionary<int, Queue<int>>();
             
             var newList = await flowManager.GetQuestionQueueByFlowIdAsync(parentFlowId);
-            
-            queues[parentFlowId] = new Queue<int>(newList);
+            queues[parentFlowId] = newList;
             
             HttpContext.Session.Set("queues", queues);
 

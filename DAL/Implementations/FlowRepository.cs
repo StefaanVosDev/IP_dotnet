@@ -20,7 +20,11 @@ public class FlowRepository(PhygitalDbContext context) : Repository(context), IF
     }
     public async Task<IEnumerable<Question>> GetQuestionsByFlowIdAsync(int id)
     {
-        return await _context.Set<Question>().Where(q => q.FlowId == id).Include(q => q.Options).ToListAsync();
+        return await _context.Set<Question>()
+            .Where(q => q.FlowId == id)
+            .Include(q => q.Options)
+            .OrderBy(question => question.Position)
+            .ToListAsync();
     }
 
     public IEnumerable<Flow> GetFlowsBetweenPositions(int newPosition, int oldPosition)
