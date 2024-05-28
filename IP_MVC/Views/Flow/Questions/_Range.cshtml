@@ -16,3 +16,8 @@
 
 <input type="range" min="@question!.Min" max="@question.Max" value="@initialValue" style="width: 100%"/>
 <input type="hidden" id="selectedValue" name="Answer" data-min="@question.Min" data-earlier-answer="@initialValue" value="@initialValue"/>
+
+@section Scripts
+{
+    <script src="~/dist/range.entry.js" defer="defer"></script>
+}

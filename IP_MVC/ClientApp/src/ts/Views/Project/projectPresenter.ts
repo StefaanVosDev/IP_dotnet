@@ -10,20 +10,6 @@ const circularButton = document.querySelectorAll("#circularButton");
 const backCardButton = document.querySelectorAll("#backButton");
 const startSessie = document.querySelectorAll(".startSessie");
 
-async function showProject(id: string, projectCard: HTMLElement) {
-    try {
-        const project = await client.getProject(id);
-        const cardBody = projectCard.querySelector('.front')!;
-
-        cardBody.innerHTML = `
-                            <h5 class="card-title">${project.name}</h5>
-                            <p class="card-text">${project.description}</p>`;
-    } catch (e) {
-        console.error('Error showing project: ', e);
-    }
-
-}
-
 async function changeProject(projectCard: HTMLElement) {
     const nameInput = projectCard.querySelector('#nameInput') as HTMLInputElement;
     const descriptionInput = projectCard.querySelector('#descriptionInput') as HTMLInputElement;

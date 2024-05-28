@@ -94,10 +94,10 @@ namespace IP_MVC.Controllers
             HttpContext.Session.Set("flowType", flowType);
             HttpContext.Session.SetInt32("parentFlowId", parentFlowId);
             
-            return RedirectToAction("Question", new { id = newSession.Id });
+            return RedirectToAction("Question");
         }
 
-        public IActionResult Question(int id, int redirectedQuestionId)
+        public IActionResult Question(int redirectedQuestionId)
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             
@@ -211,7 +211,7 @@ namespace IP_MVC.Controllers
             // If there is no answer given, redirect to the next question
             if (model.Answer == null || !model.Answer.Any())
             {
-                return RedirectToAction("Question", new { id = sessionId, redirectedQuestionId });
+                return RedirectToAction("Question", new {redirectedQuestionId });
             }
             
             // Join the answer, in case of multiple answers
@@ -264,8 +264,7 @@ namespace IP_MVC.Controllers
                 }
             }
 
-            return RedirectToAction("Question",
-                new { id = sessionId, redirectedQuestionId });
+            return RedirectToAction("Question", new {redirectedQuestionId });
         }
 
         public IActionResult OpenQuestion(int questionId)
