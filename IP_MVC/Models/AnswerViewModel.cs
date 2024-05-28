@@ -1,7 +1,9 @@
-namespace IP_MVC.Models;
-
-public class AnswerViewModel
+namespace IP_MVC.Models
 {
-    public int QuestionId { get; set; }
-    public List<string> Answer { get; set; }
+    public class AnswerViewModel
+    {
+        public int QuestionId { get; set; }
+        public List<string> AnswerPlayer1 { get; set; } 
+        public List<string> AnswerPlayer2 { get; set; } 
+    }
 }

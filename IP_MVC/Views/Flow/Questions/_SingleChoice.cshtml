@@ -2,19 +2,25 @@
 @model BL.Domain.Questions.SingleChoiceQuestion
 
 @{
-    var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+    var earlierAnswerPlayer1 = ViewData["earlierAnswerPlayer1"] as BL.Domain.Answers.Answer;
+    var earlierAnswerPlayer2 = ViewData["earlierAnswerPlayer2"] as BL.Domain.Answers.Answer;
     var question = ViewData["questionType"]  as SingleChoiceQuestion ;
 }
-@if (question?.Options != null)
-{
-    @foreach (var option in question!.Options)
+<div class="forms-container" id="formPlayers">
+    @if (question?.Options != null)
     {
-        bool isSelected = earlierAnswer != null && earlierAnswer.AnswerText == option.Text;
-        <div class="form-check m-3">
-            <input class="form-check-input" name="Answer" type="radio" id="radio@i" value="@option.Text" @(isSelected ? "checked" : "")>
-            <label class="form-check-label" for="radio@i">
-                @option.Text
-            </label>
-        </div>
+        @for (var i = 0; i < question.Options.Count; i++)
+            {
+                var option = question.Options.ElementAt(i);
+                bool isSelectedPlayer1 = earlierAnswerPlayer1 != null && earlierAnswerPlayer1.AnswerTextPlayer1 == option.Text;
+                bool isSelectedPlayer2 = earlierAnswerPlayer2 != null && earlierAnswerPlayer2.AnswerTextPlayer2 == option.Text;
+                <div class="form-check m-3 box-container">
+                    <input class="form-check-input" type="radio" id="checkPlayer1@i" name="AnswerPlayer1" value="@option" @(isSelectedPlayer1 ? "checked" : "")>
+                    <input class="form-check-input" type="radio" id="checkPlayer2@i" name="AnswerPlayer2" value="@option" @(isSelectedPlayer2 ? "checked" : "")>
+                    <label class="form-check-label" for="checkPlayer2@i">
+                        @option
+                    </label>
+                </div>
+            }
     }
-}
+</div>
