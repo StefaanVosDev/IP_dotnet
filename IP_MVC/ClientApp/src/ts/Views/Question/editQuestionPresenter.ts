@@ -1,5 +1,6 @@
 import * as client from "./restQuestionClient"
 import {Flow} from "../../models/Flows.interfaces";
+import {Question} from "../../models/Questions.interfaces";
 
 const titleText = document.getElementById('titleText')!;
 
@@ -12,6 +13,7 @@ const changeNameButton = document.getElementById('editButton')!;
 const updateNameButton = document.getElementById('updateButton')!;
 const uploadMediaButton = document.getElementById('uploadButton')!;
 const addConditionalQuestionsButton = document.getElementById('addConditionalQuestionsButton')!;
+const saveQuestionButton = document.getElementById('saveQuestionButton') as HTMLButtonElement;
 
 
 if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoice") {
@@ -46,9 +48,9 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
             let option = element.getAttribute("option-id");
             if (option != null) {
                 try {
-                    await client.deleteOption(questionId.value, option);
+                    await client.deleteOption(option);
                 } catch (e) {
-                    console.log(`ERROR DELETING OPTION ${option}`, e);
+                    console.error(`ERROR DELETING OPTION ${option}`, e);
                 }
             }
             await showOptions();
@@ -134,7 +136,6 @@ async function showSeperateAddButtons() {
         }
 
         const optionId = selectButton.getAttribute('option-id') as string;
-        console.log('de option id is: ', optionId);
         if (optionId == null) return;
         
        
@@ -151,11 +152,13 @@ async function showSeperateAddButtons() {
                 });
                 
                 questionDropdown.innerHTML = (await client.getQuestionsByFlowIdAfterPosition(flowId.value, position.value)).reduce(
-                    (acc: string, question: any) => `${acc}
-                <option id="${question.id}" value="${question.text}" ${question.id == currentNextQuestionId ? 'selected': ''}>${question.text}</option>`, ""
+                    (acc: string, question: Question) => `${acc}
+                <option id="${question.Id}" value="${question.NewText}" ${question.Id == currentNextQuestionId ? 'selected': ''}>${question.NewText}</option>`, ""
                 );
                 questionDropdown.innerHTML+= `<option id="-1" value="End flow" ${currentNextQuestionId == -1 ? 'selected': ''}>End flow</option>`;
                 questionDropdown.style.display = 'block';
+                
+                saveQuestionButton.style.display = 'block';
             });
             
         } catch(e) {
@@ -165,7 +168,6 @@ async function showSeperateAddButtons() {
     }
 }
 
-const saveQuestionButton = document.getElementById('saveQuestionButton') as HTMLButtonElement;
 saveQuestionButton.addEventListener('click', event => {
     event.preventDefault();
     const selectedQuestions = document.querySelectorAll('select') as NodeListOf<HTMLSelectElement>;

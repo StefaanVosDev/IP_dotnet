@@ -68,6 +68,8 @@ public class FlowsController : ControllerBase
         {
             Name = createDto.NewName,
             Description = createDto.NewDescription,
+            StartDate = createDto.NewStartDate.ToUniversalTime(),
+            EndDate = createDto.NewEndDate.ToUniversalTime(),
             ProjectId = createDto.NewProjectId,
             ParentFlowId = createDto.NewParentFlowId
         };

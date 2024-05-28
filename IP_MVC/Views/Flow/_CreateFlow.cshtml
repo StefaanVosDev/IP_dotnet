@@ -9,7 +9,6 @@
         <span class="close" id="closePopup">&times;</span>
         <div class="popup-content d-flex justify-content-center align-items-center position-relative">
             <form class="w-50">
-
                 <div class="form-group mb-3">
                     <label class="d-flex justify-content-start" for="NewNameInput">Name</label>
                     <input id="NewNameInput" class="form-control"/>
@@ -19,12 +18,12 @@
                     <textarea id="NewDescriptionInput" class="form-control"></textarea>
                 </div>
                 <div class="form-group pb-3">
-                    <label class="d-flex justify-content-start" asp-for="StartDate"></label>
-                    <input asp-for="StartDate" class="form-control"/>
+                    <label class="d-flex justify-content-start" for="NewStartDateInput"></label>
+                    <input id="NewStartDateInput" class="form-control" type="datetime-local"/>
                 </div>
                 <div class="form-group pb-3">
-                    <label class="d-flex justify-content-start" asp-for="EndDate"></label>
-                    <input asp-for="EndDate" class="form-control"/>
+                    <label class="d-flex justify-content-start" for="NewEndDateInput"></label>
+                    <input id="NewEndDateInput" class="form-control" type="datetime-local"/>
                 </div>
                 <input type="hidden" id="userRole" value='@(User.IsInRole(CustomIdentityConstants.AdminRole) || User.IsInRole(CustomIdentityConstants.PlatformAdminRole) ? "True" : "False")'/>
                 <input type="hidden" id="activeProject" value='@(ViewBag.ActiveProject ? "True" : "False")'/>

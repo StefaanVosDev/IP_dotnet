@@ -14,20 +14,6 @@ export async function getFlow(flowId: string) {
     return response.json();
 }
 
-// Get one flow by id
-export async function getFlowId(): Promise<string> {
-    const urlSearchParams = new URLSearchParams(window.location.search)
-
-    let clothingItemid = urlSearchParams.get("projectId")
-
-    if (!clothingItemid) {
-        const path = window.location.pathname
-        clothingItemid = path.substring(path.lastIndexOf("/") + 1)
-    }
-
-    return clothingItemid
-}
-
 // Update all flow values
 export async function updateFlow(name: string, description: string, flowId: string) {
     const response = await fetch(`/api/Flows`, {

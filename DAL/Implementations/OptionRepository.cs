@@ -40,23 +40,7 @@ public class OptionRepository(PhygitalDbContext context) : Repository(context), 
         var singleChoiceOptions = _context.Set<SingleChoiceQuestion>().Include(q => q.Options).FirstOrDefault(q => q.Id == id)?.Options;
         return singleChoiceOptions ?? _context.Set<MultipleChoiceQuestion>().Include(q => q.Options).FirstOrDefault(q => q.Id == id)?.Options;
     }
-    
-    public void DeleteOptionFromQuestion(int id, string option)
-    {
-        var singleChoiceQuestion = _context.Set<SingleChoiceQuestion>().FirstOrDefault(q => q.Id == id);
-        if (singleChoiceQuestion != null)
-        {
-            _context.Remove(singleChoiceQuestion.Options.First(o => o.Text == option));
-            _context.SaveChanges();
-        }
-        else
-        {
-            var multipleChoiceQuestion = _context.Set<MultipleChoiceQuestion>().FirstOrDefault(q => q.Id == id);
-            if (multipleChoiceQuestion == null) return;
-            _context.Remove(multipleChoiceQuestion.Options.First(o => o.Text == option));
-            _context.SaveChanges();
-        }
-    }
+
     public void UpdateOptionsAfterQuestionDeletion(int deletedQuestionId)
     {
         var allOptions = _context.Set<Option>().ToList();

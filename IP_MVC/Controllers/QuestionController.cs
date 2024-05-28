@@ -40,6 +40,9 @@ namespace IP_MVC.Controllers
                 ViewBag.Min = rangeQuestion.Min;
                 ViewBag.Max = rangeQuestion.Max;
             }
+
+            var allQuestionsInFlow = _questionManager.GetQuestionsByFlowId(question.FlowId);
+            ViewBag.FollowUpQuestions = allQuestionsInFlow.Any(q => q.Position > question.Position);
             return View(question);
         }
 
@@ -59,6 +62,7 @@ namespace IP_MVC.Controllers
             await _questionManager.UpdateAllAsync(questionsToUpdate);
             
             _optionManager.UpdateOptionsAfterQuestionDeletion(questionId);
+            _questionManager.RemoveAnswersByQuestionId(questionId);
             
             _unitOfWork.Commit();
             return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
