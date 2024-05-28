@@ -69,10 +69,8 @@ namespace IP_MVC.Controllers
             return RedirectToAction("ProjectDashboard", "Project");
         }
 
-        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active, bool? circular )
+        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active )
         {
-            ViewBag.Circular = circular ?? false;
-
             unitOfWork.BeginTransaction();
 
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
