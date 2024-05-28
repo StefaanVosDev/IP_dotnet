@@ -1,4 +1,4 @@
-import * as client from "../Question/restQuestionClient";
+import * as client from "../question/restQuestionClient";
 import Sortable from "sortablejs";
 
 async function reorderQuestions() {

@@ -1,40 +1,15 @@
 import {Chart, registerables, LinearScale, ChartTypeRegistry} from 'chart.js';
+import {ChartData, ChartDataObject, ChartItem} from "../models/Analytics.interfaces";
+import {OpenQuestion} from "../models/Questions.interfaces";
 
 Chart.register(...registerables, LinearScale);
 
-interface ChartData {
-    title: string;
-    type: string;
-    data: number[] | object;
-}
-interface Dataset {
-    backgroundColor: string[];
-    borderColor: string[];
-    borderWidth: number;
-    data: number[];
-    label: string;
-}
-interface ChartDataObject {
-    datasets: Dataset[];
-    labels: string[];
-}
-interface ChartItem {
-    title: string;
-    type: keyof ChartTypeRegistry;
-    data: ChartDataObject;
-}
-interface OpenQuestion {
-    question: string;
-    answers: (string | null)[];
-}
-
-document.addEventListener('DOMContentLoaded', (event: Event) => {
+function setupAnalytiscsEventListeners(){
     const dropdownItems = document.querySelectorAll('.dropdown-item');
     dropdownItems.forEach(item => {
         item.addEventListener('click', handleFlowChange);
     });
-});
-
+}
 async function handleFlowChange(e: Event) {
     const button = e.target as HTMLButtonElement;
     const flowId = button.dataset.flowId;
@@ -127,7 +102,7 @@ function createChartElement(item: ChartItem, index: number): HTMLElement {
 
         const legendHTML = item.data.labels.map((label: string, i: number) => {
             const bgColor = item.data.datasets[0].backgroundColor[i];
-            return `<div class="legend-item"><span class="legend-color" style="background-color:${bgColor};"></span>${label}</div>`;
+            return `<div class="legend-item"><span class="legend-color d-inline-block" style="background-color:${bgColor};"></span>${label}</div>`;
         }).join('');
         legendDiv.innerHTML = legendHTML;
     }
@@ -146,3 +121,5 @@ function renderOpenQuestions(openQuestions: OpenQuestion[]) {
         });
     }
 }
+
+setupAnalytiscsEventListeners();

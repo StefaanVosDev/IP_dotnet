@@ -51,7 +51,8 @@
                                                     else if (ViewBag.Circular)
                                                     {
                                                         <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Flow</a>
-                                                    }                                                }
+                                                    }
+                                                }
                                                 else if (ViewBag.ContainsQuestions[flow.Id] && !ViewBag.IsParentFlow[flow.Id] && !ViewBag.ActiveProject)
                                                 {
                                                     <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Linear</a>

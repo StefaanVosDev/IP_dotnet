@@ -1,5 +1,4 @@
 import * as client from "./restQuestionClient"
-import {Flow} from "../../models/Flows.interfaces";
 import {Question} from "../../models/Questions.interfaces";
 
 const titleText = document.getElementById('titleText')!;

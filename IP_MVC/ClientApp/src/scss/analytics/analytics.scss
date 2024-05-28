@@ -1,8 +1,6 @@
 @import '../_variables.scss';
 
 .analytics-page {
-  height: 100%;
-
   .big-card-content {
     height: 70vh;
   }
@@ -17,7 +15,6 @@
     }
 
     .legend-color {
-      display: inline-block;
       width: 15px;
       height: 15px;
       margin-right: 5px;

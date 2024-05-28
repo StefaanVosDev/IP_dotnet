@@ -1,6 +1,7 @@
 @using BL.Domain
 @using IP_MVC
 @using IP_MVC.Helpers
+@using Tensorflow.Operations.Activation
 @model IEnumerable<BL.Domain.Flow>
 
 
@@ -11,9 +12,9 @@
 
 <body class="subFlow-page overflow-hidden">
 <div class="d-flex position-sticky px-3">
-     <div class="border-2 px-3">
-            <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
-        </div>
+    <div class="border-2 px-3">
+        <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
+    </div>
     @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
     {
         <div class="border-2">
@@ -57,12 +58,11 @@
                                     <a class="btn btn-white py-0 h-100 align-content-center" href="@Url.Action("Edit", "Flow", new { parentFlowId = subFlow.Id })">Edit</a>
                                 </div>
                             }
-                            <div class="flex-grow-1 border-2">
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, flowtype = FlowType.LINEAR, active = @ViewBag.ActiveProject })" class="btn btn-white h-100 align-content-center">Start linear Flow</a>
-                            </div>
-                            <div class="flex-grow-1">
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, flowtype = FlowType.CIRCULAR, active = @ViewBag.ActiveProject })" class="btn btn-white h-100 align-content-center">Start circular Flow</a>
-                            </div>
+                            @if (ViewBag.ActiveProject)
+                            {
+                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Flow</a>
+                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Flow</a>
+                            }
                         </div>
                     </div>
                 </div>

@@ -3,3 +3,7 @@ export interface Question {
     text: string;
     type: string;
 }
+export interface OpenQuestion {
+    question: string;
+    answers: (string | null)[];
+}
