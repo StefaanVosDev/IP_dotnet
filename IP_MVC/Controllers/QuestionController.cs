@@ -67,13 +67,6 @@ namespace IP_MVC.Controllers
             _unitOfWork.Commit();
             return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});
         }
-        
-        [HttpGet]
-        public IActionResult Create(int parentFlowId)
-        {
-            ViewBag.parentFlowId = parentFlowId;
-            return View();
-        }
 
         private Question CreateQuestion(QuestionType type, string text, Media media, int flowId)
         {

@@ -1,5 +1,3 @@
-// Get one project by id
-import {setupEditEventListener} from "../Question/createQuestionPresenter";
 import {Project} from "../../models/Project.interface";
 
 export async function getProject(id: string) {
@@ -14,7 +12,6 @@ export async function getProject(id: string) {
     return response.json();
 }
 
-// Update all project values
 export async function updateProject(name: string, description: string, projectId: string, adminId: string) {
     const response = await fetch(`/api/Projects`, {
         method: 'PUT',
@@ -28,8 +25,8 @@ export async function updateProject(name: string, description: string, projectId
             NewName: name,
             NewDescription: description
         }),
-    });
-   
+    })
+    
     if (!response.ok) {
         throw new Error(`Failed to update project: ${response.statusText}`);
     }
