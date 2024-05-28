@@ -59,4 +59,9 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
     {
         return repository.GetQuestionsByFlowIdAfterPosition(flowId, position);
     }
+    
+    public void RemoveAnswersByQuestionId(int questionId)
+    {
+        repository.RemoveAnswersByQuestionId(questionId);
+    }
 }

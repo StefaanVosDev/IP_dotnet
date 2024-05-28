@@ -62,6 +62,7 @@ namespace IP_MVC.Controllers
             await _questionManager.UpdateAllAsync(questionsToUpdate);
             
             _optionManager.UpdateOptionsAfterQuestionDeletion(questionId);
+            _questionManager.RemoveAnswersByQuestionId(questionId);
             
             _unitOfWork.Commit();
             return RedirectToAction("Edit", "Flow", new {parentFlowId = question.FlowId});

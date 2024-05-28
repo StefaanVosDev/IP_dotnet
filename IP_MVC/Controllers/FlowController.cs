@@ -338,12 +338,37 @@ namespace IP_MVC.Controllers
             foreach (var subFlow in subFlows)
             {
                 flowManager.DeleteAsync(subFlow);
+                DeleteQuestionsInFlow(subFlow.Id);
             }
 
+            DeleteQuestionsInFlow(flowId);
+            
             flowManager.DeleteAsync(flowToRemove);
             unitOfWork.Commit();
             
             return RedirectToAction("Flow", new { projectId = projectId1 });
+        }
+
+        public void DeleteQuestionsInFlow(int flowId)
+        {
+            var questions = questionManager.GetQuestionsByFlowId(flowId);
+            foreach (var question in questions)
+            {
+                if (question.Type == QuestionType.MultipleChoice || question.Type == QuestionType.SingleChoice)
+                {
+                    var options = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(question.Id);
+                    if (options != null)
+                    {
+                        foreach (var option in options)
+                        {
+                            optionManager.DeleteAsync(option);
+                        }
+                    }
+                }
+
+                questionManager.RemoveAnswersByQuestionId(question.Id);
+                questionManager.DeleteAsync(question);
+            }
         }
 
         [HttpGet]
