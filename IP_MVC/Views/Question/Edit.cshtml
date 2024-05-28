@@ -8,6 +8,7 @@
     
     int min = ViewBag.Min ?? 0;
     int max = ViewBag.Max ?? 10;
+    bool followupQuestions = ViewBag.FollowUpQuestions ?? false;
 }
 
 <h2>Overzicht vraag</h2>
@@ -69,8 +70,12 @@
     case QuestionType.MultipleChoice:
     case QuestionType.SingleChoice:
         // Add options to the question
-        <button id="addConditionalQuestionsButton" class="btn btn-secondary">Add conditional questions</button>
-        <button id="saveQuestionButton" class="btn btn-secondary">Save follow up questions</button>
+        @if (followupQuestions)
+        {
+            <button id="addConditionalQuestionsButton" class="btn btn-secondary">Add conditional questions</button>
+            <button style="display: none" id="saveQuestionButton" class="btn btn-secondary">Save follow up questions</button>
+        }
+
         <form>
             <h2>Add possible answers to the question</h2>
             <div id="optionTable">

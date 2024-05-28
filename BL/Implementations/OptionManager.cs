@@ -32,10 +32,4 @@ public class OptionManager(IOptionRepository repository, IQuestionManager questi
     {
         repository.UpdateOptionsAfterQuestionDeletion(deletedQuestionId);
     }
-    
-
-    public void DeleteOptionFromQuestion(int id, string option)
-    {
-        repository.DeleteOptionFromQuestion(id, option);
-    }
 }

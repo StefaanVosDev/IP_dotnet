@@ -196,7 +196,7 @@ namespace IP_MVC.Controllers.api
             var newPosition = 1;
             if (listQuestionsByFlowId.Any())
             { 
-                newQuestion.Position = listQuestionsByFlowId.Max(q => q.Position) + 1;
+                newPosition = listQuestionsByFlowId.Max(q => q.Position) + 1;
             }
             newQuestion.Position = newPosition;
             

@@ -1,4 +1,3 @@
-import {appendFlowToPage, appendSubFlowToPage, setupEditEventListener} from "../Flow/flowPresenter";
 import {showQuestion} from "./createQuestionPresenter";
 import {Question} from "../../models/Questions.interfaces";
 
@@ -82,9 +81,9 @@ export async function postMedia(formData: FormData) {
 }
 
 // Delete an option from question
-export async function deleteOption(questionId: string, option: string) {
+export async function deleteOption(option: string) {
     try {
-        const response = await fetch(`/api/Options/DeleteOption?id=${questionId}&option=${option}`, {
+        const response = await fetch(`/api/Options/DeleteOption?id=${option}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -137,7 +136,8 @@ export async function getQuestionsByFlowIdAfterPosition(flowId: string, position
     if (!response.ok) {
         throw Error(`Unable to get questions: ${response.status} ${response.statusText}`);
     }
-    return response.json();
+    const responseData = await response.text();
+    return JSON.parse(responseData);
 }
 
 export async function ChangeRedirectedIdFromOption(questionId: string, selectedOption: string, questionIdToRedirect: string) {

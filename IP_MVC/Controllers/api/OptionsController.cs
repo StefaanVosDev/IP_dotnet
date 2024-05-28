@@ -50,16 +50,12 @@ namespace IP_MVC.Controllers.api
         }
         
         [HttpPost("DeleteOption")]
-        public IActionResult DeleteOption([FromQuery] int id, [FromQuery] string option)
+        public IActionResult DeleteOption([FromQuery] int id)
         {
             _unitOfWork.BeginTransaction();
-            var question = _questionManager.GetQuestionById(id);
-            if (question == null)
-            {
-                return NotFound();
-            }
 
-            _optionManager.DeleteOptionFromQuestion(id, option);
+            var option = _optionManager.GetAsync(id).Result;
+            _optionManager.DeleteAsync(option);
             
             _unitOfWork.Commit();
             return Ok();
