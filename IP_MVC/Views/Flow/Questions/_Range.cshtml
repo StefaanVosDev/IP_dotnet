@@ -3,7 +3,8 @@
 @model BL.Domain.Questions.RangeQuestion
 
 @{
-    var initialValue = ViewData["earlierAnswer"] is Answer earlierAnswer ? int.Parse(earlierAnswer.AnswerText) : Model.Min;
+    var initialValuePlayer1 = ViewData["earlierAnswer"] is Answer earlierAnswerPlayer1 ? int.Parse(earlierAnswerPlayer1.AnswerTextPlayer1) : Model.Min;
+    var initialValuePlayer2 = ViewData["earlierAnswer"] is Answer earlierAnswerPlayer2 ? int.Parse(earlierAnswerPlayer2.AnswerTextPlayer2) : Model.Min;
     var question = ViewData["questionType"]  as RangeQuestion ;
 }
 
@@ -13,6 +14,14 @@
         <span>@i</span>
     }
 </div>
+<div class="forms-container">
+    <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer1" id="rangeInputPlayer1" style="width: 100%"/>
+    <input type="hidden" id="selectedValuePlayer1" name="AnswerPlayer1" data-min="@question.Min" data-earlier-answer="@initialValuePlayer1" value="@initialValuePlayer1"/>
 
-<input type="range" min="@question!.Min" max="@question.Max" value="@initialValue" style="width: 100%"/>
-<input type="hidden" id="selectedValue" name="Answer" data-min="@question.Min" data-earlier-answer="@initialValue" value="@initialValue"/>
+    <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer2" id="rangeInputPlayer2" style="width: 100%"/>
+    <input type="hidden" id="selectedValuePlayer2" name="AnswerPlayer2" data-min="@question.Min" data-earlier-answer="@initialValuePlayer2" value="@initialValuePlayer2"/>
+</div>
+
+@section Scripts {
+    <script src="~/dist/orderQuestions.entry.js"></script>
+}

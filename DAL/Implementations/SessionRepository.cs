@@ -57,12 +57,18 @@ public class SessionRepository(PhygitalDbContext context) : Repository(context),
         {
             throw new Exception("No session found with this id");
         }
-        
+
         if (session.Answers.Any(a => a.QuestionId == answer.QuestionId))
         {
-          context.Answers.Remove(session.Answers.First(a => a.QuestionId == answer.QuestionId));
+            var existingAnswer = session.Answers.First(a => a.QuestionId == answer.QuestionId);
+            existingAnswer.AnswerTextPlayer1 = answer.AnswerTextPlayer1; 
+            existingAnswer.AnswerTextPlayer2 = answer.AnswerTextPlayer2; 
         }
-        session.Answers.Add(answer);
+        else
+        {
+            session.Answers.Add(answer);
+        }
+        context.SaveChanges();
         return answer;
     }
 
