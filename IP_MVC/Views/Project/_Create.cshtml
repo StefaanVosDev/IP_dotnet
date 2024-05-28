@@ -8,7 +8,7 @@
 
         <span class="close" id="closePopup">&times;</span>
         <div class="popup-content d-flex justify-content-center align-items-center">
-            <form class="w-50" asp-action="Create" asp-controller="Project" method="post">
+            <form class="w-50" id="createProjectForm" method="post">
                 <div class="form-group pb-3">
                     <label class="d-flex justify-content-start" asp-for="Name">Name</label>
                     <textarea type="text" asp-for="Name" class="form-control" required></textarea>
@@ -17,7 +17,7 @@
                     <label class="d-flex justify-content-start" asp-for="Description">Description</label>
                     <textarea type="text" asp-for="Description" class="form-control" required></textarea>
                 </div>
-                <button class="btn btn-blue rounded-5" id="createButton">Create Project</button>
+                <button class="btn btn-blue rounded-5" id="createProjectButton">Create Project</button>
             </form>
         </div>
     </div>

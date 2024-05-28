@@ -1,5 +1,6 @@
 import * as client from "./restQuestionClient"
 import {Flow} from "../../models/Flows.interfaces";
+import {Question} from "../../models/Questions.interfaces";
 
 const titleText = document.getElementById('titleText')!;
 
@@ -28,10 +29,10 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
                 <tr>
                 <td>${option.text}</td>
                 <td>
-                    <button delete-option option-id="${option.id}" type="button" class="btn btn-danger">Delete option</button>
+                    <button delete-option option-id="${option.id}" type="button" class="btn btn-blue">Delete option</button>
                 </td>
                 <td>
-                    <button class="select-question" style="display: none" option-id="${option.id}" type="button" class="btn btn-primary">Select folowup question</button>
+                    <button class="select-question" style="display: none" option-id="${option.id}" type="button" class="btn btn-blue">Select folowup question</button>
                 </td>
                 </tr>`, "<table>"
             ) + "</table>"
@@ -151,8 +152,8 @@ async function showSeperateAddButtons() {
                 });
                 
                 questionDropdown.innerHTML = (await client.getQuestionsByFlowIdAfterPosition(flowId.value, position.value)).reduce(
-                    (acc: string, question: any) => `${acc}
-                <option id="${question.id}" value="${question.text}" ${question.id == currentNextQuestionId ? 'selected': ''}>${question.text}</option>`, ""
+                    (acc: string, question: Question) => `${acc}
+                <option id="${question.Id}" value="${question.NewText}" ${question.Id == currentNextQuestionId ? 'selected': ''}>${question.NewText}</option>`, ""
                 );
                 questionDropdown.innerHTML+= `<option id="-1" value="End flow" ${currentNextQuestionId == -1 ? 'selected': ''}>End flow</option>`;
                 questionDropdown.style.display = 'block';
