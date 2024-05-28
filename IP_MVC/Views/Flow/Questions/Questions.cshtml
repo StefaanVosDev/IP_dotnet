@@ -14,13 +14,11 @@
     var flowType = ViewBag.FlowType as FlowType? ?? FlowType.LINEAR;
     ViewData["earlierAnswer"] = earlierAnswer;
     ViewData["questionType"] = Model.Question;
-
-    var subFlowId = ViewBag.subFlowId;
-
+    
     //todo: give this in the viewbag controller, add a checkbox?
     var facilitatorWatching = ViewBag.facilitatorWatching ?? true;
     var preview = ViewBag.Preview ?? false;
-    var showQr = ViewBag.showQrCode ?? true;
+    var parentFlowId = ViewBag.ParentFlowId;
 }
 
 <body class="questions-page">
@@ -36,9 +34,19 @@
             }
             else
             {
-                <div class="col-6 h-100">
-                    <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId = subFlowId, active = ViewBag.ActiveProject })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
-                </div>
+                @if (parentFlowId == null)
+                {
+                    <div class="col-6 h-100">
+                        <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-6 h-100">
+                        <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                    </div>
+                }
+
             }
         </div>
         <div class="card-content vh-100 align-content-center">
