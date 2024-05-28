@@ -175,15 +175,19 @@ namespace IP_MVC.Controllers.api
             {
                 case "MultipleChoice":
                     newQuestion = new MultipleChoiceQuestion();
+                    newQuestion.Type = QuestionType.MultipleChoice;
                     break;
                 case "SingleChoice":
                     newQuestion = new SingleChoiceQuestion();
+                    newQuestion.Type = QuestionType.SingleChoice;
                     break;
                 case "Open":
                     newQuestion = new OpenQuestion();
+                    newQuestion.Type = QuestionType.Open;
                     break;
                 case "Range":
                     newQuestion = new RangeQuestion();
+                    newQuestion.Type = QuestionType.Range;
                     break;
                 default:
                     return BadRequest("Invalid question type.");
