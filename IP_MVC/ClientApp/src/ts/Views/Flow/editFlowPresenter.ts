@@ -2,15 +2,18 @@ import * as client from "../Question/restQuestionClient";
 import Sortable from "sortablejs";
 
 async function reorderQuestions() {
-    const tbody = document.querySelector('.table tbody');
-    if (tbody) {
-        new Sortable(<HTMLElement>tbody, {
-            onUpdate: function (evt) {
-                const questionId = evt.item.getAttribute('data-question-id') as string;
-                const position = 1 + <number>evt.newIndex;
-                client.reOrderQuestions(questionId, position);
-            },
-        });
+    const sortable = document.getElementById('sortable');
+    if (sortable) {
+            new Sortable(sortable, {
+                onUpdate: function (evt) {
+                    const questionElement = evt.item.querySelector('.question');
+                    if (questionElement) {
+                        const questionId = questionElement.getAttribute('data-question-id') as string;
+                        const position = 1 + <number>evt.newIndex;
+                        client.reOrderQuestions(questionId, position);
+                    }
+                },
+            });
     }
 }
 

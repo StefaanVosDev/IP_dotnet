@@ -57,9 +57,9 @@
                             <th>Actions</th>
                         </tr>
                         </thead>
+                        <tbody id="sortable">
                         @foreach (var question in Model.Questions)
                         {
-                            <tbody>
                             <tr>
                                 <td class="question" data-question-id="@question.Id" data-position="@question.Position">@question.Text</td>
                                 <td class="align-content-center">
@@ -73,8 +73,8 @@
                                     </div>
                                 </td>
                             </tr>
-                            </tbody>
                         }
+                        </tbody>
                     }
                 </table>
             </div>
@@ -101,4 +101,5 @@
 {
     <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/createQuestion.entry.js" defer></script>
+    <script src="~/dist/orderQuestions.entry.js" defer></script>
 }

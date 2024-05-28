@@ -19,6 +19,7 @@ module.exports = {
         editFlow: './src/ts/Views/Flow/flowPresenter.ts',
         createQuestion: './src/ts/Views/Question/createQuestionPresenter.ts',
         manageFacilitators: './src/ts/Views/Project/FacilitatorsPresenter.ts',
+        orderQuestions: './src/ts/Views/Flow/editFlowPresenter.ts',
     },
     output: {
         filename: '[name].entry.js',
