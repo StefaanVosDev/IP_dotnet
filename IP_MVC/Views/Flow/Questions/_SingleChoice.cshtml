@@ -15,10 +15,10 @@
                 bool isSelectedPlayer1 = earlierAnswerPlayer1 != null && earlierAnswerPlayer1.AnswerTextPlayer1 == option.Text;
                 bool isSelectedPlayer2 = earlierAnswerPlayer2 != null && earlierAnswerPlayer2.AnswerTextPlayer2 == option.Text;
                 <div class="form-check m-3 box-container">
-                    <input class="form-check-input" type="radio" id="checkPlayer1@i" name="AnswerPlayer1" value="@option" @(isSelectedPlayer1 ? "checked" : "")>
-                    <input class="form-check-input" type="radio" id="checkPlayer2@i" name="AnswerPlayer2" value="@option" @(isSelectedPlayer2 ? "checked" : "")>
+                    <input class="form-check-input" type="radio" id="checkPlayer1@i" name="AnswerPlayer1" value="@option.Text" @(isSelectedPlayer1 ? "checked" : "")>
+                    <input class="form-check-input" type="radio" id="checkPlayer2@i" name="AnswerPlayer2" value="@option.Text" @(isSelectedPlayer2 ? "checked" : "")>
                     <label class="form-check-label" for="checkPlayer2@i">
-                        @option
+                        @option.Text
                     </label>
                 </div>
             }
