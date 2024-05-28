@@ -62,8 +62,8 @@ backButton.forEach(button => {
 
 createProjectButton.addEventListener('click', async (event) => {
     event.preventDefault();
-    const nameInput = document.querySelector("input[name='Name']") as HTMLInputElement;
-    const descriptionInput = document.querySelector("input[name='Description']") as HTMLInputElement;
+    const nameInput = document.querySelector("textarea[name='Name']") as HTMLTextAreaElement;
+    const descriptionInput = document.querySelector("textarea[name='Description']") as HTMLTextAreaElement;
     
     const name = nameInput.value;
     const description = descriptionInput.value;
@@ -91,8 +91,8 @@ export function showProject(project: Project) {
 
     
 
-    var randomIndex = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-    var imageUrl = `https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_${randomIndex}.png`;
+    let randomIndex = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+    let imageUrl = `https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_${randomIndex}.png`;
 
     projectsContent.innerHTML += ` 
              <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 py-0">
