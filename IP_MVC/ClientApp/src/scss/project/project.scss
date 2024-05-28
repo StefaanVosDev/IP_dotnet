@@ -1,11 +1,11 @@
 @import '../_variables.scss';
+@import "../flipCard";
 
-.subFlow-page {
-  min-height: 100vh;
-  max-height: 100vh;
-
+.project-page {
   .card {
+    background-color: $light-blue;
     width: 59%;
+    height: 45%;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -15,17 +15,19 @@
     &:hover {
       transform: translate(-50%, -50%) translateY(-5px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      z-index: 2;
-
+      z-index: 3;
+    }
+    
+    .card-body {
+      flex: 3;
     }
 
-    .button-container {
-      padding-left: 3vh;
-      padding-right: 3vh;
-
-      .flex-grow-1 {
-        padding-left: 0.5vh;
-      }
+    .d-flex {
+      flex: 1;
     }
+  }
+  
+  .dropdown-menu{
+    --bs-dropdown-min-width: auto;
   }
 }

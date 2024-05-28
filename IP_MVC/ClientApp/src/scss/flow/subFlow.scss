@@ -1,13 +1,12 @@
 @import '../_variables.scss';
 
-.endFlow {
+.subFlow-page {
   min-height: 100vh;
   max-height: 100vh;
 
   .card {
-    width: 58%;
-    height: 60%;
-    top: 40%;
+    width: 59%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -17,24 +16,6 @@
       transform: translate(-50%, -50%) translateY(-5px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
       z-index: 2;
-
-    }
-    ul{
-      list-style: none;
-    }
-
-    .button-container {
-      padding-left: 3vh;
-      padding-right: 3vh;
-
-      .flex-grow-1 {
-        padding-left: 0.5vh;
-      }
-
-      .btn {
-        background-color: $light-blue;
-        font-size: smaller;
-      }
     }
   }
 }

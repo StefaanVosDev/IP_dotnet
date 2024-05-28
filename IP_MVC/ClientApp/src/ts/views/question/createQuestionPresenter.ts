@@ -1,6 +1,4 @@
 import * as client from "./restQuestionClient";
-import {Flow} from "../../models/Flows.interfaces";
-import {updateSwiper} from "../Flow/createScroll";
 import {Question} from "../../models/Questions.interfaces";
 
 const createQuestionButton = document.querySelectorAll('#createButton')!;
