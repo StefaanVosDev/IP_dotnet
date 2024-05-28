@@ -39,10 +39,12 @@ public class Flow
         EndDate = endDate;
     }
     
-    public Flow(string name, string description, int projectId, Flow parentFlow) 
+    public Flow(string name, string description, DateTime startDate, DateTime endDate, int projectId, Flow parentFlow) 
     {
         Name = name;
         Description = description;
+        StartDate = startDate;
+        EndDate = endDate;
         ProjectId = projectId;
         ParentFlow = parentFlow;
     }
