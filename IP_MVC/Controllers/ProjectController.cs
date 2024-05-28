@@ -106,9 +106,9 @@ public class ProjectController : Controller
     }
 
 
-    [HttpDelete]
-    public IActionResult RemoveUser(int projectId, string userId)
+    public IActionResult RemoveUser(string userId, int projectId)
     {
-        throw new NotImplementedException();
+        _projectManager.RemoveFacilitatorFromProject(userId, projectId);
+        return RedirectToAction("ManageFacilitators", new { projectId });
     }
 }
