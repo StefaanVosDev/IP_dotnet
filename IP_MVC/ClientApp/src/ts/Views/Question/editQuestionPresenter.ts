@@ -106,15 +106,15 @@ async function updateMedia() {
 // display the iput element to change question name
 function displayNameChange(display: boolean) {
     if (display) {
-        titleText.style.display = 'none';
-        changeNameButton.style.display = 'none';
-        titleInput.style.display = 'block';
-        updateNameButton.style.display = 'block';
+        titleText.classList.add('d-none');
+        changeNameButton.classList.add('d-none');
+        titleInput.classList.remove('d-none');
+        updateNameButton.classList.remove('d-none');
     } else {
-        titleText.style.display = 'block';
-        changeNameButton.style.display = 'block';
-        titleInput.style.display = 'none';
-        updateNameButton.style.display = 'none';
+        titleText.classList.remove('d-none');
+        changeNameButton.classList.remove('d-none');
+        titleInput.classList.add('d-none');
+        updateNameButton.classList.add('d-none');
     }
 }
 
@@ -153,7 +153,7 @@ async function showSeperateAddButtons() {
                 
                 questionDropdown.innerHTML = (await client.getQuestionsByFlowIdAfterPosition(flowId.value, position.value)).reduce(
                     (acc: string, question: Question) => `${acc}
-                <option id="${question.Id}" value="${question.NewText}" ${question.Id == currentNextQuestionId ? 'selected': ''}>${question.NewText}</option>`, ""
+                <option id="${question.id}" value="${question.text}" ${question.id == currentNextQuestionId ? 'selected': ''}>${question.text}</option>`, ""
                 );
                 questionDropdown.innerHTML+= `<option id="-1" value="End flow" ${currentNextQuestionId == -1 ? 'selected': ''}>End flow</option>`;
                 questionDropdown.style.display = 'block';

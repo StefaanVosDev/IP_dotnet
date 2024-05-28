@@ -47,15 +47,15 @@ export function showQuestion(question: Question) {
     let deleteButtonHtml = '';
     let editButtonHtml = '';
 
-    deleteButtonHtml = `<button class="btn btn-blue deleteQuestionButton bi bi-trash" data-question-id="${question.Id}"  href="/Question/Delete?questionId=${question.Id}"></button>`;
-    editButtonHtml = ` <a class="btn btn-blue py-0" href="/Question/Edit?questionId=${question.Id}" class="btn btn-primary">Edit</a>`;
+    deleteButtonHtml = `<button class="btn btn-blue deleteQuestionButton bi bi-trash" data-question-id="${question.id}"  href="/Question/Delete?questionId=${question.id}"></button>`;
+    editButtonHtml = ` <a class="btn btn-blue py-0" href="/Question/Edit?questionId=${question.id}" class="btn btn-primary">Edit</a>`;
 
     questionsContent.innerHTML += `
 
 
         <tbody>
         <tr>
-            <td class="question" data-question-id="@{question.Text}" data-position="@question.Position">${question.NewText}</td>
+            <td class="question" data-question-id="@{question.Text}" data-position="@question.Position">${question.text}</td>
             <td class="align-content-center">
                 <div class="row">
                     <div class="col-6 ">

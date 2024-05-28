@@ -1,5 +1,5 @@
 export interface Question {
-    Id: number;
-    NewText: string;
-    NewType: string;
+    id: number;
+    text: string;
+    type: string;
 }
