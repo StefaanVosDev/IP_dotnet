@@ -21,12 +21,14 @@ namespace IP_MVC.Controllers
         UnitOfWork unitOfWork)
         : Controller
     {
-        public async Task<ViewResult> Flow(int projectId, int? parentFlowId)
+        public async Task<ViewResult> Flow(int projectId, int? parentFlowId, bool? circular)
         {
             var active = HttpContext.Session.Get<bool>("projectActive");
             ViewBag.ProjectId = projectId;
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = active;
+            ViewBag.Circular = circular ?? false;
+            ViewBag.Linear = !(circular ?? true);
             var flows = await projectManager.GetParentFlowsByProjectIdAsync(projectId);
             if (active)
             {
@@ -326,7 +328,6 @@ namespace IP_MVC.Controllers
             
             return View();
         }
-
         
         public IActionResult Delete(int flowId)
         {
@@ -388,7 +389,6 @@ namespace IP_MVC.Controllers
             unitOfWork.Commit();
             return RedirectToAction("Flow", new { projectId = newFlow.ProjectId });
         }
-        
         
         public IActionResult Create(Flow flow, int projectId, int? parentFlowId)
         {
