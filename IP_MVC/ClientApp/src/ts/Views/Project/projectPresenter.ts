@@ -116,7 +116,7 @@ function redirectToFlow(button: HTMLElement, isCircular: boolean) {
     const flowId = button.dataset.flowId;
     console.log(flowId);
     const circular = isCircular !== null ? isCircular : '';
-    window.location.href = `/Flow/Flow?projectId=${flowId}&circular=${circular}`;
+    window.location.href = `/Flow/ActivateProject?projectId=${flowId}&active=true&circular=${circular}`;
 }
 function showProjectCard(button: Element) {
         const project = button.closest(".flip-card-front")?.querySelector(".show-project");

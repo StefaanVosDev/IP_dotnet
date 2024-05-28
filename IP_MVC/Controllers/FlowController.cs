@@ -59,12 +59,12 @@ namespace IP_MVC.Controllers
             return View(flowManager.GetFlowsByParentId(parentFlowId));
         }
 
-        public IActionResult ActivateProject(int projectId, bool active)
+        public IActionResult ActivateProject(int projectId, bool active, bool circular)
         {
             HttpContext.Session.Set("projectActive", active);
             if (active)
             {
-                return RedirectToAction("Flow", new { projectId });
+                return RedirectToAction("Flow", new { projectId, circular });
             }
 
             return RedirectToAction("ProjectDashboard", "Project");
