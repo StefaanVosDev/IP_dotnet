@@ -1,3 +1,4 @@
+@using IP_MVC.Models
 @model IEnumerable<BL.Domain.Project>
 
 <button class="btn btn-blue" id="popupButton">Create New Project</button>
@@ -7,7 +8,7 @@
     <div class="row">
         @foreach (var project in Model)
         {
-            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 py-0">
                 <div class="flip-card">
                     <div class="flip-card-inner">
                         @{
@@ -39,7 +40,6 @@
                             </div>
                         </div>
                         <div class="flip-card-back position-relative">
-
                             <img src="@imageUrl" class="card-img-top w-100 h-100 z-1 position-relative" alt="Afbeelding_van_flow">
                             <div class="card border-1 border-black h-50 position-absolute card-clickable" data-parent-flow-id="@project.Id">
                                 <div class="card-body overflow-y-scroll overflow-x-hidden">
@@ -58,16 +58,16 @@
 
                                 <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
                                     <div>
-                                        <button class="btn btn-blue py-0 btn-back">Back</button>
+                                        <button class="btn btn-blue bi bi-box-arrow-left btn-back py-0"></button>
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-blue py-0" id="updateProjectButton">Update</button>
                                     </div>
                                     <div>
-                                        <a class="btn btn-blue py-0 " href="@Url.Action("Flow", "Flow", new { projectId = project.Id })">Edit Flows</a>
+                                        <a class="btn btn-blue py-0 " href="@Url.Action("Flow", "Flow", new { projectId = project.Id })">Flows</a>
                                     </div>
                                     <div>
-                                        <a class="btn btn-blue py-0" href="@Url.Action("ManageFacilitators", "Project", new { projectId = project.Id })">Manage Facilitators</a>
+                                        <a class="btn btn-blue p-0" id="popupButton" href="@Url.Action("ManageFacilitators", "Project", new { projectId = project.Id })">Facilitators</a>
                                     </div>
                                 </div>
                             </div>
