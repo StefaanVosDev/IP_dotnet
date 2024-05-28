@@ -10,11 +10,17 @@ namespace IP_MVC.Controllers;
 public class ProjectController : Controller
 {
     private readonly IProjectManager _projectManager;
+    private readonly IFlowManager _flowManager;
+    private readonly IQuestionManager _questionManager;
+    private readonly IOptionManager _optionManager;
     private readonly UnitOfWork _unitOfWork;
 
-    public ProjectController(IProjectManager projectManager, UnitOfWork unitOfWork)
+    public ProjectController(IProjectManager projectManager, IFlowManager flowManager, IQuestionManager questionManager, IOptionManager optionManager, UnitOfWork unitOfWork)
     {
         _projectManager = projectManager;
+        _flowManager = flowManager;
+        _questionManager = questionManager;
+        _optionManager = optionManager;
         _unitOfWork = unitOfWork;
     }
 
@@ -38,7 +44,32 @@ public class ProjectController : Controller
     public async Task<IActionResult> Delete(int parentFlowId)
     {
         _unitOfWork.BeginTransaction();
+        
         var project = await _projectManager.FindByIdAsync(parentFlowId);
+
+        var flows = _projectManager.GetFlowsByProjectIdAsync(parentFlowId).Result;
+        foreach (var flow in flows)
+        {
+            var questions = _questionManager.GetQuestionsByFlowId(flow.Id);
+            if (questions != null)
+            {
+                foreach (var question in questions)
+                {
+                    var options = _optionManager.GetOptionsSingleOrMultipleChoiceQuestion(question.Id);
+                    if (options != null)
+                    {
+                        foreach (var option in options)
+                        {
+                            await _optionManager.DeleteAsync(option);
+                        }
+                    }
+                    await _questionManager.DeleteAsync(question);
+
+                    _questionManager.RemoveAnswersByQuestionId(question.Id);
+                }
+            }
+            await _flowManager.DeleteAsync(flow);
+        }
         await _projectManager.DeleteAsync(project);
 
         _unitOfWork.Commit();

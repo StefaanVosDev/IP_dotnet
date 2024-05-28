@@ -51,6 +51,8 @@ export function showQuestion(question: Question) {
     editButtonHtml = ` <a class="btn btn-blue py-0" href="/Question/Edit?questionId=${question.Id}" class="btn btn-primary">Edit</a>`;
 
     questionsContent.innerHTML += `
+
+
         <tbody>
         <tr>
             <td class="question" data-question-id="@{question.Text}" data-position="@question.Position">${question.NewText}</td>

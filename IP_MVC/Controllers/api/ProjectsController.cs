@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using BL.Implementations;
 using BL.Interfaces;
 using IP_MVC.Models;
@@ -81,4 +82,25 @@ public class ProjectsController : ControllerBase
         return RedirectToAction("ManageFacilitators");
     }
     
-} 
+    [HttpPost("Create")]
+    public async Task<IActionResult> Create([FromBody] ProjectCreateDto createDto)
+    {
+        _unitOfWork.BeginTransaction();
+        if (createDto == null)
+        {
+            return BadRequest("Invalid project data.");
+        }
+
+        var project = new Project
+        {
+            Name = createDto.Name,
+            Description = createDto.Description,
+            AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+
+        };
+
+        await _projectManager.AddAsync(project);
+        _unitOfWork.Commit();
+        return Ok(project);
+    }
+}

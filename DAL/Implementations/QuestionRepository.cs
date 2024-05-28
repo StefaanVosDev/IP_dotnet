@@ -1,4 +1,5 @@
 using BL.Domain;
+using BL.Domain.Answers;
 using BL.Domain.Questions;
 using DAL.EF;
 using DAL.Interfaces;
@@ -64,4 +65,9 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
         return _context.Set<Question>().Where(q => q.FlowId == flowId && q.Position > position);
     }
     
+    public void RemoveAnswersByQuestionId(int questionId)
+    {
+        var answers = _context.Set<Answer>().Where(a => a.QuestionId == questionId);
+        _context.Set<Answer>().RemoveRange(answers);
+    }
 }
