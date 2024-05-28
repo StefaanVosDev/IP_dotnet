@@ -71,7 +71,7 @@ public class ProjectController : Controller
             ProjectId = projectId
         };
 
-        return View("_ManageFacilitators", model);
+        return View(model);
     }
 
 

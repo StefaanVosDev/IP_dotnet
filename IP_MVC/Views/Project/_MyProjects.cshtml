@@ -58,7 +58,7 @@
 
                                 <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden py-1">
                                     <div>
-                                        <button class="btn btn-blue bi bi-box-arrow-left  back-button py-0"></button>
+                                        <button class="btn btn-blue bi bi-box-arrow-left btn-back py-0"></button>
                                     </div>
                                     <div>
                                         <button type="submit" class="btn btn-blue py-0" id="updateProjectButton">Update</button>
@@ -68,12 +68,6 @@
                                     </div>
                                     <div>
                                         <a class="btn btn-blue p-0" id="popupButton" href="@Url.Action("ManageFacilitators", "Project", new { projectId = project.Id })">Facilitators</a>
-                                    @*@await Html.PartialAsync("_ManageFacilitators", new ManageFacilitatorsViewModel{
-                                            Facilitators = ViewBag.Facilitators[project.Id],
-                                            ProjectId = project.Id
-                                            }
-                                            )
-                                            *@
                                     </div>
                                 </div>
                             </div>
