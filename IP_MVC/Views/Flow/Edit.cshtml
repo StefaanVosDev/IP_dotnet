@@ -11,36 +11,36 @@
 <body class="edit-page">
 <div class="container-fluid">
     <img class="overlay-image position-absolute top-0 bottom-0 w-100 h-100" src="https://storage.googleapis.com/phygital-public/Flows/flow_halve_handjes.png" alt="Beschrijving van de afbeelding">
-    <div class="card big-card-content border-1 border-black position-relative overflow-y-scroll-scroll">
+    <div class="card big-card-content border-1 border-black position-relative overflow-y--scroll">
         <div class="row m-0 p-3 position-relative flow-card">
             <div class="card  h-100 overflow-y-scroll background-color-light-blue py-2">
                 <h3 class="d-flex justify-content-center px-3 pt-2 m-0">Flow</h3>
 
                 <form asp-action="Edit" asp-controller="Flow" method="post" id="flowEditForm">
-                    <input type="hidden" asp-for="Flow.Id"/>
+                    <div class="form-row">
+                        <input type="hidden" asp-for="Flow.Id"/>
 
-                    <div class="form-group pb-1">
-                        <label asp-for="Flow.Name"></label>
-                        <input asp-for="Flow.Name" class="form-control"/>
+                        <div class="form-group pb-1">
+                            <label asp-for="Flow.Name"></label>
+                            <input asp-for="Flow.Name" class="form-control"/>
+                        </div>
+                        <div class="form-group pb-1">
+                            <label asp-for="Flow.Description"></label>
+                            <textarea asp-for="Flow.Description" class="form-control"></textarea>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label asp-for="Flow.StartDate"></label>
+                            <input asp-for="Flow.StartDate" class="form-control"/>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label asp-for="Flow.EndDate"></label>
+                            <input asp-for="Flow.EndDate" class="form-control"/>
+                        </div>
+
+
+                        <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
+                        <input type="hidden" asp-for="Flow.ProjectId" value="@Model.Flow.ProjectId"/>
                     </div>
-
-                    <div class="form-group pb-1">
-                        <label asp-for="Flow.Description"></label>
-                        <textarea asp-for="Flow.Description" class="form-control"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Flow.StartDate"></label>
-                        <input asp-for="Flow.StartDate" class="form-control"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Flow.EndDate"></label>
-                        <input asp-for="Flow.EndDate" class="form-control"/>
-                    </div>
-
-                    <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
-                    <input type="hidden" asp-for="Flow.ProjectId" value="@Model.Flow.ProjectId"/>
                 </form>
             </div>
         </div>
@@ -83,7 +83,7 @@
 
             <div class="col d-flex justify-content-center h-100">
                 <button class="btn btn-blue" id="popupButton">Create New Question</button>
-                @await Html.PartialAsync("_CreateQuestion", new Question{FlowId = Model.Flow.Id })
+                @await Html.PartialAsync("_CreateQuestion", new Question { FlowId = Model.Flow.Id })
             </div>
 
 

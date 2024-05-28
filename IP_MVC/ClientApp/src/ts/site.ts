@@ -16,6 +16,7 @@ import '../scss/Flow/EndFlow.scss'
 import '../scss/Project/Project.scss'
 import '../scss/Project/Facilitator.scss'
 import '../scss/Flow/questions/Questions.scss'
+import '../scss/Question/Edit.scss'
 import '../scss/site.scss';
 import '../scss/Analytics/Analytics.scss';
 import '../scss/Flow/questions/questionCompleet.scss';

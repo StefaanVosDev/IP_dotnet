@@ -29,10 +29,10 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
                 <tr>
                 <td>${option.text}</td>
                 <td>
-                    <button delete-option option-id="${option.id}" type="button" class="btn btn-danger">Delete option</button>
+                    <button delete-option option-id="${option.id}" type="button" class="btn btn-blue">Delete option</button>
                 </td>
                 <td>
-                    <button class="select-question" style="display: none" option-id="${option.id}" type="button" class="btn btn-primary">Select folowup question</button>
+                    <button class="select-question" style="display: none" option-id="${option.id}" type="button" class="btn btn-blue">Select folowup question</button>
                 </td>
                 </tr>`, "<table>"
             ) + "</table>"
