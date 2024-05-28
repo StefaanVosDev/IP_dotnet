@@ -20,10 +20,13 @@
             <ul>
                 @foreach (var question in Model.Questions)
                 {
+                    var answer = Model.Answers.FirstOrDefault(a => a.QuestionId == question.Id);
                     <li>
                         <strong>Q:</strong> @question.Text
                         <br/>
-                        <strong>A:</strong> @Model.Answers.FirstOrDefault(a => a.QuestionId == question.Id)?.AnswerText
+                        <strong>Player 1's Answer:</strong> @answer?.AnswerTextPlayer1
+                        <br/>
+                        <strong>Player 2's Answer:</strong> @answer?.AnswerTextPlayer2
                     </li>
                     <br/>
                 }

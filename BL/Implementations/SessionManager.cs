@@ -41,13 +41,19 @@ public class SessionManager(ISessionRepository repository, IQuestionManager ques
         var answers = GetAnswersBySessionId(sessionId).ToList();
         return answers.Select(a => questionManager.GetQuestionById(a.QuestionId)).ToList();
     }
-    public Answer UpdateAnswer(Answer answerToUpdate, Answer answer)
+    public Answer UpdateAnswer(Answer oldAnswer, Answer newAnswer)
     {
-        if (answerToUpdate == null)
+        if (oldAnswer == null)
         {
-            AddAnswerToSession(answer.Session.Id, answer, FlowType.LINEAR);
+            AddAnswerToSession(newAnswer.Session.Id, newAnswer, FlowType.LINEAR);
         }
-        return repository.UpdateAnswer(answerToUpdate, answer);
+        else
+        {
+            oldAnswer.AnswerTextPlayer1 = newAnswer.AnswerTextPlayer1; 
+            oldAnswer.AnswerTextPlayer2 = newAnswer.AnswerTextPlayer2; 
+            repository.UpdateAnswer(oldAnswer, newAnswer);
+        }
+        return oldAnswer;
     }
 
     public Answer GetAnswerByQuestionId(int sessionId, int questionId)
