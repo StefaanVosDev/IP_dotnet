@@ -48,9 +48,9 @@ namespace IP_MVC.Controllers
             return View(flows);
         }
 
-        public IActionResult SubFlow(int parentFlowId)
+        public IActionResult SubFlow(int parentFlowId, bool? circular)
         {
-
+            ViewBag.Circular = circular ?? false;
             ViewBag.ProjectId = flowManager.GetFlowById(parentFlowId).ProjectId;
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
@@ -172,8 +172,7 @@ namespace IP_MVC.Controllers
             
             return View("Questions/Questions", viewModel);
         }
-
- 
+        
         public IActionResult EndSubFlow()
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
