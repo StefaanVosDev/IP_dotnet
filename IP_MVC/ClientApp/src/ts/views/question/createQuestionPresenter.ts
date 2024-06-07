@@ -1,28 +1,24 @@
 import * as client from "./restQuestionClient";
 import {Question} from "../../models/Questions.interfaces";
 
-const createQuestionButton = document.querySelectorAll('#createButton')!;
-const saveAndRedirectButton = document.querySelectorAll('#saveAndRedirectButton');
+const createQuestionButton = document.getElementById('createButton')!;
+const saveAndRedirectButton = document.getElementById('saveAndRedirectButton')!;
 
 export function setupEditEventListener(){
-    createQuestionButton.forEach(button => {
-        button.addEventListener('click', async () => {
+        createQuestionButton.addEventListener('click', async () => {
             addQuestion().then(() => {
                 const textInput = document.getElementById('newQuestionText') as HTMLInputElement;
                 const typeInput = document.getElementById('newQuestionType') as HTMLInputElement;
                 textInput.value = '';
                 typeInput.value = '';
             });
-        })
     });
 
-    saveAndRedirectButton.forEach(button => {
-        button.addEventListener('click', async () => {
+    saveAndRedirectButton.addEventListener('click', async () => {
             const form = document.getElementById('flowEditForm') as HTMLFormElement;
             if (form) {
                 form.submit();
             }
-        })
     });
     deleteQuestion();
 }
@@ -67,8 +63,6 @@ export function showQuestion(question: Question) {
         </tr>
         </tbody>
     `;
-
-    setupEditEventListener();
 }
 
 async function deleteQuestion() {

@@ -155,12 +155,12 @@
                                             if (preview)
                                             {
                                                 <li>
-                                                    <button class="btn-white dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
+                                                    <button class="btn-white dropdown-item active-dropdown" form="myForm" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
                                                 </li>
                                             }
                                             else
                                             {
-                                                <button class="btn-white dropdown-item active-dropdown" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
+                                                <button class="btn-white dropdown-item active-dropdown" form="myForm" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
                                             }
                                         }
                                         else
@@ -168,13 +168,13 @@
                                             if (preview)
                                             {
                                                 <li>
-                                                    <button class="btn-white dropdown-item" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
+                                                    <button class="btn-white dropdown-item" form="myForm" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="RedirectTroughPreview">Question @(index + 1)</button>
                                                 </li>
                                             }
                                             else
                                             {
                                                 <li>
-                                                    <button class="btn-white dropdown-item" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
+                                                    <button class="btn-white dropdown-item" form="myForm" type="submit" name="redirectedQuestionId@(index)" asp-controller="Flow" asp-action="SaveAnswerAndRedirect">Question @(index + 1)</button>
                                                 </li>
                                             }
                                         }
