@@ -1,9 +1,7 @@
 import Swiper from 'swiper';
 
-// Maak een globale variabele voor de Swiper-instantie
 let swiper: Swiper;
 
-// Functie om Swiper-instantie bij te werken
 export function updateSwiper() {
     swiper.update();
 }
@@ -20,7 +18,6 @@ if (nextButton && prevButton) {
     });
 }
 
-// Functie om Swiper-instantie te initialiseren
 function initSwiper() {
     swiper = new Swiper(".swiper", {
         slidesPerView: 1,

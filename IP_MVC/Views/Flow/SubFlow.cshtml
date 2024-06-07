@@ -1,6 +1,7 @@
 @using BL.Domain
 @using IP_MVC
 @using IP_MVC.Helpers
+@using Tensorflow.Operations.Activation
 @model IEnumerable<BL.Domain.Flow>
 
 
@@ -11,9 +12,9 @@
 
 <body class="subFlow-page overflow-hidden">
 <div class="d-flex position-sticky px-3">
-     <div class="border-2 px-3">
-            <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
-        </div>
+    <div class="border-2 px-3">
+        <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
+    </div>
     @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
     {
         <div class="border-2">
@@ -43,25 +44,37 @@
                                 <p class="card-text">@subFlow.Description</p>
                             </div>
                         </div>
-                        <div class="d-flex text-center position-sticky py-2 button-container">
+                        <div class="d-flex justify-content-center px-3">
 
                             @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
                             {
-                                <div class="flex-grow-1 border-2">
+                                <div class="px-3">
                                     <button class="btn bi bi-trash deleteFlowButton btn-white" data-flow-id="@subFlow.Id" href="@Url.Action("Delete", "Flow", new { flowId = subFlow.Id })"></button>
                                 </div>
                             }
                             @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
                             {
-                                <div class="flex-grow-1 border-2">
+                                <div class="px-3">
                                     <a class="btn btn-white py-0 h-100 align-content-center" href="@Url.Action("Edit", "Flow", new { parentFlowId = subFlow.Id })">Edit</a>
                                 </div>
                             }
-                            <div class="flex-grow-1 border-2">
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, flowtype = FlowType.LINEAR, active = @ViewBag.ActiveProject })" class="btn btn-white h-100 align-content-center">Start linear Flow</a>
-                            </div>
-                            <div class="flex-grow-1">
-                                <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, flowtype = FlowType.CIRCULAR, active = @ViewBag.ActiveProject })" class="btn btn-white h-100 align-content-center">Start circular Flow</a>
+                            <div class="px-3">
+                                @if (ViewBag.ActiveProject)
+                                {
+                                    @if (!ViewBag.Circular)
+                                    {
+                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue d-flex justify-content-center">Play Flow</a>
+                                    }
+                                    else if (ViewBag.Circular)
+                                    {
+                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue d-flex justify-content-center">Play Flow</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play linaire Flow</a>
+                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = subFlow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play circulaire Flow</a>
+                                }
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,3 @@
-
 export function fetchFacilitators(searchTerm: string) {
     return fetch(`/api/Projects/ManageFacilitators?searchTerm=${searchTerm}`)
         .then(response => response.json());

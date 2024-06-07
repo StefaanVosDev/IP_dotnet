@@ -28,7 +28,6 @@ namespace IP_MVC.Controllers
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = active;
             ViewBag.Circular = circular ?? false;
-            ViewBag.Linear = !(circular ?? true);
             var flows = await projectManager.GetParentFlowsByProjectIdAsync(projectId);
             if (active)
             {
@@ -49,8 +48,9 @@ namespace IP_MVC.Controllers
             return View(flows);
         }
 
-        public IActionResult SubFlow(int parentFlowId)
+        public IActionResult SubFlow(int parentFlowId, bool? circular)
         {
+            ViewBag.Circular = circular ?? false;
             ViewBag.ProjectId = flowManager.GetFlowById(parentFlowId).ProjectId;
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
@@ -69,7 +69,7 @@ namespace IP_MVC.Controllers
             return RedirectToAction("ProjectDashboard", "Project");
         }
 
-        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active)
+        public async Task<IActionResult> PlayFlow(int parentFlowId, FlowType flowType, bool active )
         {
             unitOfWork.BeginTransaction();
 
@@ -172,8 +172,7 @@ namespace IP_MVC.Controllers
             
             return View("Questions/Questions", viewModel);
         }
-
- 
+        
         public IActionResult EndSubFlow()
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
@@ -310,7 +309,7 @@ namespace IP_MVC.Controllers
                 QuestionType = question.Type
             };
             
-            return View(viewModel);
+            return View("Questions/OpenQuestion", viewModel);
         }
 
         [HttpPost]

@@ -26,19 +26,19 @@ export function setupEditEventListener(){
         })
     });
 
+    createButton.forEach(button => {
+        button.addEventListener('click', async () => {
+            addFlow().then(() => {
+                const nameInput = document.getElementById('NewNameInput') as HTMLInputElement;
+                const descriptionInput = document.getElementById('NewDescriptionInput') as HTMLInputElement;
+                nameInput.value = '';
+                descriptionInput.value = '';
+            });
+        })
+    });
+
     deleteFlow();
 }
-
-createButton.forEach(button => {
-    button.addEventListener('click', async () => {
-        addFlow().then(() => {
-            const nameInput = document.getElementById('NewNameInput') as HTMLInputElement;
-            const descriptionInput = document.getElementById('NewDescriptionInput') as HTMLInputElement;
-            nameInput.value = '';
-            descriptionInput.value = '';
-        });
-    })
-});
 
 async function showUpdatedFlow(id: string, projectCard: HTMLElement) {
     console.log('showFlow', id, projectCard);

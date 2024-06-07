@@ -130,7 +130,6 @@
     <ItemGroup>
       <AdditionalFiles Include="Views\Flow\CompletedOpenQuestion.cshtml" />
       <AdditionalFiles Include="Views\Flow\OpenQuestion.cshtml" />
-      <AdditionalFiles Include="Views\Flow\Questions\CompletedOpenQuestion.cshtml" />
       <AdditionalFiles Include="Views\Question\Edit.cshtml" />
     </ItemGroup>
 
