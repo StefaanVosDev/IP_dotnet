@@ -86,18 +86,14 @@ function setupProjectEventListeners(){
 
 function redirectToFlow(button: HTMLElement, isCircular: boolean) {
     const flowId = button.dataset.flowId;
-    console.log(flowId);
     const circular = isCircular !== null ? isCircular : '';
     window.location.href = `/Flow/ActivateProject?projectId=${flowId}&active=true&circular=${circular}`;
 }
 function showProjectCard(button: Element) {
         const project = button.closest(".flip-card-front")?.querySelector(".show-project");
-        console.log(project);
         if (project) {
             project.classList.remove("d-none")
             project.classList.add("d-block")
-
-            console.log(project);
         }
 
         const warning = button.closest(".flip-card-front")?.querySelector(".show-warning");
