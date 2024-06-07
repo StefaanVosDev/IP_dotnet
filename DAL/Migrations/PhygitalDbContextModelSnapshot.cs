@@ -30,9 +30,6 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AnswerText")
-                        .HasColumnType("text");
-
                     b.Property<string>("AnswerTextPlayer1")
                         .HasColumnType("text");
 

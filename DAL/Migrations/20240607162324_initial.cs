@@ -285,7 +285,8 @@ namespace DAL.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     QuestionId = table.Column<int>(type: "integer", nullable: false),
-                    AnswerText = table.Column<string>(type: "text", nullable: true),
+                    AnswerTextPlayer1 = table.Column<string>(type: "text", nullable: true),
+                    AnswerTextPlayer2 = table.Column<string>(type: "text", nullable: true),
                     SessionId = table.Column<int>(type: "integer", nullable: true),
                     FlowId = table.Column<int>(type: "integer", nullable: true)
                 },
