@@ -4,6 +4,7 @@
 @{
     var earlierAnswer = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
     var question = ViewData["questionType"] as MultipleChoiceQuestion;
+    var playerCount = ViewBag.PlayerCount;
 }
 
 <div class="forms-container" id="formPlayers">
@@ -14,14 +15,19 @@
 
         foreach (var option in question.Options)
         {
-
             bool isSelectedPlayer1 = selectedOptionsPlayer1.Contains(option.Text);
             bool isSelectedPlayer2 = selectedOptionsPlayer2.Contains(option.Text);
-            
-            
+
+
             <div class="form-check m-3 box-container">
-                <input class="form-check-input" type="checkbox" id="checkPlayer1@i" name="AnswerPlayer1" value="@option.Text" @(isSelectedPlayer1 ? "checked" : "")>
-                <input class="form-check-input" type="checkbox" id="checkPlayer2@i" name="AnswerPlayer2" value="@option.Text" @(isSelectedPlayer2 ? "checked" : "")>
+                @if (playerCount >= 1)
+                {
+                    <input class="form-check-input" type="checkbox" id="checkPlayer1@i" name="AnswerPlayer1" value="@option.Text" @(isSelectedPlayer1 ? "checked" : "")>
+                }
+                @if (playerCount == 2)
+                {
+                    <input class="form-check-input" type="checkbox" id="checkPlayer2@i" name="AnswerPlayer2" value="@option.Text" @(isSelectedPlayer2 ? "checked" : "")>
+                }
                 <label class="form-check-label" for="checkPlayer1@i">
                     @option.Text
                 </label>

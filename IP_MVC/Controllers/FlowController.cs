@@ -160,6 +160,8 @@ namespace IP_MVC.Controllers
                 QuestionType = questionType,
                 EarlierAnswer = earlierAnswer
             };
+            var playerCount = HttpContext.Session.GetInt32("playerCount");
+            ViewBag.PlayerCount = playerCount;
             ViewData["earlierAnswer"] = earlierAnswer;
             ViewData["currentIndex"] = currentIndex;
             ViewData["questionCount"] = questionQueue.Count;
@@ -529,6 +531,13 @@ namespace IP_MVC.Controllers
             ViewBag.Preview = true;
 
             return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult SetPlayerCount([FromBody] PlayerCountModel model)
+        {
+            HttpContext.Session.SetInt32("playerCount", model.PlayerCount);
+            return Json(new { success = true });
         }
     }
 }
