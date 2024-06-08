@@ -3,9 +3,13 @@
 @model BL.Domain.Questions.RangeQuestion
 
 @{
-    var initialValuePlayer1 = ViewData["earlierAnswer"] is Answer earlierAnswerPlayer1 ? int.Parse(earlierAnswerPlayer1.AnswerTextPlayer1) : Model.Min;
-    var initialValuePlayer2 = ViewData["earlierAnswer"] is Answer earlierAnswerPlayer2 ? int.Parse(earlierAnswerPlayer2.AnswerTextPlayer2) : Model.Min;
     var question = ViewData["questionType"]  as RangeQuestion ;
+    var playerCount = ViewBag.PlayerCount;
+    var earlierAnswerPlayer1 = ViewData["earlierAnswer"] as Answer;
+    var initialValuePlayer1 = earlierAnswerPlayer1 != null ? int.Parse(earlierAnswerPlayer1.AnswerTextPlayer1) : Model.Min;
+    var earlierAnswerPlayer2 = ViewData["earlierAnswer"] as Answer;
+    var initialValuePlayer2 = earlierAnswerPlayer2 != null && playerCount == 2 ? int.Parse(earlierAnswerPlayer2.AnswerTextPlayer2) : Model.Min;
+
 }
 
 <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">
@@ -15,11 +19,16 @@
     }
 </div>
 <div class="forms-container">
-    <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer1" id="rangeInputPlayer1" style="width: 100%"/>
-    <input type="hidden" id="selectedValuePlayer1" name="AnswerPlayer1" data-min="@question.Min" data-earlier-answer="@initialValuePlayer1" value="@initialValuePlayer1"/>
-
-    <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer2" id="rangeInputPlayer2" style="width: 100%"/>
-    <input type="hidden" id="selectedValuePlayer2" name="AnswerPlayer2" data-min="@question.Min" data-earlier-answer="@initialValuePlayer2" value="@initialValuePlayer2"/>
+    @if (playerCount >= 1)
+    {
+        <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer1" id="rangeInputPlayer1" style="width: 100%"/>
+        <input type="hidden" id="selectedValuePlayer1" name="AnswerPlayer1" data-min="@question.Min" data-earlier-answer="@initialValuePlayer1" value="@initialValuePlayer1"/>
+    }
+    @if (playerCount == 2)
+    {
+        <input type="range" min="@question!.Min" max="@question.Max" value="@initialValuePlayer2" id="rangeInputPlayer2" style="width: 100%"/>
+        <input type="hidden" id="selectedValuePlayer2" name="AnswerPlayer2" data-min="@question.Min" data-earlier-answer="@initialValuePlayer2" value="@initialValuePlayer2"/>
+    }
 </div>
 
 @section Scripts {
