@@ -160,6 +160,8 @@ namespace IP_MVC.Controllers
                 QuestionType = questionType,
                 EarlierAnswer = earlierAnswer
             };
+            var playerCount = HttpContext.Session.GetInt32("playerCount");
+            ViewBag.PlayerCount = playerCount;
             ViewData["earlierAnswer"] = earlierAnswer;
             ViewData["currentIndex"] = currentIndex;
             ViewData["questionCount"] = questionQueue.Count;
@@ -216,7 +218,7 @@ namespace IP_MVC.Controllers
             
             // Join the answer, in case of multiple answers
             var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
-            var answerTextPlayer2 = string.Join("\n", model.AnswerPlayer2);
+            var answerTextPlayer2 = model.AnswerPlayer2 != null ? string.Join("\n", model.AnswerPlayer2) : string.Empty;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
 
@@ -319,7 +321,7 @@ namespace IP_MVC.Controllers
             
             // Join the answer, in case of multiple answers
             var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
-            var answerTextPlayer2 = string.Join("\n", model.AnswerPlayer2);
+            var answerTextPlayer2 = model.AnswerPlayer2 != null ? string.Join("\n", model.AnswerPlayer2) : string.Empty;
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
@@ -529,6 +531,13 @@ namespace IP_MVC.Controllers
             ViewBag.Preview = true;
 
             return View($"~/Views/Flow/Questions/Questions.cshtml", viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult SetPlayerCount([FromBody] PlayerCountModel model)
+        {
+            HttpContext.Session.SetInt32("playerCount", model.PlayerCount);
+            return Json(new { success = true });
         }
     }
 }

@@ -26,7 +26,13 @@
                         <br/>
                         <strong>Player 1's Answer:</strong> @answer?.AnswerTextPlayer1
                         <br/>
-                        <strong>Player 2's Answer:</strong> @answer?.AnswerTextPlayer2
+                        @if (!string.IsNullOrEmpty(answer?.AnswerTextPlayer2))
+                        {
+                            <text>
+                                <strong>Player 2's Answer:</strong> @answer?.AnswerTextPlayer2
+                            </text>
+                            <br/>
+                        }
                     </li>
                     <br/>
                 }
