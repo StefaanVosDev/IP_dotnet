@@ -102,25 +102,5 @@
     <script src="~/dist/createScroll.entry.js" defer></script>
     <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/editFlow.entry.js" defer></script>
-    <script>
-        function updatePlayerCount(playerCount) {
-            console.log('Player count before fetch: ' + playerCount);
-
-            fetch('@Url.Action("SetPlayerCount", "Flow")', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ playerCount: playerCount })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Response data: ', data);
-                    console.log('Player count set to ' + playerCount);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
+    <script src="~/dist/playerCountUpdater.entry.js"></script>
 }

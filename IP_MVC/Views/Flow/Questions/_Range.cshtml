@@ -3,10 +3,13 @@
 @model BL.Domain.Questions.RangeQuestion
 
 @{
-    var initialValuePlayer1 = ViewData["earlierAnswer"] is Answer earlierAnswerPlayer1 ? int.Parse(earlierAnswerPlayer1.AnswerTextPlayer1) : Model.Min;
-    var initialValuePlayer2 = ViewData["earlierAnswer"] is Answer earlierAnswerPlayer2 ? int.Parse(earlierAnswerPlayer2.AnswerTextPlayer2) : Model.Min;
     var question = ViewData["questionType"]  as RangeQuestion ;
     var playerCount = ViewBag.PlayerCount;
+    var earlierAnswerPlayer1 = ViewData["earlierAnswer"] as Answer;
+    var initialValuePlayer1 = earlierAnswerPlayer1 != null ? int.Parse(earlierAnswerPlayer1.AnswerTextPlayer1) : Model.Min;
+    var earlierAnswerPlayer2 = ViewData["earlierAnswer"] as Answer;
+    var initialValuePlayer2 = earlierAnswerPlayer2 != null && playerCount == 2 ? int.Parse(earlierAnswerPlayer2.AnswerTextPlayer2) : Model.Min;
+
 }
 
 <div class="slider-values" id="slider" style="display: flex; justify-content: space-between; padding-bottom: 10px;">

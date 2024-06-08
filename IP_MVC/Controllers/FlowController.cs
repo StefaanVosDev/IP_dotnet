@@ -218,7 +218,7 @@ namespace IP_MVC.Controllers
             
             // Join the answer, in case of multiple answers
             var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
-            var answerTextPlayer2 = string.Join("\n", model.AnswerPlayer2);
+            var answerTextPlayer2 = model.AnswerPlayer2 != null ? string.Join("\n", model.AnswerPlayer2) : string.Empty;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
 
@@ -321,7 +321,7 @@ namespace IP_MVC.Controllers
             
             // Join the answer, in case of multiple answers
             var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
-            var answerTextPlayer2 = string.Join("\n", model.AnswerPlayer2);
+            var answerTextPlayer2 = model.AnswerPlayer2 != null ? string.Join("\n", model.AnswerPlayer2) : string.Empty;
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);

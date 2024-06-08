@@ -11,7 +11,7 @@
     @if (question?.Options != null)
     {
         var selectedOptionsPlayer1 = earlierAnswer != null ? earlierAnswer.AnswerTextPlayer1.Split('\n') : Array.Empty<string>();
-        var selectedOptionsPlayer2 = earlierAnswer != null ? earlierAnswer.AnswerTextPlayer2.Split('\n') : Array.Empty<string>();
+        var selectedOptionsPlayer2 = earlierAnswer != null && playerCount == 2 ? earlierAnswer.AnswerTextPlayer2.Split('\n') : Array.Empty<string>();
 
         foreach (var option in question.Options)
         {
