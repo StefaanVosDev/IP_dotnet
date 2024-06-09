@@ -15,3 +15,11 @@ buttons.forEach(button => {
         }
     });
 });
+document.getElementById('nextQuestionButton')?.addEventListener('click', function() {     
+    const boolNextButton = document.getElementById('NextOrPreviousButtonClicked') as HTMLInputElement;
+    boolNextButton.value = 'true';
+});
+document.getElementById('prevQuestionButton')?.addEventListener('click', function() {
+    const boolNextButton = document.getElementById('NextOrPreviousButtonClicked') as HTMLInputElement;
+    boolNextButton.value = 'true';
+});
