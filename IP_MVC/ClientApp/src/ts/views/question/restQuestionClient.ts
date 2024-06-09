@@ -1,4 +1,4 @@
-import {showQuestion} from "./createQuestionPresenter";
+// import {showQuestion} from "./createQuestionPresenter";
 import {Question} from "../../models/Questions.interfaces";
 
 export async function getOptions(questionId: string) {
@@ -110,25 +110,30 @@ export async function reOrderQuestions(questionId: string, position: number) {
 }
 
 export async function createQuestion(text: string, type: string, flowId: string) {
-    const response = await fetch('/api/Questions/Create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            Text: text,
-            Type: type,
-            FlowId: flowId
-        }),
-    }).then(response => response.json())
-        .then(data => {
-            const question: Question = {
-                id: data.id,
-                text: data.text,
-                type: data.type
-            };
-            showQuestion(question);
-        }) .catch(reason => alert("Error creating Question:" + reason));
+    try {
+        const response = await fetch('/api/Questions/Create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Text: text,
+                Type: type,
+                FlowId: flowId
+            }),
+        });
+        const data = await response.json();
+        const question: Question = {
+            id: data.id,
+            text: data.text,
+            type: data.type
+        };
+        return question;
+    } catch(reason)
+    {
+        alert("Error creating Question:" + reason);
+        return null
+    }
 }
 
 export async function getQuestionsByFlowIdAfterPosition(flowId: string, position: string) {
