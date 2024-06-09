@@ -28,7 +28,10 @@ async function addQuestion() {
     const typeInput = document.getElementById('newQuestionType') as HTMLSelectElement;
     const flowIdInput = document.getElementById('flowIdInput') as HTMLInputElement;
     try {
-        await client.createQuestion(textInput.value, typeInput.value, flowIdInput.value);
+        const question = await client.createQuestion(textInput.value, typeInput.value, flowIdInput.value);
+        if (question!=null) {
+            showQuestion(question);
+        }
     } catch (error) {
         console.error('Error creating flow:', error);
         alert('There was an issue creating the flow. Please try again.');
