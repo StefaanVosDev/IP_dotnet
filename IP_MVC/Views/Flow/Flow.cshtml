@@ -42,21 +42,29 @@
                                             </div>
 
                                             <div>
-                                                @if (ViewBag.ContainsQuestions[flow.Id] && !ViewBag.IsParentFlow[flow.Id] && ViewBag.ActiveProject)
-                                                {
-                                                    @if (!ViewBag.Circular)
+                                                @if (ViewBag.ContainsQuestions[flow.Id] && !ViewBag.IsParentFlow[flow.Id]) {
+                                                    //add a toggle for player amount
+                                                    <div class="form-check form-switch d-flex align-items-center">
+                                                        <span class="form-check-label">1P</span>
+                                                        <input class="form-check-input mx-2 classPlayerToggle" type="checkbox" id="playerToggle">
+                                                        <span class="form-check-label">2P</span>
+                                                    </div>
+                                                    if (ViewBag.ActiveProject)
                                                     {
-                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Flow</a>
+                                                        @if (!ViewBag.Circular)
+                                                        {
+                                                            <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Flow</a>
+                                                        }
+                                                        else if (ViewBag.Circular)
+                                                        {
+                                                            <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Flow</a>
+                                                        }
                                                     }
-                                                    else if (ViewBag.Circular)
+                                                    else if (!ViewBag.ActiveProject)
                                                     {
-                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR})" class="btn btn-blue">Play Flow</a>
+                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Linear</a>
+                                                        <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Circular</a>
                                                     }
-                                                }
-                                                else if (ViewBag.ContainsQuestions[flow.Id] && !ViewBag.IsParentFlow[flow.Id] && !ViewBag.ActiveProject)
-                                                {
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.LINEAR })" class="btn btn-blue">Play Linear</a>
-                                                    <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Circular</a>
                                                 }
                                                 else
                                                 {
@@ -155,4 +163,5 @@
 {
     <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/editFlow.entry.js" defer></script>
+    <script src="~/dist/playerCountUpdater.entry.js"></script>
 }
