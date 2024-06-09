@@ -2,9 +2,9 @@ import * as client from "./restFlowClient"
 import {Flow} from "../../models/Flows.interfaces";
 import {updateSwiper} from "./createScroll";
 
-const createButton = document.querySelectorAll('#createButton');
+const createButton = document.querySelectorAll('#createFLowButton');
 
-export function setupEditEventListener(){
+export function setupEditEventListener() {
     const editButtons = document.querySelectorAll('.edit-flow-btn');
     const backButton = document.querySelectorAll('.btn-back');
 
@@ -59,7 +59,7 @@ async function changeFlow(flowCard: HTMLElement) {
     const nameInput = flowCard.querySelector('#nameInput') as HTMLInputElement;
     const descriptionInput = flowCard.querySelector('#descriptionInput') as HTMLInputElement;
     const flowIdInput = flowCard.querySelector('#flowId') as HTMLInputElement;
-    
+
     console.log(nameInput.value, descriptionInput.value, flowIdInput.value);
     try {
         await client.updateFlow(nameInput.value, descriptionInput.value, flowIdInput.value);
@@ -83,6 +83,16 @@ async function addFlow() {
     const endDateInput = document.getElementById('NewEndDateInput') as HTMLInputElement;
     const projectIdInput = document.getElementById('projectIdInput') as HTMLInputElement;
     const parentFlowIdInput = document.getElementById('parentFlowIdInput') as HTMLInputElement;
+
+    if (!nameInput.value || !startDateInput.value || !endDateInput.value) {
+        alert('Please fill in all required fields name, start date, end date.');
+        return;
+    }
+    
+    if (startDateInput.value > endDateInput.value) {
+        alert('Start date cannot be after end date.');
+        return;
+    }
     
     const flow: Flow = {
         NewName: nameInput.value,
@@ -93,10 +103,10 @@ async function addFlow() {
         NewParentFlowId: parentFlowIdInput.value ? parseInt(parentFlowIdInput.value) : null,
         IsParentFlow: !parentFlowIdInput.value
     };
-    
+
     try {
         await client.createFlow(flow);
-        console.log('Flow created:', flow);
+        closePopup();
     } catch (error) {
         console.error('Error creating flow:', error);
         alert('There was an issue creating the flow. Please try again.');
@@ -205,7 +215,7 @@ export function appendSubFlowToPage(flow: Flow, subFlowId: number) {
 
     let deleteButtonHtml = '';
     let editButtonHtml = '';
-    
+
     if (isAdminRole && isAdminRole.value === "True" && isActiveProject && isActiveProject.value === "False") {
         deleteButtonHtml = `<button class="btn btn-white bi bi-trash deleteFlowButton create-btn" data-flow-id="${subFlowId}" href="/Flow/Delete?flowId=${subFlowId}"></button>`;
         editButtonHtml = ` <a class="btn btn-white py-0" href="/Flow/Edit/${subFlowId}" class="btn btn-primary">Edit Questions</a>
@@ -216,8 +226,8 @@ export function appendSubFlowToPage(flow: Flow, subFlowId: number) {
     const flowActionsHtml = `
         <a class="btn btn-white">Start Flow</a>
     `;
-    
-    flowDataElement.innerHTML +=`
+
+    flowDataElement.innerHTML += `
         <div class="swiper-slide">
             <div class="slide-card">
                 <img src="${imageUrl}" class="card-img-top w-100 vh-100 z-1 position-relative" alt="Afbeelding_van_flow">
@@ -237,14 +247,14 @@ export function appendSubFlowToPage(flow: Flow, subFlowId: number) {
             </div>
         </div>
     `;
-    
+
     updateSwiper();
 }
 
 async function deleteFlow() {
     const deleteButtonsForFlow = document.getElementsByClassName('deleteFlowButton') as HTMLCollectionOf<HTMLButtonElement>
     if (deleteButtonsForFlow === null) return;
-    for (let i=0; i < deleteButtonsForFlow.length; i++) {
+    for (let i = 0; i < deleteButtonsForFlow.length; i++) {
         deleteButtonsForFlow[i].addEventListener('click', async (event) => {
             event.preventDefault();
             const flowId = deleteButtonsForFlow[i].getAttribute('data-flow-id') as string;
@@ -260,6 +270,13 @@ async function deleteFlow() {
                 }
             }
         });
+    }
+}
+
+function closePopup() {
+    const popupOverlay = document.getElementById('popupOverlay');
+    if (popupOverlay != null) {
+        popupOverlay.style.display = 'none';
     }
 }
 

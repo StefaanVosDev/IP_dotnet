@@ -75,13 +75,15 @@
     font-family: Arial, sans-serif;
     position: absolute;
     overflow-y: scroll;
+    display: flex;
+    justify-content: center;
     top: 40%;
     height: 60vh;
     width: 59%;
     left: 50%;
     border: 1px solid #000;
     transform: translate(-50%, -50%);
-    background: $light-blue;
+    background: #d0ebfc;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -103,7 +105,6 @@
     .form-control {
       padding: 10px;
       margin: 10px 0;
-      height: 10vh;
       border: 1px solid #ddd;
       border-radius: 4px;
     }
