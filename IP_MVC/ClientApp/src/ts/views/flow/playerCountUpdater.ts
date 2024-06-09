@@ -1,29 +1,30 @@
 window.onload = function() {
-    // Get the current state of the player count
-    let playerCount = (document.getElementById('playerToggle') as HTMLInputElement).checked ? 2 : 1;
+    let playerToggles = (document.getElementsByClassName('classPlayerToggle'));
 
-    // Call the updatePlayerCount function with the current state
-    updatePlayerCount(playerCount);
+    for (let i = 0; i < playerToggles.length; i++) {
+        let playerToggle = playerToggles[i] as HTMLInputElement;
+        
+        playerToggle.addEventListener('click', function(event) {
+            let target = event.target as HTMLInputElement;
+            // let playerCount = (playerToggles[i] as HTMLInputElement).checked ? 2 : 1;
+            let playerCount = target.checked ? 2 : 1;
+            updatePlayerCount(playerCount);
+        });
+        
+        updatePlayerCount(1);
+    }
 };
 
 function updatePlayerCount(playerCount: number) {
     console.log('Player count before fetch: ' + playerCount);
-
-    // Replace 'url' with the actual URL or a variable that contains the URL
-    let url = 'url';
-
-    fetch(url, {
+    
+    fetch('/api/Flows/SetPlayerCount', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ playerCount: playerCount })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Response data: ', data);
-            console.log('Player count set to ' + playerCount);
-        })
         .catch((error) => {
             console.error('Error:', error);
         });
