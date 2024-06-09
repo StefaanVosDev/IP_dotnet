@@ -253,47 +253,57 @@ namespace IP_MVC.Controllers
             
             
             // Look for the options in the database
-            var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
-
-            var matchingAnswerPlayer1 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer1);
-            var matchingAnswerPlayer2 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer2);
-
-            int? redirectedQuestionIdPlayer1 = null;
-            int? redirectedQuestionIdPlayer2 = null;
-
-            if (matchingAnswerPlayer1 != null)
+            var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id)?.ToList();
+            if (allOptions != null && allOptions.Any())
             {
-                redirectedQuestionIdPlayer1 = matchingAnswerPlayer1.NextQuestionId ?? 0;
-                if (redirectedQuestionIdPlayer1 == -1)
-                {
-                    return RedirectToAction("EndSubFlow");
-                }
-                var questionPlayer1 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer1.Value);
+                var matchingAnswerPlayer1 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer1);
+                var matchingAnswerPlayer2 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer2);
 
-                if (questionPlayer1 != null && questionPlayer1.FlowId == flowId)
+                int? redirectedQuestionIdPlayer1 = null;
+                int? redirectedQuestionIdPlayer2 = null;
+
+                if (matchingAnswerPlayer1 != null)
                 {
-                    redirectedQuestionIdPlayer1 = questionPlayer1.Position - 1;
+                    redirectedQuestionIdPlayer1 = matchingAnswerPlayer1.NextQuestionId ?? 0;
+                    if (redirectedQuestionIdPlayer1 == -1)
+                    {
+                        return RedirectToAction("EndSubFlow");
+                    }
+
+                    if (redirectedQuestionIdPlayer1 != 0)
+                    {
+                        var questionPlayer1 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer1.Value);
+
+                        if (questionPlayer1 != null && questionPlayer1.FlowId == flowId)
+                        {
+                            redirectedQuestionIdPlayer1 = questionPlayer1.Position - 1;
+                        }
+                    }
                 }
+
+                if (matchingAnswerPlayer2 != null)
+                {
+                    redirectedQuestionIdPlayer2 = matchingAnswerPlayer2.NextQuestionId ?? 0;
+                    if (redirectedQuestionIdPlayer2 == -1)
+                    {
+                        return RedirectToAction("EndSubFlow");
+                    }
+
+                    if (redirectedQuestionIdPlayer2 != 0)
+                    {
+                        var questionPlayer2 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer2.Value);
+
+                        if (questionPlayer2 != null && questionPlayer2.FlowId == flowId)
+                        {
+                            redirectedQuestionIdPlayer2 = questionPlayer2.Position - 1;
+                        }
+                    }
+                }
+
+                redirectedQuestionId = redirectedQuestionIdPlayer1 ?? redirectedQuestionIdPlayer2 ?? 0;
             }
 
-            if (matchingAnswerPlayer2 != null)
-            {
-                redirectedQuestionIdPlayer2 = matchingAnswerPlayer2.NextQuestionId ?? 0;
-                if (redirectedQuestionIdPlayer2 == -1)
-                {
-                    return RedirectToAction("EndSubFlow");
-                }
-                var questionPlayer2 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer2.Value);
-
-                if (questionPlayer2 != null && questionPlayer2.FlowId == flowId)
-                {
-                    redirectedQuestionIdPlayer2 = questionPlayer2.Position - 1;
-                }
-            }
-            
-            redirectedQuestionId = redirectedQuestionIdPlayer1 ?? redirectedQuestionIdPlayer2 ?? 0;
-
-        return RedirectToAction("Question",
+            return RedirectToAction("Question",
     new { id = sessionId, redirectedQuestionId, showQr = true});
         }
 
