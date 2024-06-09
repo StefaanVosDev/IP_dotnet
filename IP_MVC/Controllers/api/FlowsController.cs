@@ -1,6 +1,7 @@
 using BL.Domain;
 using BL.Implementations;
 using BL.Interfaces;
+using IP_MVC.Models;
 using IP_MVC.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -87,5 +88,12 @@ public class FlowsController : ControllerBase
     {
         var subFlows = _flowManager.GetFlowsByParentId(flowId);
         return Ok(subFlows);
+    }
+    
+    [HttpPost("SetPlayerCount")]
+    public async Task<IActionResult> SetPlayerCount([FromBody] PlayerCountModel model)
+    {
+        HttpContext.Session.SetInt32("playerCount", model.PlayerCount);
+        return await Task.FromResult<IActionResult>(Ok());
     }
 }
