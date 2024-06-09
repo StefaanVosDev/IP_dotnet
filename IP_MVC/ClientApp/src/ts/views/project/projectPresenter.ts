@@ -66,7 +66,7 @@ function setupProjectEventListeners(){
 
     createProjectButton.addEventListener('click', async (event) => {
         event.preventDefault();
-        const nameInput = document.querySelector("textarea[name='Name']") as HTMLTextAreaElement;
+        const nameInput = document.querySelector("input[name='Name']") as HTMLTextAreaElement;
         const descriptionInput = document.querySelector("textarea[name='Description']") as HTMLTextAreaElement;
 
         const name = nameInput.value;
