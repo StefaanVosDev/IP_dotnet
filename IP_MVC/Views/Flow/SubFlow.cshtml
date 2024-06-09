@@ -11,18 +11,17 @@
 }
 
 <body class="subFlow-page overflow-hidden">
-<div class="d-flex position-sticky px-3">
-    <div class="border-2 px-3">
-        <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100 d-flex align-items-center"></a>
-    </div>
+<div class="border-2 px-3 d-flex align-items-center">
+    <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1"></a>
+    
     @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject)
     {
-        <div class="border-2">
-            <button class="btn btn-blue" id="popupButton">Create New SubFlow</button>
-            @await Html.PartialAsync("_CreateFlow", new BL.Domain.Flow())
-        </div>
+        <button class="btn btn-blue ml-2" id="popupButton">Create New SubFlow</button>
+        @await Html.PartialAsync("_CreateFlow", new BL.Domain.Flow())
     }
 </div>
+
+
 
 <div class="swiper">
     <div class="swiper-wrapper" id="swiper-element">
@@ -36,7 +35,7 @@
                         var imageUrl = $"https://storage.googleapis.com/phygital-public/Flows/flow_page_hands_{randomIndex}.png";
                     }
 
-                    <img src="@imageUrl" class=" card-img-top w-100 vh-100 z-1 position-relative" alt="Afbeelding_van_flow">
+                    <img src="@imageUrl" class=" card-img-top w-100 vh-100 position-relative z-1" alt="Afbeelding_van_flow">
                     <div class="card border-1 border-black h-50 position-absolute card-clickable">
                         <div class="align-items-center h-100 overflow-y-scroll">
                             <div class="card-body ">
@@ -53,7 +52,7 @@
                                     <label class="form-check-label" for="playerToggle">2P</label>
                                 </div>
                             </form>
-                            
+
                             @if (User.IsInRole(CustomIdentityConstants.AdminRole) || User.IsInRole(CustomIdentityConstants.PlatformAdminRole) && !@ViewBag.ActiveProject)
                             {
                                 <div class="px-3">
