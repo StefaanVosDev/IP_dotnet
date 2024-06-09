@@ -2,8 +2,15 @@
 @model BL.Domain.Questions.SingleChoiceQuestion
 
 @{
-    var earlierAnswerPlayer1 = ViewData["earlierAnswerPlayer1"] as BL.Domain.Answers.Answer;
-    var earlierAnswerPlayer2 = ViewData["earlierAnswerPlayer2"] as BL.Domain.Answers.Answer;
+    var earlierAnswers = ViewData["earlierAnswer"] as BL.Domain.Answers.Answer;
+    var earlierAnswerPlayer1 = "";
+    var earlierAnswerPlayer2 = "";
+    if (earlierAnswers != null)
+    {
+        earlierAnswerPlayer1 = earlierAnswers.AnswerTextPlayer1;
+        earlierAnswerPlayer2 = earlierAnswers.AnswerTextPlayer2;
+    }
+    
     var question = ViewData["questionType"] as SingleChoiceQuestion;
     var playerCount = ViewBag.PlayerCount;
 }
@@ -13,8 +20,8 @@
         @for (var i = 0; i < question.Options.Count; i++)
         {
             var option = question.Options.ElementAt(i);
-            bool isSelectedPlayer1 = earlierAnswerPlayer1 != null && earlierAnswerPlayer1.AnswerTextPlayer1 == option.Text;
-            bool isSelectedPlayer2 = earlierAnswerPlayer2 != null && earlierAnswerPlayer2.AnswerTextPlayer2 == option.Text;
+            bool isSelectedPlayer1 = earlierAnswerPlayer1 != null && earlierAnswerPlayer1 == option.Text;
+            bool isSelectedPlayer2 = earlierAnswerPlayer2 != null && earlierAnswerPlayer2 == option.Text;
             <div class="form-check m-3 box-container">
                 @if (playerCount >= 1)
                 {
