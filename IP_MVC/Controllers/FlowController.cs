@@ -217,7 +217,7 @@ namespace IP_MVC.Controllers
             }
             
             // Join the answer, in case of multiple answers
-            var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
+            var answerTextPlayer1 = model.AnswerPlayer1 != null ? string.Join("\n", model.AnswerPlayer1): string.Empty;
             var answerTextPlayer2 = model.AnswerPlayer2 != null ? string.Join("\n", model.AnswerPlayer2) : string.Empty;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
@@ -244,11 +244,7 @@ namespace IP_MVC.Controllers
                 var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId);
                 sessionManager.UpdateAnswer(oldAnswer, newAnswer);
             }
-
-            // Store the answers for both players in the session
-            HttpContext.Session.Set("player1Answer", model.AnswerPlayer1);
-            HttpContext.Session.Set("player2Answer", model.AnswerPlayer2);
-
+            
             unitOfWork.Commit();
             
             
@@ -276,7 +272,7 @@ namespace IP_MVC.Controllers
 
                         if (questionPlayer1 != null && questionPlayer1.FlowId == flowId)
                         {
-                            redirectedQuestionIdPlayer1 = questionPlayer1.Position - 1;
+                            redirectedQuestionIdPlayer1 = questionPlayer1.Position;
                         }
                     }
                 }
@@ -295,12 +291,45 @@ namespace IP_MVC.Controllers
 
                         if (questionPlayer2 != null && questionPlayer2.FlowId == flowId)
                         {
-                            redirectedQuestionIdPlayer2 = questionPlayer2.Position - 1;
+                            redirectedQuestionIdPlayer2 = questionPlayer2.Position;
                         }
                     }
                 }
 
-                redirectedQuestionId = redirectedQuestionIdPlayer1 ?? redirectedQuestionIdPlayer2 ?? 0;
+                if (redirectedQuestionIdPlayer1 != null || redirectedQuestionIdPlayer2 != null)
+                {
+                    redirectedQuestionId = redirectedQuestionIdPlayer1 ?? redirectedQuestionIdPlayer2 ?? redirectedQuestionId;
+
+                    //Remove questions in the queue that are skipped
+                    if (model.NextOrPreviousButtonClicked)
+                    {
+                        var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
+                        var flowQueue = queues[flowId];
+                        var currentQuestionId = model.QuestionId;
+
+                        var list = flowQueue.ToList();
+
+                        var currentIndex = list.IndexOf(currentQuestionId);
+
+
+                        for (int i = currentIndex + 1; i < redirectedQuestionId - 1; i++)
+                        {
+                            list.RemoveAt(currentIndex + 1);
+                        }
+
+                        flowQueue.Clear();
+
+                        foreach (var item in list)
+                        {
+                            flowQueue.Enqueue(item);
+                        }
+
+                        redirectedQuestionId = redirectedQuestionId - currentIndex - 2;
+
+                        queues[flowId] = flowQueue;
+                        HttpContext.Session.Set("queues", queues);
+                    }
+                }
             }
 
             return RedirectToAction("Question",
