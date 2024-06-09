@@ -29,7 +29,7 @@
                     <ul class="navbar-nav list-unstyled text-decoration-none flex-grow-1 h-100 py-0">
                         @if (User.Identity != null && User.Identity.IsAuthenticated && dashboard)
                         {
-                            <ul class="navbar nav-pills h-100 d-flex" id="pills-tab" role="tablist">
+                            <ul class="navbar nav-pills h-100 d-flex list-unstyled" id="pills-tab" role="tablist">
                                 <li class="nav-item h-100" role="presentation">
                                     <button class="btn btn-blue h-100 active d-flex justify-content-center" id="pills-My-projects-tab" data-bs-toggle="pill" data-bs-target="#pills-My-projects" type="button" role="tab" aria-controls="pills-My-projects" aria-selected="true">My projects</button>
                                 </li>
