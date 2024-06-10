@@ -15,7 +15,7 @@
                 </div>
 
                 <input type="hidden" asp-for="QuestionId" id="questionId" value="@ViewBag.QuestionId"/>
-                <button type="submit" class="btn btn-blue" id="closeNote">Add note</button>
+                <button type="submit" class="btn btn-blue" id="createButton">Add note</button>
             </form>
         </div>
     </div>
@@ -23,6 +23,5 @@
 
 @section Scripts
 {
-    <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/goingToNextQuestionCircularFlow.entry.js" defer></script>
 }

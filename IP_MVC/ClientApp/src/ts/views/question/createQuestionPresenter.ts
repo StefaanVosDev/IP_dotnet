@@ -4,21 +4,35 @@ import {Question} from "../../models/Questions.interfaces";
 const createQuestionButton = document.getElementById('createButton')!;
 const saveAndRedirectButton = document.getElementById('saveAndRedirectButton')!;
 
-export function setupEditEventListener(){
-        createQuestionButton.addEventListener('click', async () => {
-            addQuestion().then(() => {
-                const textInput = document.getElementById('newQuestionText') as HTMLInputElement;
-                const typeInput = document.getElementById('newQuestionType') as HTMLInputElement;
-                textInput.value = '';
-                typeInput.value = '';
-            });
+export function setupEditEventListener() {
+    createQuestionButton.addEventListener('click', async () => {
+        addQuestion().then(() => {
+            const textInput = document.getElementById('newQuestionText') as HTMLInputElement;
+            const typeInput = document.getElementById('newQuestionType') as HTMLInputElement;
+            textInput.value = '';
+            typeInput.value = '';
+        });
     });
 
     saveAndRedirectButton.addEventListener('click', async () => {
-            const form = document.getElementById('flowEditForm') as HTMLFormElement;
-            if (form) {
-                form.submit();
-            }
+        const form = document.getElementById('flowEditForm') as HTMLFormElement;
+        const endDate = document.getElementById('NewEndDate') as HTMLInputElement;
+        const startDate = document.getElementById('NewStartDate') as HTMLInputElement;
+        const name = document.getElementById('NewName') as HTMLInputElement;
+
+        if (!endDate.value || !startDate.value || !name.value) {
+            alert('Please fill in all required fields name, start date, end date.');
+            return;
+        }
+
+        if (startDate.value > endDate.value) {
+            alert('Start date cannot be after end date.');
+            return;
+        }
+        
+        if (form) {
+            form.submit();
+        }
     });
     deleteQuestion();
 }
@@ -29,7 +43,7 @@ async function addQuestion() {
     const flowIdInput = document.getElementById('flowIdInput') as HTMLInputElement;
     try {
         const question = await client.createQuestion(textInput.value, typeInput.value, flowIdInput.value);
-        if (question!=null) {
+        if (question != null) {
             showQuestion(question);
         }
     } catch (error) {
