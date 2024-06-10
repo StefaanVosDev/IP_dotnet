@@ -1,56 +1,67 @@
-let countdown: number = 10;
+import { showPopup } from "../../showPopUp";
+
+let countdown: number = 30;
 let isPaused: boolean = false;
 const countdownElement: HTMLElement | null = document.getElementById('countdown');
-const pauseButton : HTMLElement | null = document.getElementById('pauseButton');
-const popupOverlay : HTMLElement | null = document.getElementById('pauseScreen');
-const closeNoteButton : HTMLElement | null = document.getElementById('closeNote');
-const submitNoteButton : HTMLElement | null = document.getElementById('submitNote');
+const popupButton: HTMLElement | null = document.getElementById('popupButton');
+const closeNoteButton: HTMLElement | null = document.getElementById('closeNote');
+const closePopupButton: HTMLElement | null = document.getElementById('closePopup');
+
+let timeoutId: number | null = null;
 
 function updateCountdown(): void {
     if (countdownElement) {
         countdownElement.innerText = countdown.toString();
-        if (!isPaused)
+        if (!isPaused) {
             countdown--;
-        if (countdown < 0) {
-            const myForm: HTMLFormElement | null = document.getElementById('myForm') as HTMLFormElement;
-            if (myForm) {
-                myForm.setAttribute('action', '/Flow/SaveAnswerAndRedirect');
-                const redirectedQuestionIdInput = document.getElementById("redirectedQuestionId") as HTMLInputElement;
-                if (redirectedQuestionIdInput) {
-                    redirectedQuestionIdInput.value = (parseInt(redirectedQuestionIdInput.value) + 1).toString();
+
+            if (countdown < 0) {
+                const myForm: HTMLFormElement | null = document.getElementById('myForm') as HTMLFormElement;
+                if (myForm) {
+                    myForm.setAttribute('action', '/Flow/SaveAnswerAndRedirect');
+                    const redirectedQuestionIdInput = document.getElementById("redirectedQuestionId") as HTMLInputElement;
+                    if (redirectedQuestionIdInput) {
+                        redirectedQuestionIdInput.value = (parseInt(redirectedQuestionIdInput.value) + 1).toString();
+                    }
+                    myForm.submit();
                 }
-                myForm.submit();
+            } else {
+                timeoutId = window.setTimeout(updateCountdown, 1000);
             }
-        } else {
-            setTimeout(updateCountdown, 1000);
         }
     }
 }
 
-function openPopup(): void {
-    if (popupOverlay) {
-        popupOverlay.style.display = 'block';
-        isPaused = true;
+function pauseCountdown(): void {
+    isPaused = true;
+    if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
     }
 }
 
-function closePopup(): void {
-    if (popupOverlay) {
-        popupOverlay.style.display = 'none';
-        isPaused = false;
+function resumeCountdown(): void {
+    isPaused = false;
+    if (timeoutId === null) {
+        updateCountdown();
     }
 }
 
-if (pauseButton) {
-    pauseButton.addEventListener("click", openPopup);
+if (popupButton) {
+    showPopup(true);
+    popupButton.addEventListener('click', pauseCountdown);
 }
 
 if (closeNoteButton) {
-    closeNoteButton.addEventListener("click", closePopup);
+    closeNoteButton.addEventListener('click', function (event) {
+        showPopup(false);
+        resumeCountdown();
+    });
 }
 
-if (submitNoteButton) {
-    submitNoteButton.addEventListener("click", closePopup);
+if (closePopupButton) {
+    closePopupButton.addEventListener('click', resumeCountdown);
 }
 
+// Start the initial countdown
 updateCountdown();
