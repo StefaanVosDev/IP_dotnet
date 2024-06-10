@@ -1,15 +1,14 @@
-import { showPopup } from "../../showPopUp";
-
 let countdown: number = 30;
 let isPaused: boolean = false;
 const countdownElement: HTMLElement | null = document.getElementById('countdown');
 const popupButton: HTMLElement | null = document.getElementById('popupButton');
-const closeNoteButton: HTMLElement | null = document.getElementById('closeNote');
 const closePopupButton: HTMLElement | null = document.getElementById('closePopup');
+const popupOverlay = document.getElementById('popupOverlay')!;
+const submitButton = document.getElementById('createButton')!;
 
 let timeoutId: number | null = null;
 
-function updateCountdown(): void {
+export function updateCountdown(): void {
     if (countdownElement) {
         countdownElement.innerText = countdown.toString();
         if (!isPaused) {
@@ -32,6 +31,30 @@ function updateCountdown(): void {
     }
 }
 
+export function showPopup(open: boolean) {
+    if (open) {
+        popupOverlay.style.display = 'block';
+        pauseCountdown();
+    } else {
+        popupOverlay.style.display = 'none';
+        resumeCountdown();
+    }
+}
+
+submitButton.addEventListener('click', () => {
+    showPopup(false);
+    // Ensure that the timer is not running before restarting it
+    if (timeoutId === null) {
+        updateCountdown();
+    }
+});
+
+popupOverlay.addEventListener('click', function (event) {
+    if (event.target === popupOverlay) {
+        showPopup(false);
+    }
+});
+
 function pauseCountdown(): void {
     isPaused = true;
     if (timeoutId !== null) {
@@ -48,20 +71,15 @@ function resumeCountdown(): void {
 }
 
 if (popupButton) {
-    showPopup(true);
-    popupButton.addEventListener('click', pauseCountdown);
-}
-
-if (closeNoteButton) {
-    closeNoteButton.addEventListener('click', function (event) {
-        showPopup(false);
-        resumeCountdown();
+    popupButton.addEventListener('click', () => {
+        showPopup(true);
     });
 }
 
 if (closePopupButton) {
-    closePopupButton.addEventListener('click', resumeCountdown);
+    closePopupButton.addEventListener('click', () => {
+        showPopup(false);
+    });
 }
 
-// Start the initial countdown
 updateCountdown();
