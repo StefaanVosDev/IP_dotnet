@@ -51,7 +51,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.Flow", b =>
@@ -97,7 +97,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Flows");
+                    b.ToTable("Flows", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.Media", b =>
@@ -119,7 +119,7 @@ namespace DAL.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Media");
+                    b.ToTable("Media", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.Note", b =>
@@ -144,7 +144,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notes");
+                    b.ToTable("Notes", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.Project", b =>
@@ -166,7 +166,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.ProjectFacilitator", b =>
@@ -189,7 +189,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectFacilitators");
+                    b.ToTable("ProjectFacilitators", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.Questions.Option", b =>
@@ -213,7 +213,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Options");
+                    b.ToTable("Options", (string)null);
                 });
 
             modelBuilder.Entity("BL.Domain.Questions.Question", b =>
@@ -249,7 +249,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("Mediaid");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Question");
 
@@ -269,7 +269,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sessions");
+                    b.ToTable("Sessions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
