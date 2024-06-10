@@ -222,10 +222,12 @@ namespace IP_MVC.Controllers
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
             var flow = flowManager.GetFlowById(flowId);
 
+            var currentQuestionId = model.QuestionId;
+            
             // If no answers are given yet, save the answer
             var newAnswer = new Answer
             {
-                QuestionId = model.QuestionId,
+                QuestionId = currentQuestionId,
                 AnswerTextPlayer1 = answerTextPlayer1,
                 AnswerTextPlayer2 = answerTextPlayer2,
                 Session = sessionManager.GetSessionById(sessionId),
@@ -234,14 +236,14 @@ namespace IP_MVC.Controllers
             unitOfWork.BeginTransaction();
 
             // If there is no answer given to this question yet, add the answer to the session
-            if (sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId) == null)
+            if (sessionManager.GetAnswerByQuestionId(sessionId, currentQuestionId) == null)
             {
                 sessionManager.AddAnswerToSession(sessionId, newAnswer, flowType);
             }
             else
             {
                 // If an answer is already given, search the old answer and update it
-                var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId);
+                var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, currentQuestionId);
                 sessionManager.UpdateAnswer(oldAnswer, newAnswer);
             }
             
@@ -252,6 +254,9 @@ namespace IP_MVC.Controllers
             var allOptions = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id)?.ToList();
             if (allOptions != null && allOptions.Any())
             {
+                var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
+                var flowQueue = queues[flowId];
+                
                 var matchingAnswerPlayer1 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer1);
                 var matchingAnswerPlayer2 = allOptions.FirstOrDefault(o => o.Text == answerTextPlayer2);
 
@@ -260,74 +265,108 @@ namespace IP_MVC.Controllers
 
                 if (matchingAnswerPlayer1 != null)
                 {
-                    redirectedQuestionIdPlayer1 = matchingAnswerPlayer1.NextQuestionId ?? 0;
-                    if (redirectedQuestionIdPlayer1 == -1)
+                    var nextPotentialQuestionId = matchingAnswerPlayer1.NextQuestionId;
+                    if (nextPotentialQuestionId.HasValue && (flowQueue.Contains(nextPotentialQuestionId.Value) || nextPotentialQuestionId == -1))
                     {
-                        return RedirectToAction("EndSubFlow");
-                    }
-
-                    if (redirectedQuestionIdPlayer1 != 0)
-                    {
-                        var questionPlayer1 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer1.Value);
-
-                        if (questionPlayer1 != null && questionPlayer1.FlowId == flowId)
+                        redirectedQuestionIdPlayer1 = nextPotentialQuestionId.Value;
+                        if (redirectedQuestionIdPlayer1 == -1)
                         {
-                            redirectedQuestionIdPlayer1 = questionPlayer1.Position;
+                            return RedirectToAction("EndSubFlow");
+                        }
+
+                        if (redirectedQuestionIdPlayer1 != 0)
+                        {
+                            var questionPlayer1 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer1.Value);
+
+                            if (questionPlayer1 != null && questionPlayer1.FlowId == flowId)
+                            {
+                                redirectedQuestionIdPlayer1 = flowQueue.ToList().IndexOf(questionPlayer1.Id);
+                                // redirectedQuestionIdPlayer1 = questionPlayer1.Position;
+                            }
+                        }
+                    }
+                }
+                
+                if (matchingAnswerPlayer2 != null)
+                {
+                    var nextPotentialQuestionId = matchingAnswerPlayer2.NextQuestionId;
+                    if (nextPotentialQuestionId.HasValue && (flowQueue.Contains(nextPotentialQuestionId.Value) || nextPotentialQuestionId == -1))
+                    {
+                        redirectedQuestionIdPlayer2 = nextPotentialQuestionId.Value;
+                        if (redirectedQuestionIdPlayer2 == -1)
+                        {
+                            return RedirectToAction("EndSubFlow");
+                        }
+
+                        if (redirectedQuestionIdPlayer2 != 0)
+                        {
+                            var questionPlayer2 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer2.Value);
+
+                            if (questionPlayer2 != null && questionPlayer2.FlowId == flowId)
+                            {
+                                redirectedQuestionIdPlayer2 = flowQueue.ToList().IndexOf(questionPlayer2.Id);
+                                // redirectedQuestionIdPlayer2 = questionPlayer2.Position;
+                            }
                         }
                     }
                 }
 
-                if (matchingAnswerPlayer2 != null)
+                /*if (matchingAnswerPlayer2 != null)
                 {
-                    redirectedQuestionIdPlayer2 = matchingAnswerPlayer2.NextQuestionId ?? 0;
+                    redirectedQuestionIdPlayer2 = matchingAnswerPlayer2.NextQuestionId;
                     if (redirectedQuestionIdPlayer2 == -1)
                     {
                         return RedirectToAction("EndSubFlow");
                     }
 
-                    if (redirectedQuestionIdPlayer2 != 0)
+                    if (redirectedQuestionIdPlayer2 != 0 && redirectedQuestionIdPlayer2.HasValue)
                     {
                         var questionPlayer2 = questionManager.GetQuestionByIdAndType(redirectedQuestionIdPlayer2.Value);
 
                         if (questionPlayer2 != null && questionPlayer2.FlowId == flowId)
                         {
-                            redirectedQuestionIdPlayer2 = questionPlayer2.Position;
+                            if (flowQueue.Contains(questionPlayer2.Id))
+                            {
+                                redirectedQuestionIdPlayer2 = flowQueue.ToList().IndexOf(questionPlayer2.Id);
+                            }
+
+                            // redirectedQuestionIdPlayer2 = questionPlayer2.Position;
                         }
                     }
-                }
+                }*/
 
-                if (redirectedQuestionIdPlayer1 != null || redirectedQuestionIdPlayer2 != null)
+                if (matchingAnswerPlayer1 != null || matchingAnswerPlayer2 != null)
                 {
                     redirectedQuestionId = redirectedQuestionIdPlayer1 ?? redirectedQuestionIdPlayer2 ?? redirectedQuestionId;
 
                     //Remove questions in the queue that are skipped
                     if (model.NextOrPreviousButtonClicked)
                     {
-                        var queues = HttpContext.Session.Get<Dictionary<int, Queue<int>>>("queues");
-                        var flowQueue = queues[flowId];
-                        var currentQuestionId = model.QuestionId;
-
                         var list = flowQueue.ToList();
 
                         var currentIndex = list.IndexOf(currentQuestionId);
 
-
-                        for (int i = currentIndex + 1; i < redirectedQuestionId - 1; i++)
+                        // redirectedQuestionId--;
+                        var removeCounter = 0;
+                        if (currentIndex < redirectedQuestionId)
                         {
-                            list.RemoveAt(currentIndex + 1);
+                            for (int i = currentIndex + 1; i < redirectedQuestionId; i++)
+                            {
+                                list.RemoveAt(currentIndex + 1);
+                                removeCounter++;
+                            }
+
+                            redirectedQuestionId -= removeCounter;
+                            flowQueue.Clear();
+
+                            foreach (var item in list)
+                            {
+                                flowQueue.Enqueue(item);
+                            }
+
+                            queues[flowId] = flowQueue;
+                            HttpContext.Session.Set("queues", queues);
                         }
-
-                        flowQueue.Clear();
-
-                        foreach (var item in list)
-                        {
-                            flowQueue.Enqueue(item);
-                        }
-
-                        redirectedQuestionId = redirectedQuestionId - currentIndex - 2;
-
-                        queues[flowId] = flowQueue;
-                        HttpContext.Session.Set("queues", queues);
                     }
                 }
             }

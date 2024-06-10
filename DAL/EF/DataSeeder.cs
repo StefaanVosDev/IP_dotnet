@@ -45,12 +45,12 @@ public class DataSeeder
                                 1,
                                 "Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten?",
                                 [
-                                    new Option("Natuur en ecologie",2 ),
-                                    new Option("Vrije tijd, sport, cultuur",2 ),
-                                    new Option("Huisvesting",2 ),
-                                    new Option("Onderwijs en kinderopvang",2 ),
-                                    new Option("Gezondheidszorg en welzijn",3 ),
-                                    new Option("Verkeersveiligheid en mobiliteit",3 ),
+                                    new Option("Natuur en ecologie", null),
+                                    new Option("Vrije tijd, sport, cultuur",null),
+                                    new Option("Huisvesting",null ),
+                                    new Option("Onderwijs en kinderopvang",null ),
+                                    new Option("Gezondheidszorg en welzijn",null ),
+                                    new Option("Verkeersveiligheid en mobiliteit",null ),
                                     new Option("Ondersteunen van lokale handel", null)
                                 ],
                                 new Media()
@@ -67,17 +67,17 @@ public class DataSeeder
                                 [
                                     new Option()
                                     {
-                                        Text = "Meer lessen op school rond de partijprogramma’s", NextQuestionId = 3
+                                        Text = "Meer lessen op school rond de partijprogramma’s", NextQuestionId = null
                                     },
                                     new Option()
                                     {
                                         Text = "Activiteiten in mijn jeugdclub, sportclub… rond de verkiezingen",
-                                        NextQuestionId = 3
+                                        NextQuestionId = null
                                     },
                                     new Option()
                                     {
                                         Text = "Een bezoek van de partijen aan mijn school, jeugd/sportclub, …",
-                                        NextQuestionId = 3
+                                        NextQuestionId = null
                                     },
                                     new Option()
                                     {
@@ -88,7 +88,7 @@ public class DataSeeder
                                     {
                                         Text =
                                             "Een debat georganiseerd door een jeugdhuis met de verschillende partijen",
-                                        NextQuestionId = 3
+                                        NextQuestionId = null
                                     }
                                 ],
                                 new Media()
@@ -135,10 +135,10 @@ public class DataSeeder
                                 1,
                                 "Waarop wil jij dat de focus wordt gelegd in het nieuwe stadspark?",
                                 [
-                                    new Option() { Text = "Sportinfrastructuur", NextQuestionId = 2 },
-                                    new Option() { Text = "Speeltuin voor kinderen", NextQuestionId = 2 },
-                                    new Option() { Text = "Zitbanken en picknickplaatsen", NextQuestionId = 3 },
-                                    new Option() { Text = "Ruimte voor kleine evenementen", NextQuestionId = 3 },
+                                    new Option() { Text = "Sportinfrastructuur", NextQuestionId = null },
+                                    new Option() { Text = "Speeltuin voor kinderen", NextQuestionId = null },
+                                    new Option() { Text = "Zitbanken en picknickplaatsen", NextQuestionId = null },
+                                    new Option() { Text = "Ruimte voor kleine evenementen", NextQuestionId = null },
                                     new Option() { Text = "Drank- en eetmogelijkheden", NextQuestionId = null }
                                 ],
                                 new Media()
