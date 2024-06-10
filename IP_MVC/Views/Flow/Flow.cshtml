@@ -150,10 +150,10 @@
                     @await Html.PartialAsync("_CreateFlow", new Flow())
                 </div>
             }
-            @if (@ViewBag.ActiveProject)
+            @*@if (@ViewBag.ActiveProject)
             {
                 <a class="btn btn-blue" href="@Url.Action("ActivateProject", "Flow", new { projectId = @ViewBag.ProjectId, active = false })">Stop project session</a>
-            }
+            }*@
         </div>
     </div >
 </div>

@@ -87,7 +87,8 @@ function setupProjectEventListeners(){
 function redirectToFlow(button: HTMLElement, isCircular: boolean) {
     const flowId = button.dataset.flowId;
     const circular = isCircular !== null ? isCircular : '';
-    window.location.href = `/Flow/ActivateProject?projectId=${flowId}&active=true&circular=${circular}`;
+    window.open(`/Flow/ActivateProject?projectId=${flowId}&active=true&circular=${circular}`, '_blank');
+    // window.location.href = `/Flow/ActivateProject?projectId=${flowId}&active=true&circular=${circular}`;
 }
 
 function showProjectCard(button: Element) {
