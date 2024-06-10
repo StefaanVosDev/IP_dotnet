@@ -22,21 +22,23 @@
 
                         <div class="form-group pb-1">
                             <label asp-for="Flow.Name"></label>
-                            <input asp-for="Flow.Name" class="form-control"/>
+                            <input asp-for="Flow.Name" id="newName" class="form-control"/>
                         </div>
                         <div class="form-group pb-1">
                             <label asp-for="Flow.Description"></label>
                             <textarea asp-for="Flow.Description" class="form-control"></textarea>
                         </div>
-                        <div class="col-6 form-group">
-                            <label asp-for="Flow.StartDate"></label>
-                            <input asp-for="Flow.StartDate" class="form-control"/>
-                        </div>
-                        <div class="col-6 form-group">
-                            <label asp-for="Flow.EndDate"></label>
-                            <input asp-for="Flow.EndDate" class="form-control"/>
-                        </div>
 
+                        <div class="form-group row pb-3">
+                            <div class="col">
+                                <label asp-for="Flow.StartDate"></label>
+                                <input asp-for="Flow.StartDate" id="NewEndDate" class="form-control"/>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Flow.EndDate"></label>
+                                <input asp-for="Flow.EndDate" id="NewEndDate" class="form-control"/>
+                            </div>
+                        </div>
 
                         <input type="hidden" asp-for="Flow.ParentFlowId" value="@Model.Flow.ParentFlowId"/>
                         <input type="hidden" asp-for="Flow.ProjectId" value="@Model.Flow.ProjectId"/>
@@ -101,4 +103,5 @@
 {
     <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/orderQuestions.entry.js" defer></script>
+    <script src="~/dist/createQuestion.entry.js" defer></script>
 }
