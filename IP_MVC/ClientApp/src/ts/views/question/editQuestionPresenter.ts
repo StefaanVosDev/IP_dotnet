@@ -58,6 +58,19 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
 
     async function addOption(option: string) {
         try {
+            const alphanumericRegex = /[a-zA-Z0-9]/;
+            if (!alphanumericRegex.test(option)) {
+                console.error("Option must contain at least one letter or number.");
+                return;
+            }
+            
+            const options = await client.getOptions(questionId.value)
+            const alreadyExists = options.some((getOption: {text: string}) => getOption.text == option)
+            if (alreadyExists) {
+                console.error("Option already exists.");
+                return
+            }
+            
             await client.postOption(questionId.value, option)
         } catch (e) {
             console.error("Error adding option: ", e);
