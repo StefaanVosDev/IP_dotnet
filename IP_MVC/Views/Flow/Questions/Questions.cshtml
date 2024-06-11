@@ -95,6 +95,7 @@
                                 @await Html.PartialAsync("Questions/_SingleChoice", new SingleChoiceQuestion())
                                 break;
                         }
+                        <br/>
                         <input type="hidden" name="flowId" value="@Model.Question.FlowId"/>
                         <input type="hidden" name="id" value="@Model.Question.Id"/>
                         <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
