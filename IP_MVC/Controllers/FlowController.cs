@@ -6,6 +6,7 @@ using BL.Domain.Answers;
 using BL.Domain.Questions;
 using BL.Implementations;
 using IP_MVC.Models;
+using Microsoft.AspNetCore.Identity;
 using QRCoder;
 using static QRCoder.PayloadGenerator;
 using WebApplication1.Models;
@@ -18,6 +19,8 @@ namespace IP_MVC.Controllers
         IProjectManager projectManager,
         IQuestionManager questionManager,
         IOptionManager optionManager,
+        IUserManager userManager,
+
         UnitOfWork unitOfWork)
         : Controller
     {
