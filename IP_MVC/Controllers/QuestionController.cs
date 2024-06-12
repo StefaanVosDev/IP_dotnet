@@ -41,8 +41,9 @@ namespace IP_MVC.Controllers
                 ViewBag.Max = rangeQuestion.Max;
             }
 
-            var allQuestionsInFlow = _questionManager.GetQuestionsByFlowId(question.FlowId);
+            var allQuestionsInFlow = _questionManager.GetQuestionsByFlowId(question.FlowId).ToList();
             ViewBag.FollowUpQuestions = allQuestionsInFlow.Any(q => q.Position > question.Position);
+            ViewBag.IsLastQuestion = allQuestionsInFlow.Max(q => q.Position) == question.Position;
             return View(question);
         }
 
