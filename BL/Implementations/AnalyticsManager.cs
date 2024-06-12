@@ -8,8 +8,10 @@ public class AnalyticsManager : IAnalyticsManager
 {
     public object GetSingleChoiceQuestionData(SingleChoiceQuestion question, IEnumerable<Answer> answers)
     {
-        var answerGroups = answers.GroupBy(a => a.AnswerTextPlayer1);
-        var labels = question.Options;
+        var answerGroups = answers.SelectMany(a => new[] { a.AnswerTextPlayer1, a.AnswerTextPlayer2 })
+            .Where(a => !string.IsNullOrEmpty(a))
+            .GroupBy(a => a);
+        var labels = question.Options.Select(option => option.Text).ToList();
         var data = answerGroups.Select(g => g.Count()).ToList();
 
         return new
@@ -53,8 +55,11 @@ public class AnalyticsManager : IAnalyticsManager
 
     public object GetMultipleChoiceQuestionData(MultipleChoiceQuestion question, IEnumerable<Answer> answers)
     {
-        var answerGroups = answers.SelectMany(a => a.AnswerTextPlayer1.Split(';')).GroupBy(a => a);
-        var labels = question.Options;
+        var answerGroups = answers.SelectMany(a => new[] { a.AnswerTextPlayer1, a.AnswerTextPlayer2 })
+            .Where(a => !string.IsNullOrEmpty(a))
+            .SelectMany(a => a.Split(';'))
+            .GroupBy(a => a);
+        var labels = question.Options.Select(option => option.Text).ToList();
         var data = answerGroups.Select(g => g.Count()).ToList();
 
         return new
@@ -109,8 +114,8 @@ public class AnalyticsManager : IAnalyticsManager
     public object GetRangeQuestionData(RangeQuestion question, IEnumerable<Answer> answers)
     {
         var enumerable = answers as Answer[] ?? answers.ToArray();
-        var answerValuesPlayer1 = enumerable.Select(a => int.Parse(a.AnswerTextPlayer1)).ToList();
-        var answerValuesPlayer2 = enumerable.Select(a => int.Parse(a.AnswerTextPlayer2)).ToList();
+        var answerValuesPlayer1 = enumerable.Where(a => !string.IsNullOrEmpty(a.AnswerTextPlayer1)).Select(a => int.Parse(a.AnswerTextPlayer1)).ToList();
+        var answerValuesPlayer2 = enumerable.Where(a => !string.IsNullOrEmpty(a.AnswerTextPlayer2)).Select(a => int.Parse(a.AnswerTextPlayer2)).ToList();
         var answerValues = answerValuesPlayer1.Concat(answerValuesPlayer2).ToList();
 
         var min = question.Min;
@@ -178,10 +183,12 @@ public class AnalyticsManager : IAnalyticsManager
 
     public object GetOpenQuestionData(OpenQuestion question, IEnumerable<Answer> answers)
     {
+        var answerList = answers.SelectMany(a => new[] { a.AnswerTextPlayer1, a.AnswerTextPlayer2 }).ToList();
+
         return new
         {
             question = question.Text,
-            answers = answers.Select(a => a.AnswerTextPlayer1).ToList()
+            answers = answerList
         };
     }
 }
