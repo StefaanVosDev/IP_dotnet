@@ -620,5 +620,16 @@ namespace IP_MVC.Controllers
             HttpContext.Session.SetInt32("playerCount", model.PlayerCount);
             return Json(new { success = true });
         }
+        
+        public IActionResult StopProjectSession(ExitFlowLoginModel model)
+        {
+            if (!userManager.CheckPassword(model.Username, model.Password))
+            {
+                return NoContent();
+            }
+            
+            HttpContext.Session.Set("projectActive", false);
+            return RedirectToAction("ProjectDashboard", "Project");
+        }
     }
 }

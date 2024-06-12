@@ -1,5 +1,6 @@
 @using BL.Domain
 @using IP_MVC
+@using IP_MVC.Models
 @model IEnumerable<BL.Domain.Flow> 
 @inject BL.Interfaces.IFlowManager FlowManager
 
@@ -156,7 +157,7 @@
             @if (@ViewBag.ActiveProject)
             {
                 <button class="btn btn-blue" id="popupButton">Stop Project Sessie</button>
-                @await Html.PartialAsync("_AskPasswordPopUp")
+                @await Html.PartialAsync("_AskPasswordPopUp", new ExitFlowLoginModel())
             }
         </div>
     </div >

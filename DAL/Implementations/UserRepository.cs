@@ -10,4 +10,23 @@ public class UserRepository(PhygitalDbContext context) : Repository(context), IU
     {
         return context.Users.Find(id);
     }
+
+    public bool CheckPassword(string user, string password)
+    {
+        var identityUser = context.Users.FirstOrDefault(u => u.UserName == user);
+    
+        if (identityUser == null)
+        {
+            return false;
+        }
+
+        var passwordHasher = new PasswordHasher<IdentityUser>();
+        if (identityUser.PasswordHash != null)
+        {
+            var result = passwordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, password);
+    
+            return result == PasswordVerificationResult.Success;
+        }
+        return false;
+    }
 }
