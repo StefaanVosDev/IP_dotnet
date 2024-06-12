@@ -11,8 +11,8 @@ public class UserManager(IUserRepository repository) : Manager<IdentityUser>(rep
         return repository.GetUserById(id);
     }
 
-    public bool CheckPassword(string user, string password)
+    public bool CheckPassword(string loggedInUser, string user, string password)
     {
-        return repository.CheckPassword(user, password);
+        return repository.CheckPassword(loggedInUser, user, password);
     }
 }

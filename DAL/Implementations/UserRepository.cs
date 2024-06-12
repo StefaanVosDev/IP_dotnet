@@ -11,10 +11,14 @@ public class UserRepository(PhygitalDbContext context) : Repository(context), IU
         return context.Users.Find(id);
     }
 
-    public bool CheckPassword(string user, string password)
+    public bool CheckPassword(string loggedInUser, string user, string password)
     {
+        if (loggedInUser != user)
+        {
+            return false;
+        }
+        
         var identityUser = context.Users.FirstOrDefault(u => u.UserName == user);
-    
         if (identityUser == null)
         {
             return false;

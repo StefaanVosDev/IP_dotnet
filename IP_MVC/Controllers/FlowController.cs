@@ -623,7 +623,8 @@ namespace IP_MVC.Controllers
         
         public IActionResult StopProjectSession(ExitFlowLoginModel model)
         {
-            if (!userManager.CheckPassword(model.Username, model.Password))
+            var loggedInUser = HttpContext.User.Identity?.Name;
+            if (!userManager.CheckPassword(loggedInUser, model.Username, model.Password))
             {
                 return NoContent();
             }
