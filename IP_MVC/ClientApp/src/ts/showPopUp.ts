@@ -24,7 +24,7 @@ export function showPopup(open: boolean, autoClose: boolean = false) {
     }
 }
 
-popupButton.addEventListener('click', () => showPopup(true));
+popupButton?.addEventListener('click', () => showPopup(true));
 closePopupButton.addEventListener('click', () => showPopup(false));
 submitButton?.addEventListener('click', () => showPopup(false));
 popupOverlay.addEventListener('click', function (event) {
