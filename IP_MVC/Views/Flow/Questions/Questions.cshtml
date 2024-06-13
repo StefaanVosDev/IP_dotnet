@@ -84,15 +84,26 @@
                         @switch (@Model.QuestionType)
                         {
                             case QuestionType.Open:
-                                <img height="250" width="250" src="@ViewBag.QrImage1" alt="Qr code image player 1"/>
-                                <a href="@Url.Action("OpenQuestion", "Flow", new {questionId = Model.Question.Id})" class="btn">Open vraag player 1</a>
-
-                                if (playerCount != 1)
-                                {
-                                    <img height="250" width="250" src="@ViewBag.QrImage2" alt="Qr code image player 2"/>
-                                    <a href="@Url.Action("OpenQuestion", "Flow", new {questionId = Model.Question.Id, player1 = false})" class="btn">Open vraag player 2</a>
-                                }
-                                
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-6">
+                                        <figure class="text-center">
+                                            <img height="250" width="250" src="@ViewBag.QrImage1" alt="Qr code image player 1"/>
+                                            @if (playerCount != 1)
+                                            {
+                                                <figcaption>Speler 1 hier scannen</figcaption>
+                                            }
+                                        </figure>
+                                    </div>
+                                    @if (playerCount != 1)
+                                    {
+                                        <div class="col-xl-6">
+                                            <figure class="text-center">
+                                                <img height="250" width="250" src="@ViewBag.QrImage2" alt="Qr code image player 2"/>
+                                                <figcaption>Speler 2 hier scannen</figcaption>
+                                            </figure>
+                                        </div>
+                                    }
+                                </div>
                                 break;
                             case QuestionType.Range:
                                 @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
@@ -114,7 +125,7 @@
                         <div class="d-flex justify-content-between align-items-center py-2">
                             @if (flowType == FlowType.LINEAR)
                             {
-                                <input type="hidden" id="NextOrPreviousButtonClicked" name="NextOrPreviousButtonClicked" value="false" />
+                                <input type="hidden" id="NextOrPreviousButtonClicked" name="NextOrPreviousButtonClicked" value="false"/>
                                 @if (currentIndex != 0)
                                 {
                                     if (preview)
