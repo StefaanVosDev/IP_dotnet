@@ -30,7 +30,7 @@
                                                 <p class="card-text">@flow.Description</p>
                                             </div>
 
-                                            <div class="d-flex justify-content-between  align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden px-3">
+                                            <div class="d-flex justify-content-between  align-items-center position-sticky button-container overflow-x-scroll px-3">
                                                 <div >
                                                     @if (User.IsInRole(CustomIdentityConstants.AdminRole) && !@ViewBag.ActiveProject || User.IsInRole(CustomIdentityConstants.PlatformAdminRole) && !@ViewBag.ActiveProject)
                                                     {
@@ -156,8 +156,8 @@
             }
             @if (@ViewBag.ActiveProject)
             {
-                <button class="btn btn-blue" id="stopProjectSessionButton">Stop Project Sessie</button>
-                @await Html.PartialAsync("_AskPasswordPopUp", new ExitFlowLoginModel())
+                <button class="btn btn-blue" id="openAskPasswordPopUp">Stop Project Session</button>
+                @await Html.PartialAsync("_AskPasswordPopUp", new AskPasswordPopUpModel() {ActionName = "StopProjectSession", ButtonText = "Stop project session"})
             }
         </div>
     </div >

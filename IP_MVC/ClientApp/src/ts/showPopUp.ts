@@ -6,7 +6,7 @@ const closePopupButton = document.getElementById('closePopup')!;
 const submitButton = document.getElementById('createButton')!;
 const startDate = document.getElementById('NewStartDateInput') as HTMLInputElement;
 const endDate = document.getElementById('NewEndDateInput')as HTMLInputElement;
-const stopProjectSessionButton = document.getElementById('stopProjectSessionButton')!;
+const openAskPasswordPopUpButton = document.getElementById('openAskPasswordPopUp')!;
 
 export function showPopup(open: boolean, autoClose: boolean = false) {
     if (open){
@@ -25,11 +25,11 @@ export function showPopup(open: boolean, autoClose: boolean = false) {
 }
 
 popupButton?.addEventListener('click', () => showPopup(true));
-closePopupButton.addEventListener('click', () => showPopup(false));
+closePopupButton?.addEventListener('click', () => showPopup(false));
 submitButton?.addEventListener('click', () => showPopup(false));
-popupOverlay.addEventListener('click', function (event) {
+popupOverlay?.addEventListener('click', function (event) {
     if (event.target === popupOverlay) {
         showPopup(false);
     }
 });
-stopProjectSessionButton.addEventListener('click', () => showPopup(true, true));
+openAskPasswordPopUpButton?.addEventListener('click', () => showPopup(true, true));

@@ -154,11 +154,21 @@ namespace IP_MVC.Controllers
             {
                 // Create QR code
                 QRCodeGenerator qrCodeGenerator = new();
-                Payload payload = new Url(Url.Action("OpenQuestion", "Flow", new {questionId}, protocol: HttpContext.Request.Scheme));
-                QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(payload);
-                BitmapByteQRCode qrCode = new(qrCodeData);
-                string base64String = Convert.ToBase64String(qrCode.GetGraphic(20));
-                ViewBag.QrImage = "data:image/png;base64," + base64String;
+                
+                // Create for player 1 
+                Payload payload1 = new Url(Url.Action("OpenQuestion", "Flow", new {questionId}, protocol: HttpContext.Request.Scheme));
+                QRCodeData qrCodeData1 = qrCodeGenerator.CreateQrCode(payload1);
+                BitmapByteQRCode qrCode1 = new(qrCodeData1);
+                string base64String1 = Convert.ToBase64String(qrCode1.GetGraphic(20));
+                ViewBag.QrImage1 = "data:image/png;base64," + base64String1;
+                
+                // Create for player 2
+                Payload payload2 = new Url(Url.Action("OpenQuestion", "Flow", new { questionId, player1 = false}, protocol: HttpContext.Request.Scheme));
+                QRCodeData qrCodeData2 = qrCodeGenerator.CreateQrCode(payload2);
+                BitmapByteQRCode qrCode2 = new(qrCodeData2);
+                string base64String2 = Convert.ToBase64String(qrCode2.GetGraphic(20));
+                ViewBag.QrImage2 = "data:image/png;base64," + base64String2;
+                
             }
 
             // Get the earlier answer given
@@ -384,10 +394,10 @@ namespace IP_MVC.Controllers
             }
 
             return RedirectToAction("Question",
-    new { id = sessionId, redirectedQuestionId, showQr = true});
+    new { redirectedQuestionId });
         }
 
-        public IActionResult OpenQuestion(int questionId)
+        public IActionResult OpenQuestion(int questionId, bool player1 = true)
         {
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
             
@@ -400,6 +410,15 @@ namespace IP_MVC.Controllers
                 Question = question,
                 QuestionType = question.Type
             };
+
+            if (player1)
+            {
+                ViewBag.playerAnswer = "AnswerPlayer1";
+            }
+            else
+            {
+                ViewBag.playerAnswer = "AnswerPlayer2";
+            }
             
             return View("Questions/OpenQuestion", viewModel);
         }
@@ -407,10 +426,16 @@ namespace IP_MVC.Controllers
         [HttpPost]
         public IActionResult SaveAnswerOpenQuestion(int flowId, AnswerViewModel model)
         {
+            // If there is no answer given, redirect to the next question
+            if (model.AnswerPlayer1 == null && model.AnswerPlayer2 == null)
+            {
+                return RedirectToAction("CompletedOpenQuestion");
+            }
+            
             unitOfWork.BeginTransaction();
             
             // Join the answer, in case of multiple answers
-            var answerTextPlayer1 = string.Join("\n", model.AnswerPlayer1);
+            var answerTextPlayer1 = model.AnswerPlayer1 != null ? string.Join("\n", model.AnswerPlayer1): string.Empty;
             var answerTextPlayer2 = model.AnswerPlayer2 != null ? string.Join("\n", model.AnswerPlayer2) : string.Empty;
             var sessionId = HttpContext.Session.GetInt32("sessionId") ?? 0;
             var flowType = HttpContext.Session.Get<FlowType>("flowType");
@@ -435,6 +460,13 @@ namespace IP_MVC.Controllers
             {
                 // If an answer is already given, search the old answer and update it
                 var oldAnswer = sessionManager.GetAnswerByQuestionId(sessionId, model.QuestionId);
+                if (oldAnswer.AnswerTextPlayer1 != string.Empty && newAnswer.AnswerTextPlayer1 == string.Empty)
+                {
+                    newAnswer.AnswerTextPlayer1 = oldAnswer.AnswerTextPlayer1;
+                } else if (oldAnswer.AnswerTextPlayer2 != string.Empty && newAnswer.AnswerTextPlayer2 == string.Empty)
+                {
+                    newAnswer.AnswerTextPlayer2 = oldAnswer.AnswerTextPlayer2;
+                }
                 sessionManager.UpdateAnswer(oldAnswer, newAnswer);
             }
             
@@ -636,14 +668,23 @@ namespace IP_MVC.Controllers
             return Json(new { success = true });
         }
         
-        public IActionResult StopProjectSession(ExitFlowLoginModel model)
+        public IActionResult ValidatePassword(AskPasswordPopUpModel model)
         {
             var loggedInUser = HttpContext.User.Identity?.Name;
             if (!userManager.CheckPassword(loggedInUser, model.Username, model.Password))
             {
                 return NoContent();
             }
-            
+
+            if (model.ActionName == "SubFlow")
+            {
+                return RedirectToAction("SubFlow", new {parentFlowId = model.ParentFlowId});
+            } 
+            if (model.ActionName == "Flow")
+            {
+                return RedirectToAction("Flow", new {projectId = model.ProjectId});
+            }
+
             HttpContext.Session.Set("projectActive", false);
             return RedirectToAction("ProjectDashboard", "Project");
         }

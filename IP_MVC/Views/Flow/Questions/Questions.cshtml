@@ -1,6 +1,7 @@
 @using BL.Domain
 @using BL.Domain.Answers
 @using BL.Domain.Questions
+@using IP_MVC.Models
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IP_MVC.Models.QuestionViewModel
 
@@ -19,6 +20,7 @@
     var facilitatorWatching = ViewBag.facilitatorWatching ?? true;
     var preview = ViewBag.Preview ?? false;
     var parentFlowId = ViewBag.ParentFlowId;
+    var playerCount = ViewBag.PlayerCount ?? 1;
 }
 
 <body class="questions-page">
@@ -37,13 +39,30 @@
                 @if (parentFlowId == null)
                 {
                     <div class="col-6 h-100">
-                        <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        @if (flowType == FlowType.LINEAR)
+                        {
+                            <a id="backButton" href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        }
+                        else
+                        {
+                            <button class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center" id="openAskPasswordPopUp"></button>
+                            @await Html.PartialAsync("_AskPasswordPopUp", new AskPasswordPopUpModel()
+                                { ActionName = "Flow", ButtonText = "End circular flow", ProjectId = ViewBag.ProjectId })
+                        }
                     </div>
                 }
                 else
                 {
                     <div class="col-6 h-100">
-                        <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        @if (flowType == FlowType.LINEAR)
+                        {
+                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        }
+                        else
+                        {
+                            <button class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center" id="openAskPasswordPopUp"></button>
+                            @await Html.PartialAsync("_AskPasswordPopUp", new AskPasswordPopUpModel() { ActionName = "SubFlow", ButtonText = "End circular flow", ParentFlowId = parentFlowId })
+                        }
                     </div>
                 }
             }
@@ -56,17 +75,17 @@
                         switch (Model.Question.Media.type)
                         {
                             case MediaType.VIDEO:
-                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                <div class="col py-2 d-flex justify-content-center align-items-center w-100 h-100">
                                     <iframe src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
                                 </div>
                                 break;
                             case MediaType.IMAGE:
-                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                <div class="col py-2 d-flex justify-content-center align-items-center  w-100 h-100">
                                     <img src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description">
                                 </div>
                                 break;
                             case MediaType.AUDIO:
-                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                <div class="col py-2 d-flex justify-content-center align-items-center  w-100 h-100">
                                     <audio controls>
                                         <source src=@Model.Question.Media.url alt="@Model.Question.Media.description" type="audio/mpeg">
                                     </audio>
@@ -83,7 +102,26 @@
                         @switch (@Model.QuestionType)
                         {
                             case QuestionType.Open:
-                                <img height="250" width="250" src="@ViewBag.QrImage" alt="Qr code image"/>
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-6">
+                                        <figure class="text-center">
+                                            <img height="250" width="250" src="@ViewBag.QrImage1" alt="Qr code image player 1"/>
+                                            @if (playerCount != 1)
+                                            {
+                                                <figcaption>Player 1 scan here</figcaption>
+                                            }
+                                        </figure>
+                                    </div>
+                                    @if (playerCount != 1)
+                                    {
+                                        <div class="col-xl-6">
+                                            <figure class="text-center">
+                                                <img height="250" width="250" src="@ViewBag.QrImage2" alt="Qr code image player 2"/>
+                                                <figcaption>Player 2 scan here</figcaption>
+                                            </figure>
+                                        </div>
+                                    }
+                                </div>
                                 break;
                             case QuestionType.Range:
                                 @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
@@ -105,7 +143,7 @@
                         <div class="d-flex justify-content-between align-items-center py-2">
                             @if (flowType == FlowType.LINEAR)
                             {
-                                <input type="hidden" id="NextOrPreviousButtonClicked" name="NextOrPreviousButtonClicked" value="false" />
+                                <input type="hidden" id="NextOrPreviousButtonClicked" name="NextOrPreviousButtonClicked" value="false"/>
                                 @if (currentIndex != 0)
                                 {
                                     if (preview)
@@ -193,6 +231,7 @@
 
 @section Scripts
 {
+    <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/controlQuestions.entry.js" defer></script>
     <script src="~/dist/redirectedQuestionId.entry.js" defer></script>
     <script src="~/dist/goingToNextQuestionCircularFlow.entry.js" defer></script>

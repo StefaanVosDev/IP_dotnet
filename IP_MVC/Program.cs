@@ -33,7 +33,7 @@ builder.Services.AddDbContext<PhygitalDbContext>(options =>
     try
     {
         var connectionString = $"Host={AccessSecret("DB_IP")}" + builder.Configuration.GetConnectionString("Connection") + AccessSecret("db_password") + ";";
-        // var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
+        //var connectionString = builder.Configuration.GetConnectionString("LocalConnection");
         var testConnection = new NpgsqlConnection(connectionString);
         testConnection.Open();
         testConnection.Close();
