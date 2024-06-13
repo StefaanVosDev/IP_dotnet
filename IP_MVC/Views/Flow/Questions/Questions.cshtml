@@ -19,6 +19,7 @@
     var facilitatorWatching = ViewBag.facilitatorWatching ?? true;
     var preview = ViewBag.Preview ?? false;
     var parentFlowId = ViewBag.ParentFlowId;
+    var playerCount = ViewBag.PlayerCount ?? 1;
 }
 
 <body class="questions-page">
@@ -83,7 +84,15 @@
                         @switch (@Model.QuestionType)
                         {
                             case QuestionType.Open:
-                                <img height="250" width="250" src="@ViewBag.QrImage" alt="Qr code image"/>
+                                <img height="250" width="250" src="@ViewBag.QrImage1" alt="Qr code image player 1"/>
+                                <a href="@Url.Action("OpenQuestion", "Flow", new {questionId = Model.Question.Id})" class="btn">Open vraag player 1</a>
+
+                                if (playerCount != 1)
+                                {
+                                    <img height="250" width="250" src="@ViewBag.QrImage2" alt="Qr code image player 2"/>
+                                    <a href="@Url.Action("OpenQuestion", "Flow", new {questionId = Model.Question.Id, player1 = false})" class="btn">Open vraag player 2</a>
+                                }
+                                
                                 break;
                             case QuestionType.Range:
                                 @await Html.PartialAsync("Questions/_Range", new RangeQuestion())
