@@ -155,8 +155,6 @@ async function showSeperateAddButtons() {
         const optionId = selectButton.getAttribute('option-id') as string;
         if (optionId == null) return;
         
-       
-        
         try {
             selectButton.addEventListener('click', async (event) => {
                 event.preventDefault();
@@ -196,8 +194,29 @@ saveQuestionButton?.addEventListener('click', event => {
     
     if (optionId == null || questionId.value == null || selectedQuestionId == null) 
         return;
-    client.ChangeRedirectedIdFromOption(questionId.value, optionId, selectedQuestionId);
+    client.ChangeRedirectedIdFromOption(questionId.value, optionId, selectedQuestionId)
+        .then(() => hideSeperateAddButtons())
+        .then(() => alert("Question saved!"));
 });
+
+async function hideSeperateAddButtons() {
+    const selectQuestionsButtons = document.querySelectorAll('button.select-question') as NodeListOf<HTMLButtonElement>;
+    
+    for (const selectButton of selectQuestionsButtons) {
+        if (selectButton == null) return;
+        selectButton.style.display = 'none';
+
+        let questionDropdown = selectButton.parentElement?.querySelector('select');
+        if (questionDropdown) {
+            questionDropdown.style.display = 'none';
+        }
+    }
+
+    const saveQuestionButton = document.getElementById('saveQuestionButton') as HTMLButtonElement;
+    if (saveQuestionButton) {
+        saveQuestionButton.style.display = 'none';
+    }
+}
 
 changeNameButton.addEventListener('click', event => displayNameChange(true));
 updateNameButton.addEventListener('click', event =>
