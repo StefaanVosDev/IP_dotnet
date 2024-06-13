@@ -488,7 +488,7 @@ namespace IP_MVC.Controllers
             var flowToRemove = flowManager.GetFlowById(flowId);
             var projectId1 = flowToRemove.ProjectId;
 
-            var subFlows = flowManager.GetFlowsByParentId(flowId);
+            var subFlows = flowManager.GetFlowsByParentId(flowId).ToList();
             foreach (var subFlow in subFlows)
             {
                 flowManager.DeleteAsync(subFlow);
