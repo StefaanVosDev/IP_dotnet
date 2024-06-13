@@ -69,7 +69,7 @@
                                                             <a href="@Url.Action("PlayFlow", "Flow", new { parentFlowId = flow.Id, FlowType = FlowType.CIRCULAR })" class="btn btn-blue">Play Circular</a>
                                                         }
                                                     }
-                                                    else
+                                                    else if (ViewBag.IsParentFlow[flow.Id])
                                                     {
                                                         @if (!ViewBag.Circular)
                                                         {

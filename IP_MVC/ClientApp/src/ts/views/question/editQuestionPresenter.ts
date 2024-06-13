@@ -23,7 +23,12 @@ if (questionType.value == "MultipleChoice" || questionType.value == "SingleChoic
     // Loads all options from question and shows them in table
     async function showOptions() {
         try {
-            optionTable.innerHTML = (await client.getOptions(questionId.value)).reduce(
+            const options = await client.getOptions(questionId.value);
+            if (options==null || options.length == 0) {
+                optionTable.innerHTML = '<p>This question does not have any options yet</p>'
+                return;
+            }
+            optionTable.innerHTML = options.reduce(
                 (acc: string, option: any) => `${acc}
                 <tr>
                 <td>${option.text}</td>
@@ -180,7 +185,7 @@ async function showSeperateAddButtons() {
     }
 }
 
-saveQuestionButton.addEventListener('click', event => {
+saveQuestionButton?.addEventListener('click', event => {
     event.preventDefault();
     const selectedQuestions = document.querySelectorAll('select') as NodeListOf<HTMLSelectElement>;
     const visibleSelectFieldIndex = Array.from(selectedQuestions).findIndex(select => select.style.display == 'block');
@@ -200,6 +205,6 @@ updateNameButton.addEventListener('click', event =>
 );
 uploadMediaButton.addEventListener('click', event => updateMedia());
 
-addConditionalQuestionsButton.addEventListener('click', event => {
+addConditionalQuestionsButton?.addEventListener('click', event => {
     showSeperateAddButtons();
 });
