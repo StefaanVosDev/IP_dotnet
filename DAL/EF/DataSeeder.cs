@@ -30,13 +30,14 @@ public class DataSeeder
                                                        "een eerlijke en transparante manier te bieden voor het kiezen van leiders en het " +
                                                        "vormgeven van de toekomst van de samenleving.");
 
-        var audi = new Project("Customer Audi",
-            "Het project \"Audi Customer Experience Optimization\" richt zich op het verbeteren van de algehele klantbeleving van Audi door middel van een gedetailleerde enquête. Deze enquête verzamelt klantfeedback over verschillende aspecten van Audi's voertuigen en dienstverlening. De verkregen inzichten worden gebruikt om gerichte verbeteringen aan te brengen.");
+        var audi = new Project("Audi",
+            "Audi is een Duits automerk dat wereldwijd bekend staat om zijn luxueuze en hoogwaardige voertuigen. Het merk, opgericht in 1909 door August Horch, is tegenwoordig onderdeel van de Volkswagen Group en heeft zijn hoofdkantoor in Ingolstadt, Duitsland. Audi combineert geavanceerde technologie, innovatief ontwerp en uitstekende prestaties om voertuigen te creëren die zowel elegant als krachtig zijn.");
         context.Add(verkiezingen);
         context.Add(audi);
 
         var adminUser = await _userManager.FindByNameAsync("admin@kdg.be");
         verkiezingen.AdminId = adminUser?.Id;
+        audi.AdminId = adminUser?.Id;
         await context.SaveChangesAsync();
 
         var verkiezingenFlows = new List<Flow>
@@ -299,8 +300,8 @@ public class DataSeeder
                         },
                         null,
                         null,
-                        DateTime.UtcNow,
-                        DateTime.UtcNow.AddMonths(6)
+                        new DateTime(2024, 1, 1).ToUniversalTime(),
+                        new DateTime(2024, 7, 1).ToUniversalTime()
                     ),
                     new Flow(
                         2,
@@ -350,8 +351,8 @@ public class DataSeeder
                         },
                         null,
                         null,
-                        DateTime.UtcNow,
-                        DateTime.UtcNow.AddMonths(6)
+                        new DateTime(2024, 1, 1).ToUniversalTime(),
+                        new DateTime(2024, 7, 1).ToUniversalTime()
                     ),
                     new Flow(
                         3,
@@ -403,8 +404,8 @@ public class DataSeeder
                         },
                         null,
                         null,
-                        DateTime.UtcNow,
-                        DateTime.UtcNow.AddMonths(6)
+                        new DateTime(2024, 1, 1).ToUniversalTime(),
+                        new DateTime(2024, 7, 1).ToUniversalTime()
                     ),
                     new Flow(
                         4,
@@ -454,8 +455,8 @@ public class DataSeeder
                         },
                         null,
                         null,
-                        DateTime.UtcNow,
-                        DateTime.UtcNow.AddMonths(6)
+                        new DateTime(2024, 1, 1).ToUniversalTime(),
+                        new DateTime(2024, 7, 1).ToUniversalTime()
                     )
                 },
                 new Media()
@@ -464,8 +465,8 @@ public class DataSeeder
                     url = "https://storage.googleapis.com/phygital-public/Questions/audi_interieur.webp",
                     type = MediaType.IMAGE
                 },
-                DateTime.UtcNow,
-                DateTime.UtcNow.AddMonths(6)
+                new DateTime(2024, 1, 1).ToUniversalTime(),
+                new DateTime(2024, 7, 1).ToUniversalTime()
             )
         };
 
