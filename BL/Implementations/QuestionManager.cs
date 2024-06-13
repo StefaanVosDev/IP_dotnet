@@ -64,4 +64,9 @@ public class QuestionManager(IQuestionRepository repository) : Manager<Question>
     {
         repository.RemoveAnswersByQuestionId(questionId);
     }
+
+    public async Task<IEnumerable<Note>> GetNotesByQuestionAsync(int questionId)
+    {
+        return await repository.GetNotesByQuestionAsync(questionId);
+    }
 }

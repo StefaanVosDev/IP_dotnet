@@ -17,4 +17,5 @@ public interface IQuestionRepository : IRepository
     public void AddMediaToQuestion(int questionId, string path, string description, MediaType type);
     public IEnumerable<Question> GetQuestionsByFlowIdAfterPosition(int flowId, int position);
     public void RemoveAnswersByQuestionId(int questionId);
+    public Task<IEnumerable<Note>> GetNotesByQuestionAsync(int questionId);
 }
