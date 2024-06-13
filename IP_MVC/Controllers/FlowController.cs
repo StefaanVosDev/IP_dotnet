@@ -456,11 +456,14 @@ namespace IP_MVC.Controllers
             var flowToRemove = flowManager.GetFlowById(flowId);
             var projectId1 = flowToRemove.ProjectId;
 
-            var subFlows = flowManager.GetFlowsByParentId(flowId);
-            foreach (var subFlow in subFlows)
+            var subFlows = flowManager.GetFlowsByParentId(flowId)?.ToList();
+            if (subFlows != null)
             {
-                flowManager.DeleteAsync(subFlow);
-                DeleteQuestionsInFlow(subFlow.Id);
+                foreach (var subFlow in subFlows)
+                {
+                    flowManager.DeleteAsync(subFlow);
+                    DeleteQuestionsInFlow(subFlow.Id);
+                }
             }
 
             DeleteQuestionsInFlow(flowId);
@@ -473,23 +476,26 @@ namespace IP_MVC.Controllers
 
         public void DeleteQuestionsInFlow(int flowId)
         {
-            var questions = questionManager.GetQuestionsByFlowId(flowId);
-            foreach (var question in questions)
+            var questions = questionManager.GetQuestionsByFlowId(flowId)?.ToList();
+            if (questions != null)
             {
-                if (question.Type == QuestionType.MultipleChoice || question.Type == QuestionType.SingleChoice)
+                foreach (var question in questions)
                 {
-                    var options = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(question.Id);
-                    if (options != null)
+                    if (question.Type == QuestionType.MultipleChoice || question.Type == QuestionType.SingleChoice)
                     {
-                        foreach (var option in options)
+                        var options = optionManager.GetOptionsSingleOrMultipleChoiceQuestion(question.Id)?.ToList();
+                        if (options != null)
                         {
-                            optionManager.DeleteAsync(option);
+                            foreach (var option in options)
+                            {
+                                optionManager.DeleteAsync(option);
+                            }
                         }
                     }
-                }
 
-                questionManager.RemoveAnswersByQuestionId(question.Id);
-                questionManager.DeleteAsync(question);
+                    questionManager.RemoveAnswersByQuestionId(question.Id);
+                    questionManager.DeleteAsync(question);
+                }
             }
         }
 
