@@ -1,5 +1,6 @@
 @using BL.Domain
 @using IP_MVC
+@using IP_MVC.Models
 @model IEnumerable<BL.Domain.Flow> 
 @inject BL.Interfaces.IFlowManager FlowManager
 
@@ -147,7 +148,6 @@
             {
                 <div class="px-3">
                     <a class="btn btn-blue" href="@Url.Action("ProjectDashboard", "Project")">Go back to projects</a>
-
                 </div>
                 <div class="px-3">
                     <button class="btn btn-blue" id="popupButton">Create New Flow</button>
@@ -156,7 +156,8 @@
             }
             @if (@ViewBag.ActiveProject)
             {
-                <a class="btn btn-blue" href="@Url.Action("ActivateProject", "Flow", new { projectId = @ViewBag.ProjectId, active = false })">Stop project session</a>
+                <button class="btn btn-blue" id="stopProjectSessionButton">Stop Project Sessie</button>
+                @await Html.PartialAsync("_AskPasswordPopUp", new ExitFlowLoginModel())
             }
         </div>
     </div >
