@@ -202,7 +202,6 @@ saveQuestionButton?.addEventListener('click', event => {
 async function hideSeperateAddButtons() {
     const selectQuestionsButtons = document.querySelectorAll('button.select-question') as NodeListOf<HTMLButtonElement>;
     
-    console.log("semqfj: "+selectQuestionsButtons?.length);
     for (const selectButton of selectQuestionsButtons) {
         if (selectButton == null) return;
         selectButton.style.display = 'none';
