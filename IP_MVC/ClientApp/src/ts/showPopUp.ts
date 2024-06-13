@@ -6,13 +6,18 @@ const closePopupButton = document.getElementById('closePopup')!;
 const submitButton = document.getElementById('createButton')!;
 const startDate = document.getElementById('NewStartDateInput') as HTMLInputElement;
 const endDate = document.getElementById('NewEndDateInput')as HTMLInputElement;
-export function showPopup(open: boolean) {
+const stopProjectSessionButton = document.getElementById('stopProjectSessionButton')!;
+
+export function showPopup(open: boolean, autoClose: boolean = false) {
     if (open){
         popupOverlay.style.display = 'block';
         if (startDate != null && endDate != null){
             const currentDate = new Date().toISOString().slice(0, 16); 
             startDate.value = currentDate;
             endDate.value = currentDate;
+        }
+        if (autoClose) {
+            setTimeout(() => showPopup(false), 60000);
         }
     } else {
         popupOverlay.style.display = 'none';
@@ -27,3 +32,4 @@ popupOverlay.addEventListener('click', function (event) {
         showPopup(false);
     }
 });
+stopProjectSessionButton.addEventListener('click', () => showPopup(true, true));
