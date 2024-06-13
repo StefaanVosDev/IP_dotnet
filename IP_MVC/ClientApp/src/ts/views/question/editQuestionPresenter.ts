@@ -120,7 +120,7 @@ async function updateMedia() {
     }
 }
 
-// display the iput element to change question name
+// display the input element to change question name
 function displayNameChange(display: boolean) {
     if (display) {
         titleText.classList.add('d-none');
@@ -202,6 +202,7 @@ saveQuestionButton?.addEventListener('click', event => {
 changeNameButton.addEventListener('click', event => displayNameChange(true));
 updateNameButton.addEventListener('click', event =>
     client.updateQuestionTitle(questionId.value, titleInput.value)
+        .then(() => displayNameChange(false))
 );
 uploadMediaButton.addEventListener('click', event => updateMedia());
 
