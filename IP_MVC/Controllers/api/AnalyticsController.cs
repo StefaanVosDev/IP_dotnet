@@ -1,3 +1,4 @@
+using BL.Domain;
 using BL.Domain.Questions;
 using BL.Implementations;
 using BL.Interfaces;
@@ -11,13 +12,15 @@ public class AnalyticsController : ControllerBase
     private readonly IFlowManager _flowManager;
     private readonly IAnswerManager _answerManager;
     private readonly IAnalyticsManager _analyticsManager;
+    private readonly IQuestionManager _questionManager;
 
     public AnalyticsController(IFlowManager flowManager, IAnswerManager answerManager,
-        IAnalyticsManager analyticsManager)
+        IAnalyticsManager analyticsManager, IQuestionManager questionManager)
     {
         _flowManager = flowManager;
         _answerManager = answerManager;
         _analyticsManager = analyticsManager;
+        _questionManager = questionManager;
     }
 
     [HttpGet("GetFlowAnalytics/{flowId}")]
@@ -84,5 +87,20 @@ public class AnalyticsController : ControllerBase
             Console.WriteLine(ex.Message);
             return StatusCode(500, new { message = $"Internal server error: {ex.Message}" });
         }
+    }
+    
+    [HttpGet("GetNotesForFlow/{flowId}")]
+    public async Task<IActionResult> GetNotesForFlow(int flowId)
+    {
+        var questions = await _flowManager.GetQuestionsByFlowIdAsync(flowId);
+        var notes = new List<Note>();
+
+        foreach (var question in questions)
+        {
+            var questionNotes = await _questionManager.GetNotesByQuestionAsync(question.Id);
+            notes.AddRange(questionNotes);
+        }
+
+        return new JsonResult(notes);
     }
 }

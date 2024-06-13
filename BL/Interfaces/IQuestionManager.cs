@@ -20,4 +20,5 @@ public interface IQuestionManager : IManager<Question>
 
     public IEnumerable<Question> GetQuestionsByFlowIdAfterPosition(int flowId, int position);
     public void RemoveAnswersByQuestionId(int questionId);
+    public Task<IEnumerable<Note>> GetNotesByQuestionAsync(int questionId);
 }
