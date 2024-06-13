@@ -21,7 +21,7 @@ export function showPopup(open: boolean) {
 
 popupButton.addEventListener('click', () => showPopup(true));
 closePopupButton.addEventListener('click', () => showPopup(false));
-submitButton.addEventListener('click', () => showPopup(false));
+submitButton?.addEventListener('click', () => showPopup(false));
 popupOverlay.addEventListener('click', function (event) {
     if (event.target === popupOverlay) {
         showPopup(false);
