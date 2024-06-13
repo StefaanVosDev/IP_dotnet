@@ -1,3 +1,4 @@
+using BL.Domain.Questions;
 using BL.Implementations;
 using BL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,14 @@ namespace IP_MVC.Controllers.api
         {
             var options = _optionManager.GetOptionsSingleOrMultipleChoiceQuestion(id);
             
-            if (options == null || !options.Any())
+            if (options == null)
             {
-                return NoContent();
+                return NotFound();
+            }
+
+            if (!options.Any())
+            {
+                return Ok(new List<Option>());
             }
 
             return Ok(options);

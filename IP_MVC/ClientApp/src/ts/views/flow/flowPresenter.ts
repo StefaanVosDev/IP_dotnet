@@ -143,10 +143,10 @@ export function appendFlowToPage(flow: Flow, flowId: number) {
         editButtonHtml = `<button data-edit-flow data-flow-id="${flowId}" class="btn btn-blue py-0 edit-flow-btn">Edit</button>`;
     }
 
-    const flowActionsHtml = `
+    /*const flowActionsHtml = `
         <a href="/Flow/SubFlow?parentFlowId=${flow.NewParentFlowId}&active=${isActiveProject}" class="btn btn-blue">Go to Subflows</a>
     `;
-
+*/
     const subFlowEditButtonHtml = `       
             <div class="btn-group">
                 <button class="btn bi bi-menu-button-wide btn-blue dropdown-toggle py-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -175,7 +175,7 @@ export function appendFlowToPage(flow: Flow, flowId: number) {
                             <div class="d-flex justify-content-between align-items-center position-sticky button-container overflow-x-scroll overflow-y-hidden px-3">
                                 <div>${deleteButtonHtml}</div>
                                 <div>${editButtonHtml}</div>
-                                <div>${flowActionsHtml}</div>
+<!--                                <div>$flowActionsHtml}</div>-->
                             </div>
                         </div>
                     </div>

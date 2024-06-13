@@ -55,7 +55,16 @@ namespace IP_MVC.Controllers
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
 
-            return View(flowManager.GetFlowsByParentId(parentFlowId));
+            var flows = flowManager.GetFlowsByParentId(parentFlowId).ToList();
+            var containsQuestions = new Dictionary<int, bool>();
+
+            foreach (var flow in flows)
+            {
+                containsQuestions[flow.Id] = questionManager.GetQuestionsByFlowId(flow.Id).Any();
+            }
+            ViewBag.ContainsQuestions = containsQuestions;
+
+            return View(flows);
         }
 
         public IActionResult ActivateProject(int projectId, bool active, bool circular)

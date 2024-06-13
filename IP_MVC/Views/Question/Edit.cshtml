@@ -131,14 +131,17 @@
 
                                         <button id="buttonToAdd" class="btn btn-blue">Add option</button>
                                     </div>
-                                    <div class="col d-flex justify-content-center h-100">
+                                    @if (!ViewBag.IsLastQuestion)
+                                    {
+                                        <div class="col d-flex justify-content-center h-100">
 
-                                        <button id="addConditionalQuestionsButton" class="btn btn-blue">Add conditional questions</button>
-                                    </div>
-                                    <div class="col d-flex justify-content-center h-100">
+                                            <button id="addConditionalQuestionsButton" class="btn btn-blue">Add conditional questions</button>
+                                        </div>
+                                        <div class="col d-flex justify-content-center h-100">
 
-                                        <button id="saveQuestionButton" class="btn btn-blue">Save follow up questions</button>
-                                    </div>
+                                            <button id="saveQuestionButton" class="btn btn-blue">Save follow up questions</button>
+                                        </div>
+                                    }
                                 </div>
                                 break;
                             case QuestionType.Range:
