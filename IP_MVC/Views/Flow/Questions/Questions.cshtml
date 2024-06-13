@@ -75,17 +75,17 @@
                         switch (Model.Question.Media.type)
                         {
                             case MediaType.VIDEO:
-                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                <div class="col py-2 d-flex justify-content-center align-items-center w-100 h-100">
                                     <iframe src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
                                 </div>
                                 break;
                             case MediaType.IMAGE:
-                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                <div class="col py-2 d-flex justify-content-center align-items-center  w-100 h-100">
                                     <img src=@Model.Question.Media.url class="img-fluid w-100 h-100" alt="@Model.Question.Media.description">
                                 </div>
                                 break;
                             case MediaType.AUDIO:
-                                <div class="col py-2 d-flex justify-content-center align-items-center">
+                                <div class="col py-2 d-flex justify-content-center align-items-center  w-100 h-100">
                                     <audio controls>
                                         <source src=@Model.Question.Media.url alt="@Model.Question.Media.description" type="audio/mpeg">
                                     </audio>

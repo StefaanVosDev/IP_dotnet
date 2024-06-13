@@ -45,7 +45,7 @@ public class DataSeeder
             new(
                 1,
                 "Betrokkenheid bij het lokale beleid",
-                "dit is de interesante beschrijving van de flow",
+                "Betrokkenheid bij het lokale beleid verwijst naar de mate waarin burgers actief deelnemen aan en invloed uitoefenen op de besluitvorming en uitvoering van beleid in hun lokale gemeenschap. Dit is een cruciaal aspect van een goed functionerende democratie, omdat het zorgt voor een betere afstemming tussen de behoeften en wensen van de burgers en de acties van lokale overheden. ",
                 verkiezingen.Id,
                 FlowType.LINEAR,
                 null,
@@ -53,7 +53,7 @@ public class DataSeeder
                     new Flow(
                         1,
                         "Betrokkenheid en participatie",
-                        "dit is de interesante beschrijving van de flow",
+                        "Betrokkenheid verwijst naar de interesse en het bewustzijn van burgers met betrekking tot politieke en maatschappelijke zaken. Het gaat om de mate waarin mensen zich geïnformeerd voelen en zich bekommeren om wat er gebeurt in hun samenleving.",
                         verkiezingen.Id,
                         FlowType.LINEAR,
                         [
@@ -143,7 +143,7 @@ public class DataSeeder
                     new Flow(
                         2,
                         "Kiesintenties en participatie aan verkiezingen",
-                        "dit is de interesante beschrijving van de flow",
+                        "Kiesintenties verwijzen naar de bereidheid van kiezers om op een bepaalde partij of kandidaat te stemmen bij een verkiezing. Deze intenties worden vaak gemeten door middel van opiniepeilingen, waarin respondenten wordt gevraagd op welke partij of kandidaat ze van plan zijn te stemmen. Kiesintenties kunnen worden beïnvloed door verschillende factoren",
                         verkiezingen.Id,
                         FlowType.LINEAR,
                         [
