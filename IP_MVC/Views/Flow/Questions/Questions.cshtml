@@ -1,6 +1,7 @@
 @using BL.Domain
 @using BL.Domain.Answers
 @using BL.Domain.Questions
+@using IP_MVC.Models
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IP_MVC.Models.QuestionViewModel
 
@@ -38,13 +39,30 @@
                 @if (parentFlowId == null)
                 {
                     <div class="col-6 h-100">
-                        <a href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        @if (flowType == FlowType.LINEAR)
+                        {
+                            <a id="backButton" href="@Url.Action("Flow", "Flow", new { projectId = ViewBag.ProjectId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        }
+                        else
+                        {
+                            <button class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center" id="openAskPasswordPopUp"></button>
+                            @await Html.PartialAsync("_AskPasswordPopUp", new AskPasswordPopUpModel()
+                                { ActionName = "Flow", ButtonText = "End circular flow", ProjectId = ViewBag.ProjectId })
+                        }
                     </div>
                 }
                 else
                 {
                     <div class="col-6 h-100">
-                        <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        @if (flowType == FlowType.LINEAR)
+                        {
+                            <a href="@Url.Action("SubFlow", "Flow", new { parentFlowId })" class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center"></a>
+                        }
+                        else
+                        {
+                            <button class="btn-white btn bi bi-box-arrow-left py-1 h-100  align-items-center" id="openAskPasswordPopUp"></button>
+                            @await Html.PartialAsync("_AskPasswordPopUp", new AskPasswordPopUpModel() { ActionName = "SubFlow", ButtonText = "End circular flow", ParentFlowId = parentFlowId })
+                        }
                     </div>
                 }
             }
@@ -213,6 +231,7 @@
 
 @section Scripts
 {
+    <script src="~/dist/showPopUp.entry.js" defer></script>
     <script src="~/dist/controlQuestions.entry.js" defer></script>
     <script src="~/dist/redirectedQuestionId.entry.js" defer></script>
     <script src="~/dist/goingToNextQuestionCircularFlow.entry.js" defer></script>
