@@ -15,22 +15,37 @@ public class DataSeeder
 
     public async Task Seed(PhygitalDbContext context)
     {
-        
         ArgumentNullException.ThrowIfNull(context);
-        
-        var project = new Project("Phygital", "dit is de interesante beschrijving van de flow");
-        context.Add(project);
+
+        var verkiezingen = new Project("Verkiezingen", "Verkiezingen vormen een fundamenteel onderdeel van een " +
+                                                       "democratisch systeem, waarbij burgers hun stem kunnen " +
+                                                       "uitbrengen om vertegenwoordigers te kiezen die hen in " +
+                                                       "de regering zullen vertegenwoordigen. Dit proces stelt " +
+                                                       "de bevolking in staat om invloed uit te oefenen op" +
+                                                       " beleidsbeslissingen en de richting van het land. " +
+                                                       "Verkiezingen vinden meestal plaats op lokaal, regionaal " +
+                                                       "en nationaal niveau en kunnen verschillende vormen " +
+                                                       "aannemen, zoals parlementaire verkiezingen, `" +
+                                                       "presidentsverkiezingen, en referenda. Het doel is om " +
+                                                       "een eerlijke en transparante manier te bieden voor het kiezen van leiders en het " +
+                                                       "vormgeven van de toekomst van de samenleving.");
+
+        var audi = new Project("Customer Audi",
+            "Het project \"Audi Customer Experience Optimization\" richt zich op het verbeteren van de algehele klantbeleving van Audi door middel van een gedetailleerde enquête. Deze enquête verzamelt klantfeedback over verschillende aspecten van Audi's voertuigen en dienstverlening. De verkregen inzichten worden gebruikt om gerichte verbeteringen aan te brengen.");
+        context.Add(verkiezingen);
+        context.Add(audi);
+
         var adminUser = await _userManager.FindByNameAsync("admin@kdg.be");
-        project.AdminId = adminUser?.Id;
+        verkiezingen.AdminId = adminUser?.Id;
         await context.SaveChangesAsync();
-        
-        var flows = new List<Flow>
+
+        var verkiezingenFlows = new List<Flow>
         {
             new(
                 1,
                 "Betrokkenheid bij het lokale beleid",
                 "dit is de interesante beschrijving van de flow",
-                project.Id,
+                verkiezingen.Id,
                 FlowType.LINEAR,
                 null,
                 [
@@ -38,7 +53,7 @@ public class DataSeeder
                         1,
                         "Betrokkenheid en participatie",
                         "dit is de interesante beschrijving van de flow",
-                        project.Id,
+                        verkiezingen.Id,
                         FlowType.LINEAR,
                         [
                             new SingleChoiceQuestion(
@@ -46,11 +61,11 @@ public class DataSeeder
                                 "Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten?",
                                 [
                                     new Option("Natuur en ecologie", null),
-                                    new Option("Vrije tijd, sport, cultuur",null),
-                                    new Option("Huisvesting",null ),
-                                    new Option("Onderwijs en kinderopvang",null ),
-                                    new Option("Gezondheidszorg en welzijn",null ),
-                                    new Option("Verkeersveiligheid en mobiliteit",null ),
+                                    new Option("Vrije tijd, sport, cultuur", null),
+                                    new Option("Huisvesting", null),
+                                    new Option("Onderwijs en kinderopvang", null),
+                                    new Option("Gezondheidszorg en welzijn", null),
+                                    new Option("Verkeersveiligheid en mobiliteit", null),
                                     new Option("Ondersteunen van lokale handel", null)
                                 ],
                                 new Media()
@@ -128,7 +143,7 @@ public class DataSeeder
                         2,
                         "Kiesintenties en participatie aan verkiezingen",
                         "dit is de interesante beschrijving van de flow",
-                        project.Id,
+                        verkiezingen.Id,
                         FlowType.LINEAR,
                         [
                             new SingleChoiceQuestion(
@@ -223,8 +238,240 @@ public class DataSeeder
                 new DateTime(2024, 7, 1).ToUniversalTime()
             )
         };
-        
-        project.Flows = flows; 
+        var audiExperienceFlows = new List<Flow>
+        {
+            new(
+                1,
+                "Customer Experience Optimization",
+                "Het project richt zich op het verbeteren van de algehele klantbeleving van Audi door middel van een gedetailleerde enquête.",
+                audi.Id,
+                FlowType.LINEAR,
+                null,
+                new List<Flow>
+                {
+                    new Flow(
+                        1,
+                        "Vehicle Performance and Quality",
+                        "Dit deel van de enquête verzamelt feedback over de prestaties en kwaliteit van Audi-voertuigen.",
+                        audi.Id,
+                        FlowType.LINEAR,
+                        new List<Question>
+                        {
+                            new RangeQuestion(
+                                1,
+                                "Op een schaal van 1 tot 10, hoe zou u de prestaties van uw Audi-voertuig beoordelen?",
+                                1,
+                                10,
+                                new Media()
+                                {
+                                    description = "Afbeelding van Audi's prestaties",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_prestaties.png",
+                                    type = MediaType.IMAGE
+                                }
+                            ),
+                            new OpenQuestion(
+                                2,
+                                "Wat vindt u het meest indrukwekkend aan uw Audi-voertuig?",
+                                new Media()
+                                {
+                                    description = "Video van Audi's indrukwekkende kenmerken",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_kenmerken.mp4",
+                                    type = MediaType.VIDEO
+                                }
+                            ),
+                            new MultipleChoiceQuestion(
+                                3,
+                                "Welke van de volgende aspecten van uw Audi-voertuig vindt u het belangrijkst? (Kies er maximaal 3)",
+                                new List<Option>
+                                {
+                                    new Option("Rijcomfort", null),
+                                    new Option("Brandstofefficiëntie", null),
+                                    new Option("Veiligheidsvoorzieningen", null),
+                                    new Option("Design", null)
+                                },
+                                new Media()
+                                {
+                                    description = "Afbeelding van Audi-interieur",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_kenmerken.mp4",
+                                    type = MediaType.IMAGE
+                                }
+                            )
+                        },
+                        null,
+                        null,
+                        DateTime.UtcNow,
+                        DateTime.UtcNow.AddMonths(6)
+                    ),
+                    new Flow(
+                        2,
+                        "Dealership and Purchase Experience",
+                        "Dit deel van de enquête verzamelt feedback over de aankoopervaring bij Audi-dealers.",
+                        audi.Id,
+                        FlowType.LINEAR,
+                        new List<Question>
+                        {
+                            new RangeQuestion(
+                                1,
+                                "Op een schaal van 1 tot 10, hoe zou u uw aankoopervaring bij de Audi-dealer beoordelen?",
+                                1,
+                                10,
+                                new Media()
+                                {
+                                    description = "Video van de Audi-dealerervaring",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_vlotteverkoop.webp",
+                                    type = MediaType.VIDEO
+                                }
+                            ),
+                            new OpenQuestion(
+                                2,
+                                "Wat kan volgens u worden verbeterd aan de dienstverlening van de Audi-dealer?",
+                                new Media()
+                                {
+                                    description = "Afbeelding van Audi's klantendienst",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_klantendienst.webp",
+                                    type = MediaType.IMAGE
+                                }
+                            ),
+                            new SingleChoiceQuestion(
+                                3,
+                                "Vond u het aankoopproces bij de Audi-dealer soepel en probleemloos?",
+                                new List<Option>
+                                {
+                                    new Option("Ja", null),
+                                    new Option("Nee", null)
+                                },
+                                new Media()
+                                {
+                                    description = "Afbeelding van een vlotte Audi-aankoop",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_vlotteverkoop.webp",
+                                    type = MediaType.IMAGE
+                                }
+                            )
+                        },
+                        null,
+                        null,
+                        DateTime.UtcNow,
+                        DateTime.UtcNow.AddMonths(6)
+                    ),
+                    new Flow(
+                        3,
+                        "Service and Maintenance",
+                        "Dit deel van de enquête verzamelt feedback over de service en het onderhoud bij Audi-dealers.",
+                        audi.Id,
+                        FlowType.LINEAR,
+                        new List<Question>
+                        {
+                            new RangeQuestion(
+                                1,
+                                "Hoe zou u de kwaliteit van de service en onderhoud bij uw Audi-dealer beoordelen op een schaal van 1 tot 10?",
+                                1,
+                                10,
+                                new Media()
+                                {
+                                    description = "Video van Audi-onderhoudsservice",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_onderhoud.mp4",
+                                    type = MediaType.VIDEO
+                                }
+                            ),
+                            new OpenQuestion(
+                                2,
+                                "Kunt u een specifiek voorbeeld geven van een positieve of negatieve ervaring met de serviceafdeling van Audi?",
+                                new Media()
+                                {
+                                    description = "Afbeelding van Audi-service",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_klantendienst.webp",
+                                    type = MediaType.IMAGE
+                                }
+                            ),
+                            new MultipleChoiceQuestion(
+                                3,
+                                "Hoe heeft u contact opgenomen met de serviceafdeling van uw Audi-dealer? (Meerdere opties mogelijk)",
+                                new List<Option>
+                                {
+                                    new Option("Telefonisch", null),
+                                    new Option("E-mail", null),
+                                    new Option("Chat", null),
+                                    new Option("Persoonlijk bezoek", null)
+                                },
+                                new Media()
+                                {
+                                    description = "Afbeelding van verschillende contactmethoden",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_contact.jpeg",
+                                    type = MediaType.IMAGE
+                                }
+                            )
+                        },
+                        null,
+                        null,
+                        DateTime.UtcNow,
+                        DateTime.UtcNow.AddMonths(6)
+                    ),
+                    new Flow(
+                        4,
+                        "Overall Audi Experience",
+                        "Dit deel van de enquête verzamelt feedback over de algehele ervaring met Audi.",
+                        audi.Id,
+                        FlowType.LINEAR,
+                        new List<Question>
+                        {
+                            new RangeQuestion(
+                                1,
+                                "Hoe tevreden bent u in het algemeen over uw ervaring met Audi op een schaal van 1 tot 10?",
+                                1,
+                                10,
+                                new Media()
+                                {
+                                    description = "Video van een algemene Audi-ervaring",
+                                    url = "https://example.com/audi_overall_experience.mp4",
+                                    type = MediaType.VIDEO
+                                }
+                            ),
+                            new OpenQuestion(
+                                2,
+                                "Wat is volgens u het belangrijkste dat Audi kan doen om uw algehele ervaring te verbeteren?",
+                                new Media()
+                                {
+                                    description = "Afbeelding van een Audi-verbetering",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_vlotteverkoop.webp",
+                                    type = MediaType.IMAGE
+                                }
+                            ),
+                            new SingleChoiceQuestion(
+                                3,
+                                "Zou u Audi aanbevelen aan anderen?",
+                                new List<Option>
+                                {
+                                    new Option("Ja", null),
+                                    new Option("Nee", null)
+                                },
+                                new Media()
+                                {
+                                    description = "Afbeelding van een aanbeveling",
+                                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_interieur.webp",
+                                    type = MediaType.IMAGE
+                                }
+                            )
+                        },
+                        null,
+                        null,
+                        DateTime.UtcNow,
+                        DateTime.UtcNow.AddMonths(6)
+                    )
+                },
+                new Media()
+                {
+                    description = "Afbeelding van een Audi-voertuig",
+                    url = "https://storage.googleapis.com/phygital-public/Questions/audi_interieur.webp",
+                    type = MediaType.IMAGE
+                },
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddMonths(6)
+            )
+        };
+
+
+        verkiezingen.Flows = verkiezingenFlows;
+        audi.Flows = audiExperienceFlows;
         await context.SaveChangesAsync();
     }
 }
