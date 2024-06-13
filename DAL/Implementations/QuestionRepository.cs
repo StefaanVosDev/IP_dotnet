@@ -70,4 +70,13 @@ public class QuestionRepository(PhygitalDbContext context) : Repository(context)
         var answers = _context.Set<Answer>().Where(a => a.QuestionId == questionId);
         _context.Set<Answer>().RemoveRange(answers);
     }
+    
+    public async Task<IEnumerable<Note>> GetNotesByQuestionAsync(int questionId)
+    {
+        var notes = await _context.Set<Note>()
+            .Where(n => n.QuestionId == questionId)
+            .ToListAsync();
+
+        return notes;
+    }
 }

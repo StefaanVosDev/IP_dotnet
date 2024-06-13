@@ -15,10 +15,14 @@ async function handleFlowChange(e: Event) {
     const flowId = button.dataset.flowId;
 
     if (flowId) {
-        const response = await fetch(`/api/Analytics/GetFlowAnalytics/${flowId}`);
-        const data = await response.json();
+        const AnalyticsResponse = await fetch(`/api/Analytics/GetFlowAnalytics/${flowId}`);
+        const data = await AnalyticsResponse.json();
         renderCharts(data.chartData);
         renderOpenQuestions(data.openQuestions);
+
+        const NotesResponse = await fetch(`/api/Analytics/GetNotesForFlow/${flowId}`);
+        const notes = await NotesResponse.json();
+        renderNotes(notes);
     }
 }
 function renderCharts(chartData: ChartData[]) {
@@ -119,6 +123,26 @@ function renderOpenQuestions(openQuestions: OpenQuestion[]) {
                 chartsContainer.appendChild(div);
             }
         });
+    }
+}
+
+function renderNotes(notes: any[]) {
+    const notesContainer = document.querySelector('#notesContainer');
+    if (notesContainer instanceof HTMLElement) {
+        notesContainer.innerHTML = '';
+        if (notes && notes.length > 0) {
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = 'Notes';
+            titleElement.style.textAlign = 'center';
+            notesContainer.appendChild(titleElement);
+
+            notes.forEach((note: any) => {
+                const noteElement = document.createElement('p');
+                noteElement.textContent = note.content;
+                noteElement.style.textAlign = 'center';
+                notesContainer.appendChild(noteElement);
+            });
+        }
     }
 }
 
