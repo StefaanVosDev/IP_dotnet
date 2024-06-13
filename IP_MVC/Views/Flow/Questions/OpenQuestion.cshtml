@@ -6,6 +6,7 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
 
+    var playerAnswer = ViewBag.playerAnswer ?? "AnswerPlayer1";
 }
 
 <div class="container open-question-page">
@@ -19,7 +20,7 @@
                 <input type="hidden" name="QuestionId" value="@Model.Question.Id"/>
                 <div class="form-group">
                     <label for="answer">@Model.Question.Text</label>
-                    <textarea id="answer" class="form-control" name="Answer" rows="5" placeholder="Type hier uw antwoord..."></textarea>
+                    <textarea id="answer" class="form-control" name="@playerAnswer" rows="5" placeholder="Type hier uw antwoord..."></textarea>
                 </div>
                 <button type="submit" class="btn">Submit</button>
             </form>
