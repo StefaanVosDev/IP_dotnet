@@ -6,6 +6,7 @@ using BL.Domain.Answers;
 using BL.Domain.Questions;
 using BL.Implementations;
 using IP_MVC.Models;
+using Microsoft.AspNetCore.Identity;
 using QRCoder;
 using static QRCoder.PayloadGenerator;
 using WebApplication1.Models;
@@ -18,6 +19,8 @@ namespace IP_MVC.Controllers
         IProjectManager projectManager,
         IQuestionManager questionManager,
         IOptionManager optionManager,
+        IUserManager userManager,
+
         UnitOfWork unitOfWork)
         : Controller
     {
@@ -55,7 +58,16 @@ namespace IP_MVC.Controllers
             ViewBag.ParentFlowId = parentFlowId;
             ViewBag.ActiveProject = HttpContext.Session.Get<bool>("projectActive");
 
-            return View(flowManager.GetFlowsByParentId(parentFlowId));
+            var flows = flowManager.GetFlowsByParentId(parentFlowId).ToList();
+            var containsQuestions = new Dictionary<int, bool>();
+
+            foreach (var flow in flows)
+            {
+                containsQuestions[flow.Id] = questionManager.GetQuestionsByFlowId(flow.Id).Any();
+            }
+            ViewBag.ContainsQuestions = containsQuestions;
+
+            return View(flows);
         }
 
         public IActionResult ActivateProject(int projectId, bool active, bool circular)
@@ -616,6 +628,18 @@ namespace IP_MVC.Controllers
         {
             HttpContext.Session.SetInt32("playerCount", model.PlayerCount);
             return Json(new { success = true });
+        }
+        
+        public IActionResult StopProjectSession(ExitFlowLoginModel model)
+        {
+            var loggedInUser = HttpContext.User.Identity?.Name;
+            if (!userManager.CheckPassword(loggedInUser, model.Username, model.Password))
+            {
+                return NoContent();
+            }
+            
+            HttpContext.Session.Set("projectActive", false);
+            return RedirectToAction("ProjectDashboard", "Project");
         }
     }
 }
