@@ -156,8 +156,8 @@
             }
             @if (@ViewBag.ActiveProject)
             {
-                <button class="btn btn-blue" id="stopProjectSessionButton">Stop Project Sessie</button>
-                @await Html.PartialAsync("_AskPasswordPopUp", new ExitFlowLoginModel())
+                <button class="btn btn-blue" id="openAskPasswordPopUp">Stop Project Sessie</button>
+                @await Html.PartialAsync("_AskPasswordPopUp", new AskPasswordPopUpModel() {ActionName = "StopProjectSession", ButtonText = "Stop project session"})
             }
         </div>
     </div >

@@ -630,14 +630,23 @@ namespace IP_MVC.Controllers
             return Json(new { success = true });
         }
         
-        public IActionResult StopProjectSession(ExitFlowLoginModel model)
+        public IActionResult ValidatePassword(AskPasswordPopUpModel model)
         {
             var loggedInUser = HttpContext.User.Identity?.Name;
             if (!userManager.CheckPassword(loggedInUser, model.Username, model.Password))
             {
                 return NoContent();
             }
-            
+
+            if (model.ActionName == "SubFlow")
+            {
+                return RedirectToAction("SubFlow", new {parentFlowId = model.ParentFlowId});
+            } 
+            if (model.ActionName == "Flow")
+            {
+                return RedirectToAction("Flow", new {projectId = model.ProjectId});
+            }
+
             HttpContext.Session.Set("projectActive", false);
             return RedirectToAction("ProjectDashboard", "Project");
         }
